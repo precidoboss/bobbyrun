@@ -517,15 +517,15 @@
         let PLAYER_GRAVITY_BASE = 0.18; 
         let PLAYER_FLAP_STRENGTH_BASE = -4.5; 
         // Adjusted for larger player on mobile
-        const PLAYER_SIZE_BASE = 100; // Increased from 80 
+        const PLAYER_SIZE_BASE = 120; // Increased from 100 
 
         const MAX_ROTATION_DEGREES = 35;
         
         const CANDLE_WIDTH_BASE = 150; 
         const DESIRED_GAP_HEIGHT_RATIO = 0.25; 
         // Adjusted for larger candle sections on mobile
-        const MIN_CANDLE_SECTION_HEIGHT_PX_BASE = 80; // Increased from 50 
-        const MIN_GAP_HEIGHT_BASE = 180; 
+        const MIN_CANDLE_SECTION_HEIGHT_PX_BASE = 100; // Increased from 80 
+        const MIN_GAP_HEIGHT_BASE = 180; // This can remain as a base for calculating minGap, but the multiplier below will reduce the effective size
 
         const INITIAL_OBSTACLE_SPEED_BASE = 2.5; 
         const OBSTACLE_INTERVAL_MIN = 3000; 
@@ -702,7 +702,7 @@
             GAME_HEIGHT = window.innerHeight;
 
             // Player dimensions scale with GAME_HEIGHT, with a higher minimum
-            PLAYER_SPRITE_HEIGHT = Math.max(60, GAME_HEIGHT * (PLAYER_SIZE_BASE / BASE_GAME_HEIGHT)); // Ensured min 60px
+            PLAYER_SPRITE_HEIGHT = Math.max(70, GAME_HEIGHT * (PLAYER_SIZE_BASE / BASE_GAME_HEIGHT)); // Ensured min 70px
             PLAYER_SPRITE_WIDTH = PLAYER_SPRITE_HEIGHT; // Keep player square
             player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
             player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
@@ -717,7 +717,7 @@
             currentScaledCandleWidth = Math.max(70, GAME_WIDTH * (CANDLE_WIDTH_BASE / BASE_GAME_WIDTH)); // Ensured min 70px width
             const scaleFactorForHeight = GAME_HEIGHT / BASE_GAME_HEIGHT;
             currentScaledMinGapHeight = MIN_GAP_HEIGHT_BASE * scaleFactorForHeight;
-            currentScaledMinCandleSectionHeight = Math.max(60, MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight); // Ensured min 60px height
+            currentScaledMinCandleSectionHeight = Math.max(70, MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight); // Ensured min 70px height
 
             // Adjust player initial position based on new GAME_HEIGHT
             window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
@@ -890,7 +890,7 @@
                 return; 
             }
             player.style.top = `${window.playerY}px`; 
-            player.style.left = `${(GAME_WIDTH - player.offsetWidth) / 2}px`;
+            player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
             player.style.transform = `rotateZ(${rotationAngle}deg)`; 
         }
 
@@ -941,11 +941,12 @@
             const availableVerticalSpace = GAME_HEIGHT - (player.offsetHeight * 2); 
             
             // Determine the actual minimum gap, ensuring it's at least currentScaledMinGapHeight
-            const currentMinGap = Math.max(currentScaledMinGapHeight, player.offsetHeight * 2.5); 
+            // Adjusted: Minimum gap is now tighter relative to player height
+            const currentMinGap = Math.max(currentScaledMinGapHeight, player.offsetHeight * 1.8); // Reduced from 2.5 
             
             // Randomly determine the gap height, making it between currentMinGap and
-            // currentMinGap + 30% of the remaining available vertical space.
-            const gapHeight = currentMinGap + Math.random() * (availableVerticalSpace * 0.3); 
+            // currentMinGap + a smaller random factor of the remaining available vertical space.
+            const gapHeight = currentMinGap + Math.random() * (availableVerticalSpace * 0.1); // Reduced from 0.3 
 
             // Calculate the maximum possible height for the top candle (which is now green)
             const maxTopCandleHeight = GAME_HEIGHT - gapHeight - currentScaledMinCandleSectionHeight; 
@@ -1176,8 +1177,8 @@
         /**
          * Calculates the final score based on Flappy score and Market Cap.
          * @param {number} flappyScore
-         * @param {number} number - The number to format.
-         * @returns {string} The formatted currency string.
+         * @param {number} marketCap
+         * @returns {number} Combined final score.
          */
         function calculateCombinedFinalScore(flappyScore, marketCap) {
             return flappyScore + (marketCap / 1000);
