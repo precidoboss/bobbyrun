@@ -516,13 +516,15 @@
 
         let PLAYER_GRAVITY_BASE = 0.18; 
         let PLAYER_FLAP_STRENGTH_BASE = -4.5; 
-        const PLAYER_SIZE_BASE = 80; 
+        // Adjusted for larger player on mobile
+        const PLAYER_SIZE_BASE = 100; // Increased from 80 
 
         const MAX_ROTATION_DEGREES = 35;
         
         const CANDLE_WIDTH_BASE = 150; 
         const DESIRED_GAP_HEIGHT_RATIO = 0.25; 
-        const MIN_CANDLE_SECTION_HEIGHT_PX_BASE = 50; 
+        // Adjusted for larger candle sections on mobile
+        const MIN_CANDLE_SECTION_HEIGHT_PX_BASE = 80; // Increased from 50 
         const MIN_GAP_HEIGHT_BASE = 180; 
 
         const INITIAL_OBSTACLE_SPEED_BASE = 2.5; 
@@ -549,7 +551,7 @@
         const RED_CANDLE_IMAGE_URL = "https://i.imgur.com/yCs6SVg.png";
         const GREEN_CANDLE_IMAGE_URL = "https://i.imgur.com/uUbXFff.png"; 
         const POTION_IMAGE_URL = "https://i.imgur.com/cL2ndoI.png";
-        const FLAPPY_COIN_IMAGE_URL = "https://i.com/JZRXMxr.png";
+        const FLAPPY_COIN_IMAGE_URL = "https://i.imgur.com/JZRXMxr.png";
 
         const SPRITE_ANIMATION_SPEED = 200; 
 
@@ -699,8 +701,8 @@
             GAME_WIDTH = window.innerWidth;
             GAME_HEIGHT = window.innerHeight;
 
-            // Player dimensions scale with GAME_HEIGHT
-            PLAYER_SPRITE_HEIGHT = Math.max(40, GAME_HEIGHT * (PLAYER_SIZE_BASE / BASE_GAME_HEIGHT)); 
+            // Player dimensions scale with GAME_HEIGHT, with a higher minimum
+            PLAYER_SPRITE_HEIGHT = Math.max(60, GAME_HEIGHT * (PLAYER_SIZE_BASE / BASE_GAME_HEIGHT)); // Ensured min 60px
             PLAYER_SPRITE_WIDTH = PLAYER_SPRITE_HEIGHT; // Keep player square
             player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
             player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
@@ -711,10 +713,11 @@
             window.currentObstacleSpeed = INITIAL_OBSTACLE_SPEED_BASE * (GAME_WIDTH / BASE_GAME_WIDTH); // Scale speed too
 
             // Calculate current scaled candle width, min gap, and min candle section height
-            currentScaledCandleWidth = GAME_WIDTH * (CANDLE_WIDTH_BASE / BASE_GAME_WIDTH);
+            // Ensure minimum candle width and section height for mobile
+            currentScaledCandleWidth = Math.max(70, GAME_WIDTH * (CANDLE_WIDTH_BASE / BASE_GAME_WIDTH)); // Ensured min 70px width
             const scaleFactorForHeight = GAME_HEIGHT / BASE_GAME_HEIGHT;
             currentScaledMinGapHeight = MIN_GAP_HEIGHT_BASE * scaleFactorForHeight;
-            currentScaledMinCandleSectionHeight = MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight;
+            currentScaledMinCandleSectionHeight = Math.max(60, MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight); // Ensured min 60px height
 
             // Adjust player initial position based on new GAME_HEIGHT
             window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
@@ -1173,8 +1176,8 @@
         /**
          * Calculates the final score based on Flappy score and Market Cap.
          * @param {number} flappyScore
-         * @param {number} marketCap
-         * @returns {number} Combined final score.
+         * @param {number} number - The number to format.
+         * @returns {string} The formatted currency string.
          */
         function calculateCombinedFinalScore(flappyScore, marketCap) {
             return flappyScore + (marketCap / 1000);
@@ -1357,7 +1360,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 �𝗩𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
@@ -1906,4 +1909,3 @@
     </script>
 </body>
 </html>
-�
