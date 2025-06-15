@@ -347,6 +347,10 @@
             font-weight: bold;
             border: 2px solid #FFD700;
         }
+        .leaderboard-table tbody tr.top-3 {
+            background-color: rgba(255, 215, 0, 0.3); /* Lighter gold for top 3 */
+            border: 2px solid #FFD700;
+        }
         /* Make columns responsive */
         .leaderboard-table td:nth-child(1), .leaderboard-table th:nth-child(1) { width: 10%; } /* Rank */
         .leaderboard-table td:nth-child(2), .leaderboard-table th:nth-child(2) { width: 35%; } /* Player */
@@ -410,6 +414,15 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+        .glowing-score {
+            color: #00FFFF; /* Cyan */
+            text-shadow: 
+                0 0 5px #fff,    
+                0 0 10px #00FFFF, 
+                0 0 20px #00FFFF, 
+                0 0 30px rgba(0, 255, 255, 0.7); 
+            font-weight: bold;
         }
     </style>
 </head>
@@ -545,7 +558,7 @@
             MIN_GAP_HEIGHT_BASE: 180, 
             MIN_GAP_HEIGHT_MULTIPLIER: 1.6, 
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.1, 
-            CANDLE_WIDTH_BASE: 250, // Increased for larger mobile candles
+            CANDLE_WIDTH_BASE: 280, // Increased for larger mobile candles
             INITIAL_OBSTACLE_SPEED_BASE: 3.5, 
         };
 
@@ -953,37 +966,39 @@
          * Green candles from top, Red candles from bottom.
          */
         function createCandleObstacle() {
-            // Calculate available vertical space for the gap and candles
-            const availableVerticalSpace = GAME_HEIGHT - (player.offsetHeight * 2); 
-            
             // Determine the actual minimum gap, ensuring it's at least currentScaledMinGapHeight
-            // Adjusted: Minimum gap is now tighter relative to player height based on currentConfig
             const currentMinGap = Math.max(currentScaledMinGapHeight, player.offsetHeight * currentConfig.MIN_GAP_HEIGHT_MULTIPLIER); 
             
-            // Randomly determine the gap height, making it between currentMinGap and
-            // currentMinGap + a smaller random factor of the remaining available vertical space.
-            const gapHeight = currentMinGap + Math.random() * (availableVerticalSpace * currentConfig.AVAILABLE_SPACE_GAP_RANDOM_FACTOR); 
+            // Randomly determine the gap height, now based on a smaller random factor of available space
+            // This makes the gaps more consistently tighter or wider depending on config
+            const gapHeight = currentMinGap + Math.random() * (GAME_HEIGHT * currentConfig.AVAILABLE_SPACE_GAP_RANDOM_FACTOR); 
 
-            // Calculate the maximum possible height for the top candle (which is now green)
-            const maxTopCandleHeight = GAME_HEIGHT - gapHeight - currentScaledMinCandleSectionHeight; 
-            
-            const minTopCandleHeight = currentScaledMinCandleSectionHeight; 
+            // Define comfortable vertical bounds for the gap's top position
+            const minGapYPosition = player.offsetHeight * 1.5; // At least 1.5 player heights from the top
+            const maxGapYPosition = GAME_HEIGHT - player.offsetHeight * 1.5 - gapHeight; // At least 1.5 player heights from the bottom
 
-            let topCandleHeight;
-            if (maxTopCandleHeight <= minTopCandleHeight) { 
-                topCandleHeight = GAME_HEIGHT / 2 - (gapHeight / 2);
+            let actualGapY;
+            if (minGapYPosition >= maxGapYPosition) { // If screen is too small for the comfort zone
+                actualGapY = (GAME_HEIGHT - gapHeight) / 2; // Center the gap
             } else {
-                topCandleHeight = minTopCandleHeight + Math.random() * (maxTopCandleHeight - minTopCandleHeight);
+                actualGapY = minGapYPosition + Math.random() * (maxGapYPosition - minGapYPosition);
             }
-            
-            const bottomCandleHeight = GAME_HEIGHT - topCandleHeight - gapHeight;
 
-            const gapY = topCandleHeight; 
+            const topCandleHeight = actualGapY; 
+            const bottomCandleHeight = GAME_HEIGHT - actualGapY - gapHeight;
+
+            // Ensure minimum candle section height
+            const finalTopCandleHeight = Math.max(currentScaledMinCandleSectionHeight, topCandleHeight);
+            const finalBottomCandleHeight = Math.max(currentScaledMinCandleSectionHeight, bottomCandleHeight);
+
+            // Re-adjust gap height if minimum candle heights force it
+            const newGapHeight = GAME_HEIGHT - finalTopCandleHeight - finalBottomCandleHeight;
+            const newGapY = finalTopCandleHeight;
 
             // --- Create the Green (Top) Candle ---
             const greenCandle = document.createElement('div');
             greenCandle.classList.add('candle-obstacle', 'green-candle'); 
-            greenCandle.style.height = `${topCandleHeight}px`; 
+            greenCandle.style.height = `${finalTopCandleHeight}px`; 
             greenCandle.style.width = `${currentScaledCandleWidth}px`; 
             greenCandle.style.left = `${GAME_WIDTH}px`; 
             greenCandle.style.top = `0px`; 
@@ -991,10 +1006,10 @@
             // --- Create the Red (Bottom) Candle ---
             const redCandle = document.createElement('div');
             redCandle.classList.add('candle-obstacle', 'red-candle'); 
-            redCandle.style.height = `${bottomCandleHeight}px`; 
+            redCandle.style.height = `${finalBottomCandleHeight}px`; 
             redCandle.style.width = `${currentScaledCandleWidth}px`; 
             redCandle.style.left = `${GAME_WIDTH}px`; 
-            redCandle.style.top = `${topCandleHeight + gapHeight}px`; 
+            redCandle.style.top = `${newGapY + newGapHeight}px`; 
 
             gameContainer.appendChild(greenCandle); // Append green first (top)
             gameContainer.appendChild(redCandle); // Append red second (bottom)
@@ -1003,14 +1018,14 @@
                 redElement: redCandle,
                 greenElement: greenCandle,
                 x: GAME_WIDTH, 
-                gapY: gapY,
-                gapHeight: gapHeight,
+                gapY: newGapY,
+                gapHeight: newGapHeight,
                 width: currentScaledCandleWidth, 
                 passed: false,
             });
 
             // Always create a collectible here
-            createCollectible(redCandle.offsetLeft + currentScaledCandleWidth / 2, gapY, gapHeight);
+            createCollectible(redCandle.offsetLeft + currentScaledCandleWidth / 2, newGapY, newGapHeight);
         }
 
         /**
@@ -1060,8 +1075,9 @@
             if (!window.gameStarted || window.gameOver) return; 
 
             const playerRect = player.getBoundingClientRect();
-            const playerHitboxShrinkAmountX = playerRect.width * 0.40; 
-            const playerHitboxShrinkAmountY = playerRect.height * 0.40;
+            // Increased shrink amount to make the effective collision area smaller (more forgiving)
+            const playerHitboxShrinkAmountX = playerRect.width * 0.45; 
+            const playerHitboxShrinkAmountY = playerRect.height * 0.45;
 
             const playerCollisionRect = {
                 left: playerRect.left + playerHitboxShrinkAmountX,
@@ -1377,7 +1393,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔�𝗘 𝗢𝗩𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
@@ -1527,6 +1543,28 @@
         }
 
         /**
+         * Formats the player's name for display on the leaderboard.
+         * Prioritizes X handle, otherwise masks email.
+         * @param {object} profile - The user's profile object.
+         * @returns {string} Formatted player name.
+         */
+        function formatPlayerName(profile) {
+            if (profile && profile.x_account_name) {
+                return profile.x_account_name;
+            }
+            if (profile && profile.email) {
+                const parts = profile.email.split('@');
+                if (parts.length === 2) {
+                    const localPart = parts[0];
+                    const domainPart = parts[1];
+                    const maskedLocal = localPart.substring(0, Math.min(3, localPart.length)) + '***';
+                    return `${maskedLocal}@${domainPart}`;
+                }
+            }
+            return 'Unknown Player';
+        }
+
+        /**
          * Fetches and displays the leaderboard.
          */
         async function displayLeaderboard() {
@@ -1544,7 +1582,7 @@
                     )
                 `)
                 .order('combined_score', { ascending: false })
-                .limit(10);
+                .limit(10); // Still showing top 10, will highlight top 3 visually
             hideLoading();
 
             if (error) {
@@ -1563,18 +1601,20 @@
             data.forEach((entry, index) => {
                 const tr = document.createElement('tr');
                 const rank = index + 1;
-                // Use x_account_name if available, otherwise email for display
-                const username = entry.profiles ? (entry.profiles.x_account_name || entry.profiles.email) : 'Unknown Player';
+                const username = formatPlayerName(entry.profiles);
                 
                 tr.innerHTML = `
                     <td>#${rank}</td>
                     <td>${username}</td>
                     <td>${entry.score}</td>
                     <td>${formatCurrency(entry.market_cap)}</td>
-                    <td>${entry.combined_score}</td>
+                    <td class="glowing-score">${entry.combined_score}</td>
                 `;
                 if (currentUser && entry.profiles && entry.profiles.id === currentUser.id) { 
                     tr.classList.add('current-user');
+                }
+                if (rank <= 3) {
+                    tr.classList.add('top-3');
                 }
                 leaderboardTableBody.appendChild(tr);
             });
@@ -1719,7 +1759,7 @@
          */
         function updateAuthUI() {
             if (isLoggedIn && currentUser) {
-                userNameDisplay.textContent = currentProfile && currentProfile.x_account_name ? currentProfile.x_account_name : currentUser.email;
+                userNameDisplay.textContent = formatPlayerName(currentProfile);
                 profileButton.style.display = 'inline-block';
                 logoutButton.style.display = 'inline-block';
                 signInEmailLinkButton.classList.add('hidden'); 
@@ -1999,4 +2039,3 @@
     </script>
 </body>
 </html>
-�
