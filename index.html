@@ -205,7 +205,7 @@
             position: absolute;
             z-index: 20;
         }
-        .message-box {
+        .message-box, .device-selection-modal {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -216,14 +216,14 @@
             text-align: center;
             z-index: 30;
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); 
-            display: none;
+            display: none; /* Hidden by default, JS controls visibility */
             max-width: 80%;
             max-height: 80%;
             overflow-y: auto;
             border: 3px solid #FFD700;
             box-sizing: border-box; 
         }
-        .message-box h2 {
+        .message-box h2, .device-selection-modal h2 {
             font-weight: 900;
             color: #FFD700;
             text-shadow: 
@@ -234,7 +234,7 @@
                 0 0 60px rgba(0, 0, 0, 0.8); 
             font-family: 'Inter', monospace, sans-serif; 
         }
-        .message-box p {
+        .message-box p, .device-selection-modal p {
             font-weight: 600;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.7); 
             font-family: 'Inter', monospace, sans-serif; 
@@ -442,6 +442,16 @@
         <!-- Player character -->
         <div id="player" class="player"></div>
 
+        <!-- Device Selection Modal (New) -->
+        <div id="deviceSelectionModal" class="device-selection-modal">
+            <h2>Choose Your Device</h2>
+            <p>Select the best experience for your device:</p>
+            <div class="flex flex-col items-center mt-4">
+                <button id="playOnLaptopButton" class="flappy-button">💻 PLAY ON LAPTOP</button>
+                <button id="playOnMobileButton" class="flappy-button">📱 PLAY ON MOBILE</button>
+            </div>
+        </div>
+
         <!-- Main Message Box (Start, Game Over, Auth) -->
         <div id="messageBox" class="message-box">
             <h2 id="messageTitle"></h2>
@@ -507,27 +517,57 @@
     </div>
 
     <script>
-        // Game constants
+        // Game constants - now separated into configurations
         const BASE_GAME_WIDTH = 626; 
         const BASE_GAME_HEIGHT = 1131;
 
         let GAME_WIDTH = window.innerWidth;
         let GAME_HEIGHT = window.innerHeight;
 
-        let PLAYER_GRAVITY_BASE = 0.18; 
-        let PLAYER_FLAP_STRENGTH_BASE = -4.5; 
-        // Adjusted for larger player on mobile
-        const PLAYER_SIZE_BASE = 120; // Increased from 100 
+        // --- Device-Specific Configurations ---
+        const laptopConfig = {
+            PLAYER_SIZE_BASE: 80,
+            PLAYER_GRAVITY_BASE: 0.18,
+            PLAYER_FLAP_STRENGTH_BASE: -4.5,
+            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 50,
+            MIN_GAP_HEIGHT_BASE: 180,
+            MIN_GAP_HEIGHT_MULTIPLIER: 2.5, // Multiplier for player height
+            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.3, // Random addition to gap
+            CANDLE_WIDTH_BASE: 150,
+            INITIAL_OBSTACLE_SPEED_BASE: 2.5,
+        };
+
+        const mobileConfig = {
+            PLAYER_SIZE_BASE: 150, 
+            PLAYER_GRAVITY_BASE: 0.35, // Increased from 0.28 for faster fall
+            PLAYER_FLAP_STRENGTH_BASE: -7.5, // More negative from -6.5 for stronger/faster flap
+            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 120, 
+            MIN_GAP_HEIGHT_BASE: 180, 
+            MIN_GAP_HEIGHT_MULTIPLIER: 1.6, 
+            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.1, 
+            CANDLE_WIDTH_BASE: 180, 
+            INITIAL_OBSTACLE_SPEED_BASE: 3.5, // Increased from 3.0 for faster obstacles
+        };
+
+        let currentConfig = laptopConfig; // Default, will be set by device selection
+
+        // Variables that will take values from currentConfig
+        let PLAYER_GRAVITY; 
+        let PLAYER_FLAP_STRENGTH; 
+        let PLAYER_SIZE; // Player size will be calculated from PLAYER_SIZE_BASE
+        let MIN_CANDLE_SECTION_HEIGHT_PX;
+        let MIN_GAP_HEIGHT;
+        let CANDLE_WIDTH;
+        let INITIAL_OBSTACLE_SPEED;
+
+        // Derived variables (calculated in calculateGameDimensions)
+        let currentScaledCandleWidth;
+        let currentScaledMinGapHeight;
+        let currentScaledMinCandleSectionHeight;
 
         const MAX_ROTATION_DEGREES = 35;
-        
-        const CANDLE_WIDTH_BASE = 150; 
         const DESIRED_GAP_HEIGHT_RATIO = 0.25; 
-        // Adjusted for larger candle sections on mobile
-        const MIN_CANDLE_SECTION_HEIGHT_PX_BASE = 100; // Increased from 80 
-        const MIN_GAP_HEIGHT_BASE = 180; // This can remain as a base for calculating minGap, but the multiplier below will reduce the effective size
-
-        const INITIAL_OBSTACLE_SPEED_BASE = 2.5; 
+        
         const OBSTACLE_INTERVAL_MIN = 3000; 
         const OBSTACLE_INTERVAL_MAX = 4500; 
         const FLAP_SOUND_COOLDOWN = 150; 
@@ -540,12 +580,8 @@
 
         const PLAYER_SPRITE_SHEET_URL = "https://i.imgur.com/N3fsA36.png"; 
         const PLAYER_SPRITE_FRAME_COUNT = 4; 
-        let PLAYER_SPRITE_WIDTH = PLAYER_SIZE_BASE; 
-        let PLAYER_SPRITE_HEIGHT = PLAYER_SIZE_BASE; 
-
-        let currentScaledCandleWidth;
-        let currentScaledMinGapHeight;
-        let currentScaledMinCandleSectionHeight;
+        let PLAYER_SPRITE_WIDTH; 
+        let PLAYER_SPRITE_HEIGHT; 
 
         const BACKGROUND_IMAGE_URL = "https://i.imgur.com/ESwrOre.png"; 
         const RED_CANDLE_IMAGE_URL = "https://i.imgur.com/yCs6SVg.png";
@@ -562,6 +598,10 @@
         const playerIcon = document.getElementById('playerIcon');
         const marketCapDisplay = document.getElementById('marketCap');
         const powerupStatusDisplay = document.getElementById('powerupStatus');
+
+        const deviceSelectionModal = document.getElementById('deviceSelectionModal'); 
+        const playOnLaptopButton = document.getElementById('playOnLaptopButton');     
+        const playOnMobileButton = document.getElementById('playOnMobileButton');     
 
         const messageBox = document.getElementById('messageBox');
         const messageTitle = document.getElementById('messageTitle');
@@ -585,17 +625,17 @@
 
         // Modals and their elements
         const leaderboardModal = document.getElementById('leaderboardModal');
-        const leaderboardTableBody = document.querySelector('#leaderboardTable tbody'); // Changed to tbody
+        const leaderboardTableBody = document.querySelector('#leaderboardTable tbody'); 
         const leaderboardCloseButton = document.getElementById('leaderboardCloseButton');
 
         const profileModal = document.getElementById('profileModal'); 
         const profileEmailDisplay = document.getElementById('profileEmailDisplay'); 
         const profileXAccountDisplay = document.getElementById('profileXAccountDisplay'); 
-        const profileRankDisplay = document.getElementById('profileRankDisplay'); // New rank display
+        const profileRankDisplay = document.getElementById('profileRankDisplay'); 
         const profileXAccountNameInput = document.getElementById('profileXAccountNameInput'); 
         const profileSetXAccountNameButton = document.getElementById('profileSetXAccountNameButton'); 
-        const profileSignInEmailLinkButton = document.getElementById('profileSignInEmailLinkButton'); // Added
-        const profileLogoutButton = document.getElementById('profileLogoutButton'); // Added
+        const profileSignInEmailLinkButton = document.getElementById('profileSignInEmailLinkButton'); 
+        const profileLogoutButton = document.getElementById('profileLogoutButton'); 
         const profileCloseButton = document.getElementById('profileCloseButton'); 
 
         const loadingOverlay = document.getElementById('loadingOverlay');
@@ -637,92 +677,36 @@
         let isLoggedIn = false;
 
         /**
-         * Shows the loading overlay.
-         * @param {string} message - The message to display on the loading screen.
-         */
-        function showLoading(message = "Loading...") {
-            loadingOverlay.querySelector('img').style.display = 'block'; // Show spinner
-            loadingOverlay.innerHTML = `<img src="https://i.imgur.com/N3fsA36.png" alt="Loading Coin"> ${message}`;
-            loadingOverlay.style.display = 'flex';
-        }
-
-        /**
-         * Hides the loading overlay.
-         */
-        function hideLoading() {
-            loadingOverlay.style.display = 'none';
-        }
-
-        /**
-         * Formats a number as currency with commas.
-         * @param {number} num - The number to format.
-         * @returns {string} The formatted currency string.
-         */
-        function formatCurrency(num) {
-            return num.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-        }
-        
-        /**
-         * Initializes Tone.js audio context and synths.
-         * This must be called after a user gesture to avoid browser autoplay policies.
-         * Synths are disposed and recreated to ensure a clean state between games.
-         */
-        async function initAudio() {
-            console.log("initAudio called. Tone.context.state:", Tone.context.state);
-            if (flapSynth) { 
-                flapSynth.dispose();
-                flapSynth = null;
-            }
-
-            if (Tone.context.state === 'suspended') {
-                try {
-                    await Tone.start();
-                    console.log('Audio context resumed after user gesture.');
-                } catch (e) {
-                    console.error('Failed to resume audio context:', e);
-                }
-            } else {
-                console.log('Audio context state:', Tone.context.state);
-            }
-
-            flapSynth = new Tone.MembraneSynth({ 
-                pitchDecay: 0.05, octaves: 8,
-                envelope: { attack: 0.001, decay: 0.4, sustain: 0.01, release: 0.4, attackCurve: "exponential" },
-                volume: -10
-            }).toDestination();
-            console.log('Flap synth created.');
-        }
-
-        /**
          * Calculates the actual rendered dimensions of the game area and adjusts all dynamic elements.
          * This ensures everything scales proportionally to the current screen size.
+         * Moved to top to prevent ReferenceError.
          */
         function calculateGameDimensions() {
             GAME_WIDTH = window.innerWidth;
             GAME_HEIGHT = window.innerHeight;
 
+            // Apply current configuration parameters
+            PLAYER_GRAVITY = currentConfig.PLAYER_GRAVITY_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
+            PLAYER_FLAP_STRENGTH = currentConfig.PLAYER_FLAP_STRENGTH_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
+            window.currentObstacleSpeed = currentConfig.INITIAL_OBSTACLE_SPEED_BASE * (GAME_WIDTH / BASE_GAME_WIDTH); 
+
             // Player dimensions scale with GAME_HEIGHT, with a higher minimum
-            PLAYER_SPRITE_HEIGHT = Math.max(70, GAME_HEIGHT * (PLAYER_SIZE_BASE / BASE_GAME_HEIGHT)); // Ensured min 70px
+            PLAYER_SPRITE_HEIGHT = Math.max(70, GAME_HEIGHT * (currentConfig.PLAYER_SIZE_BASE / BASE_GAME_HEIGHT)); 
             PLAYER_SPRITE_WIDTH = PLAYER_SPRITE_HEIGHT; // Keep player square
             player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
             player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
 
-            // Adjust physics constants based on new height
-            PLAYER_GRAVITY = PLAYER_GRAVITY_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
-            PLAYER_FLAP_STRENGTH = PLAYER_FLAP_STRENGTH_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
-            window.currentObstacleSpeed = INITIAL_OBSTACLE_SPEED_BASE * (GAME_WIDTH / BASE_GAME_WIDTH); // Scale speed too
-
             // Calculate current scaled candle width, min gap, and min candle section height
-            // Ensure minimum candle width and section height for mobile
-            currentScaledCandleWidth = Math.max(70, GAME_WIDTH * (CANDLE_WIDTH_BASE / BASE_GAME_WIDTH)); // Ensured min 70px width
+            currentScaledCandleWidth = Math.max(70, GAME_WIDTH * (currentConfig.CANDLE_WIDTH_BASE / BASE_GAME_WIDTH)); 
             const scaleFactorForHeight = GAME_HEIGHT / BASE_GAME_HEIGHT;
-            currentScaledMinGapHeight = MIN_GAP_HEIGHT_BASE * scaleFactorForHeight;
-            currentScaledMinCandleSectionHeight = Math.max(70, MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight); // Ensured min 70px height
+            currentScaledMinGapHeight = currentConfig.MIN_GAP_HEIGHT_BASE * scaleFactorForHeight;
+            currentScaledMinCandleSectionHeight = Math.max(70, currentConfig.MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight); 
 
             // Adjust player initial position based on new GAME_HEIGHT
             window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
             player.style.top = `${window.playerY}px`; 
             player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
+            player.style.transform = `rotateZ(0deg)`; 
 
             // Adjust UI element sizes and positions based on a common scale factor
             const scaleFactor = Math.min(GAME_WIDTH / BASE_GAME_WIDTH, GAME_HEIGHT / BASE_GAME_HEIGHT);
@@ -758,14 +742,20 @@
             powerupStatusDisplay.style.borderRadius = `${0.5 * scaleFactor}rem`;
 
 
-            // Message Box
-            messageBox.style.padding = `${1 * scaleFactor}rem ${1.5 * scaleFactor}rem`;
-            messageBox.style.borderRadius = `${1.5 * scaleFactor}rem`;
-            messageBox.style.borderWidth = `${3 * scaleFactor}px`;
-            messageTitle.style.fontSize = `${2 * scaleFactor}rem`;
-            messageTitle.style.marginBottom = `${0.6 * scaleFactor}rem`;
-            messageText.style.fontSize = `${1 * scaleFactor}rem`;
-            messageText.style.marginBottom = `${0.8 * scaleFactor}rem`;
+            // Message Box & Device Selection Modal
+            document.querySelectorAll('.message-box, .device-selection-modal').forEach(modal => {
+                modal.style.padding = `${1 * scaleFactor}rem ${1.5 * scaleFactor}rem`;
+                modal.style.borderRadius = `${1.5 * scaleFactor}rem`;
+                modal.style.borderWidth = `${3 * scaleFactor}px`;
+            });
+            document.querySelectorAll('.message-box h2, .device-selection-modal h2').forEach(h2 => {
+                h2.style.fontSize = `${2 * scaleFactor}rem`;
+                h2.style.marginBottom = `${0.6 * scaleFactor}rem`;
+            });
+            document.querySelectorAll('.message-box p, .device-selection-modal p').forEach(p => {
+                p.style.fontSize = `${1 * scaleFactor}rem`;
+                p.style.marginBottom = `${0.8 * scaleFactor}rem`;
+            });
             
             // Buttons
             const buttonFontSize = 20 * scaleFactor;
@@ -825,6 +815,32 @@
             particleCanvas.width = GAME_WIDTH;
             particleCanvas.height = GAME_HEIGHT;
             createParticles(); 
+        }
+
+        /**
+         * Shows the loading overlay.
+         * @param {string} message - The message to display on the loading screen.
+         */
+        function showLoading(message = "Loading...") {
+            loadingOverlay.querySelector('img').style.display = 'block'; // Show spinner
+            loadingOverlay.innerHTML = `<img src="https://i.imgur.com/N3fsA36.png" alt="Loading Coin"> ${message}`;
+            loadingOverlay.style.display = 'flex';
+        }
+
+        /**
+         * Hides the loading overlay.
+         */
+        function hideLoading() {
+            loadingOverlay.style.display = 'none';
+        }
+
+        /**
+         * Formats a number as currency with commas.
+         * @param {number} num - The number to format.
+         * @returns {string} The formatted currency string.
+         */
+        function formatCurrency(num) {
+            return num.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
         }
         
         /**
@@ -941,12 +957,12 @@
             const availableVerticalSpace = GAME_HEIGHT - (player.offsetHeight * 2); 
             
             // Determine the actual minimum gap, ensuring it's at least currentScaledMinGapHeight
-            // Adjusted: Minimum gap is now tighter relative to player height
-            const currentMinGap = Math.max(currentScaledMinGapHeight, player.offsetHeight * 1.8); // Reduced from 2.5 
+            // Adjusted: Minimum gap is now tighter relative to player height based on currentConfig
+            const currentMinGap = Math.max(currentScaledMinGapHeight, player.offsetHeight * currentConfig.MIN_GAP_HEIGHT_MULTIPLIER); 
             
             // Randomly determine the gap height, making it between currentMinGap and
             // currentMinGap + a smaller random factor of the remaining available vertical space.
-            const gapHeight = currentMinGap + Math.random() * (availableVerticalSpace * 0.1); // Reduced from 0.3 
+            const gapHeight = currentMinGap + Math.random() * (availableVerticalSpace * currentConfig.AVAILABLE_SPACE_GAP_RANDOM_FACTOR); 
 
             // Calculate the maximum possible height for the top candle (which is now green)
             const maxTopCandleHeight = GAME_HEIGHT - gapHeight - currentScaledMinCandleSectionHeight; 
@@ -1169,7 +1185,6 @@
         function stopSpriteAnimation() {
             if (window.spriteAnimationInterval) clearInterval(window.spriteAnimationInterval); 
             window.spriteAnimationInterval = null; 
-            window.currentSpriteFrameIndex = 0; 
             player.style.backgroundPosition = `0 0`; 
             player.style.transform = `rotateZ(0deg)`;
         }
@@ -1222,7 +1237,7 @@
         }
 
         function particleAnimationLoop() {
-            if (messageBox.style.display !== 'none' || leaderboardModal.style.display !== 'none' || profileModal.style.display !== 'none') { 
+            if (deviceSelectionModal.style.display !== 'none' || messageBox.style.display !== 'none' || leaderboardModal.style.display !== 'none' || profileModal.style.display !== 'none') { 
                 updateParticles();
                 drawParticles();
                 particleAnimationFrameId = requestAnimationFrame(particleAnimationLoop);
@@ -1252,7 +1267,7 @@
                 return;
             }
 
-            window.marketCap += (MARKET_CAP_PER_BASE_CANDLE_WIDTH / CANDLE_WIDTH_BASE) * window.currentObstacleSpeed; 
+            window.marketCap += (MARKET_CAP_PER_BASE_CANDLE_WIDTH / currentConfig.CANDLE_WIDTH_BASE) * window.currentObstacleSpeed; 
             marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
 
             updatePlayer();
@@ -1297,7 +1312,7 @@
             window.marketCap = INITIAL_MARKET_CAP; 
             marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
             
-            calculateGameDimensions(); 
+            calculateGameDimensions(); // Recalculate dimensions based on currentConfig
 
             window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
             player.style.top = `${window.playerY}px`; 
@@ -1319,6 +1334,7 @@
             window.items = []; 
 
             messageBox.style.display = 'none'; 
+            deviceSelectionModal.style.display = 'none'; // Hide device selection
             leaderboardModal.style.display = 'none'; 
             profileModal.style.display = 'none'; 
             particleCanvas.style.display = 'none'; 
@@ -1368,25 +1384,60 @@
                 💥 Combined Score: <b>${finalCombinedScore.toFixed(0)}</b><br>
             `;
             
-            // Save score to Supabase if logged in
+            // Save high score to Supabase if logged in
             if (isLoggedIn && currentUser && currentUser.id) {
-                showLoading("Saving score...");
-                // Ensure market_cap is an integer before sending to Supabase
+                showLoading("Saving high score...");
                 const roundedMarketCap = Math.round(window.marketCap); 
-                const { error } = await supabase
-                    .from('scores')
-                    .insert([
-                        { user_id: currentUser.id, score: window.score, market_cap: roundedMarketCap, combined_score: finalCombinedScore.toFixed(0) }
-                    ]);
-                hideLoading();
-                if (error) {
-                    console.error("Error saving score:", error);
-                    messageText.innerHTML += `<br><span style="color:red;">Error saving score: ${error.message}</span>`;
+                const formattedCombinedScore = finalCombinedScore.toFixed(0);
+
+                // 1. Fetch existing high score for the user
+                const { data: existingHighScore, error: fetchError } = await supabase
+                    .from('high_scores') // Query the new high_scores table
+                    .select('combined_score')
+                    .eq('user_id', currentUser.id)
+                    .single();
+
+                if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 means no row found
+                    console.error("Error fetching existing high score:", fetchError);
+                    messageText.innerHTML += `<br><span style="color:red;">Error checking high score: ${fetchError.message}</span>`;
                 } else {
-                    messageText.innerHTML += `<br><span style="color:lime;">Score saved!</span>`;
-                    // Refresh leaderboard after a successful save
-                    await displayLeaderboard(); 
+                    // 2. Compare and decide whether to upsert
+                    let shouldSaveNewScore = false;
+                    if (!existingHighScore) {
+                        shouldSaveNewScore = true; // No existing high score, so save this one
+                        console.log("No existing high score found, will save new one.");
+                    } else if (parseInt(formattedCombinedScore) > existingHighScore.combined_score) {
+                        shouldSaveNewScore = true; // New score is higher, so save it
+                        console.log(`New score ${formattedCombinedScore} is higher than existing ${existingHighScore.combined_score}, will update.`);
+                    } else {
+                        console.log(`New score ${formattedCombinedScore} is not higher than existing ${existingHighScore.combined_score}, will not save.`);
+                    }
+
+                    if (shouldSaveNewScore) {
+                        const { error: upsertError } = await supabase
+                            .from('high_scores') // Upsert into high_scores table
+                            .upsert([
+                                { 
+                                    user_id: currentUser.id, 
+                                    score: window.score, 
+                                    market_cap: roundedMarketCap, 
+                                    combined_score: formattedCombinedScore 
+                                }
+                            ], { onConflict: 'user_id' }); // Use user_id for conflict resolution
+
+                        if (upsertError) {
+                            console.error("Error saving high score:", upsertError);
+                            messageText.innerHTML += `<br><span style="color:red;">Error saving high score: ${upsertError.message}</span>`;
+                        } else {
+                            messageText.innerHTML += `<br><span style="color:lime;">High Score saved!</span>`;
+                            await displayLeaderboard(); // Refresh leaderboard after a successful save
+                        }
+                    } else {
+                         messageText.innerHTML += `<br><span style="color:orange;">Your score (${formattedCombinedScore}) was not a new high score.</span>`;
+                         await displayLeaderboard(); // Still refresh just in case
+                    }
                 }
+                hideLoading();
             } else {
                 messageText.innerHTML += `<br>Sign in to save your score and appear on the leaderboard!`;
             }
@@ -1481,11 +1532,11 @@
         async function displayLeaderboard() {
             showLoading("Fetching leaderboard...");
             const { data, error } = await supabase
-                .from('scores')
+                .from('high_scores') // Query the high_scores table
                 .select(`
                     combined_score,
-                    score,        /* Added to fetch Flappy score */
-                    market_cap,   /* Added to fetch Market Cap */
+                    score,        
+                    market_cap,   
                     profiles (
                         x_account_name,
                         email,
@@ -1542,7 +1593,7 @@
             showLoading("Calculating rank...");
             // Get the user's highest score
             const { data: userScores, error: userScoresError } = await supabase
-                .from('scores')
+                .from('high_scores') // Query high_scores for user's best
                 .select('combined_score')
                 .eq('user_id', currentUser.id)
                 .order('combined_score', { ascending: false })
@@ -1564,11 +1615,11 @@
 
             const userHighestScore = userScores.combined_score;
 
-            // Count how many scores are greater than or equal to the user's score
+            // Count how many scores are greater than or equal to the user's score from high_scores
             const { count, error: countError } = await supabase
-                .from('scores')
+                .from('high_scores')
                 .select('id', { count: 'exact' })
-                .gte('combined_score', userHighestScore); // Count scores >= user's score
+                .gte('combined_score', userHighestScore); 
 
             hideLoading();
 
@@ -1705,10 +1756,11 @@
         }
 
         /**
-         * Shows the authentication/start screen or game over screen.
+         * Shows the main welcome/auth screen.
          * @param {boolean} isGameOver - True if showing after game over.
          */
         function showAuthScreen(isGameOver = false) {
+            deviceSelectionModal.style.display = 'none'; // Ensure device selection is hidden
             messageBox.style.display = 'block'; 
             particleCanvas.style.display = 'block'; 
             if (!particleAnimationFrameId) { 
@@ -1750,6 +1802,23 @@
             } 
         }
 
+        /**
+         * Shows the initial device selection modal.
+         */
+        function showDeviceSelection() {
+            deviceSelectionModal.style.display = 'flex';
+            messageBox.style.display = 'none';
+            leaderboardModal.style.display = 'none';
+            profileModal.style.display = 'none';
+            userInfoDisplay.style.display = 'none'; // Hide user info bar initially
+            
+            particleCanvas.style.display = 'block'; 
+            if (!particleAnimationFrameId) { 
+                createParticles(); 
+                particleAnimationLoop(); 
+            }
+        }
+
         // --- Event Listeners ---
 
         document.addEventListener('keydown', (e) => {
@@ -1764,22 +1833,31 @@
         });
 
         gameContainer.addEventListener('click', async (e) => {
-            // Check if the click target is a button inside messageBox or modals, or userInfo buttons.
-            // If it's one of these, let the specific button handler manage it.
-            const isMessageBoxButton = e.target.closest('#messageBox button');
-            const isModalButton = e.target.closest('.leaderboard-modal button') || e.target.closest('.profile-modal button');
+            // Check if the click target is a button inside any modal or userInfo buttons.
+            const isAnyModalButton = e.target.closest('#messageBox button') || 
+                                     e.target.closest('.leaderboard-modal button') || 
+                                     e.target.closest('.profile-modal button') ||
+                                     e.target.closest('#deviceSelectionModal button'); 
             const isUserInfoButton = e.target.closest('#userInfo button');
-            const isInput = e.target.closest('input'); // Added check for input field
+            const isInput = e.target.closest('input'); 
 
             // If an input field is clicked, do nothing to prevent unintended game starts or flaps.
             if (isInput) {
                 return;
             }
 
-            if (isMessageBoxButton || isModalButton || isUserInfoButton) {
+            if (isAnyModalButton || isUserInfoButton) {
                 e.stopPropagation(); // Prevent this click from bubbling up to the gameContainer's general handler
 
-                if (e.target.closest('#signInEmailLinkButton')) {
+                if (e.target.closest('#playOnLaptopButton')) { 
+                    currentConfig = laptopConfig;
+                    calculateGameDimensions(); // Apply selected config
+                    showAuthScreen(false); // Move to welcome screen
+                } else if (e.target.closest('#playOnMobileButton')) { 
+                    currentConfig = mobileConfig;
+                    calculateGameDimensions(); // Apply selected config
+                    showAuthScreen(false); // Move to welcome screen
+                } else if (e.target.closest('#signInEmailLinkButton')) {
                     await handleSignInWithEmailLink();
                 } else if (e.target.closest('#startButton')) { 
                     startGame();
@@ -1806,7 +1884,7 @@
                         profileXAccountNameInput.value = '';
                         profileRankDisplay.textContent = 'Rank: N/A (Sign in to see)';
                     }
-                    updateAuthUI(); // Ensure profile modal buttons are correct
+                    updateAuthUI(); 
                 } else if (e.target.closest('#profileSetXAccountNameButton')) {
                     const newXAccountName = profileXAccountNameInput.value.trim();
                     await updateXAccountName(newXAccountName);
@@ -1836,12 +1914,15 @@
             }
         }, { passive: false }); 
 
-        window.onload = async () => {
+        // Named function for window.onload
+        async function initializeGame() {
+            // Initial call to calculate dimensions based on default/initial config (laptopConfig)
+            // This is needed so that player.offsetHeight and player.offsetWidth are correctly initialized
             calculateGameDimensions(); 
 
+            // Set initial player style based on default config
             player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
             player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
-
             updatePlayerSize();
             window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
             player.style.top = `${window.playerY}px`; 
@@ -1856,6 +1937,7 @@
                 await verifyEmailLink();
             }
 
+            // Set up auth state change listener immediately
             window.supabase.auth.onAuthStateChange(async (event, session) => {
                 console.log("Auth state changed:", event, session);
                 if (session) {
@@ -1872,12 +1954,20 @@
                     isLoggedIn = false;
                 }
                 updateAuthUI();
-                showAuthScreen(window.gameOver); 
+                // After auth state changes, if device selection is already hidden, show auth screen
+                // This prevents the auth screen from showing prematurely if device selection is still active
+                if (deviceSelectionModal.style.display === 'none') {
+                    showAuthScreen(window.gameOver); 
+                }
             });
 
-            updateAuthUI();
-            showAuthScreen(); 
-        };
+            // Display device selection modal first
+            showDeviceSelection(); 
+        }
+
+        // Assign the named function to window.onload
+        window.onload = initializeGame;
+
 
         document.addEventListener('touchstart', (e) => {
             // Prevent default touch behavior only if not interacting with a button or input
@@ -1899,13 +1989,12 @@
                 player.style.top = `${window.playerY}px`; 
                 player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
             }
-            messageBox.style.top = '50%';
-            messageBox.style.left = '50%';
-            messageBox.style.transform = 'translate(-50%, -50%)';
-            leaderboardModal.style.top = '0'; 
-            leaderboardModal.style.left = '0';
-            profileModal.style.top = '0';
-            profileModal.style.left = '0';
+            // Ensure modals are centered on resize
+            document.querySelectorAll('.message-box, .device-selection-modal, .leaderboard-modal, .profile-modal').forEach(modal => {
+                modal.style.top = '50%';
+                modal.style.left = '50%';
+                modal.style.transform = 'translate(-50%, -50%)';
+            });
         });
     </script>
 </body>
