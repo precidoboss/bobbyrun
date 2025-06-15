@@ -526,27 +526,27 @@
 
         // --- Device-Specific Configurations ---
         const laptopConfig = {
-            PLAYER_SIZE_BASE: 80,
+            PLAYER_SIZE_BASE: 120, // Increased for desktop
             PLAYER_GRAVITY_BASE: 0.18,
             PLAYER_FLAP_STRENGTH_BASE: -4.5,
             MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 50,
-            MIN_GAP_HEIGHT_BASE: 180,
-            MIN_GAP_HEIGHT_MULTIPLIER: 2.5, // Multiplier for player height
-            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.3, // Random addition to gap
+            MIN_GAP_HEIGHT_BASE: 120, // Decreased for tighter gaps
+            MIN_GAP_HEIGHT_MULTIPLIER: 1.8, // Decreased for tighter gaps relative to player
+            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.15, // Reduced for more consistent and tighter gaps
             CANDLE_WIDTH_BASE: 150,
             INITIAL_OBSTACLE_SPEED_BASE: 2.5,
         };
 
         const mobileConfig = {
             PLAYER_SIZE_BASE: 150, 
-            PLAYER_GRAVITY_BASE: 0.35, // Increased from 0.28 for faster fall
-            PLAYER_FLAP_STRENGTH_BASE: -7.5, // More negative from -6.5 for stronger/faster flap
+            PLAYER_GRAVITY_BASE: 0.35, 
+            PLAYER_FLAP_STRENGTH_BASE: -7.5, 
             MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 120, 
             MIN_GAP_HEIGHT_BASE: 180, 
             MIN_GAP_HEIGHT_MULTIPLIER: 1.6, 
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.1, 
-            CANDLE_WIDTH_BASE: 180, 
-            INITIAL_OBSTACLE_SPEED_BASE: 3.5, // Increased from 3.0 for faster obstacles
+            CANDLE_WIDTH_BASE: 250, // Increased for larger mobile candles
+            INITIAL_OBSTACLE_SPEED_BASE: 3.5, 
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device selection
@@ -568,8 +568,8 @@
         const MAX_ROTATION_DEGREES = 35;
         const DESIRED_GAP_HEIGHT_RATIO = 0.25; 
         
-        const OBSTACLE_INTERVAL_MIN = 3000; 
-        const OBSTACLE_INTERVAL_MAX = 4500; 
+        const OBSTACLE_INTERVAL_MIN = 1500; // Halved for closer obstacles
+        const OBSTACLE_INTERVAL_MAX = 2250; // Halved for closer obstacles
         const FLAP_SOUND_COOLDOWN = 150; 
 
         const POTION_SPAWN_CHANCE_RATE = 0.10; 
@@ -1377,7 +1377,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔�𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
@@ -1999,3 +1999,4 @@
     </script>
 </body>
 </html>
+�
