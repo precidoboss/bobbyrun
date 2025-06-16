@@ -428,6 +428,29 @@
                 0 0 30px rgba(0, 255, 255, 0.7); 
             font-weight: bold;
         }
+        /* New styles for speed-up text animation */
+        .speed-up-text {
+            position: absolute;
+            top: 20%; /* Adjusted position */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Luckiest Guy', cursive;
+            font-size: 3.5rem; /* Adjust as needed */
+            font-weight: 900;
+            color: #FFD700; /* Gold color for impact */
+            text-shadow: 
+                0 0 10px #fff,
+                0 0 20px #FFD700,
+                0 0 40px #FFD700,
+                0 0 80px #FFD700;
+            opacity: 0; /* Start hidden */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade */
+            z-index: 50; /* Above other elements */
+            pointer-events: none; /* Do not block clicks */
+        }
+        .speed-up-text.show {
+            opacity: 1; /* Fade in */
+        }
     </style>
 </head>
 <body>
@@ -458,6 +481,9 @@
         <div id="powerupStatus" class="powerup-status"></div>
         <!-- Player character -->
         <div id="player" class="player"></div>
+
+        <!-- Speed Up Animation Text -->
+        <div id="speedUpText" class="speed-up-text">FLAPPY SPEED UP!</div>
 
         <!-- Device Selection Modal (New) -->
         <div id="deviceSelectionModal" class="device-selection-modal">
@@ -566,8 +592,8 @@
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Slightly reduced random factor for tighter gaps
             CANDLE_WIDTH_BASE: 200, // Significantly reduced for more horizontal gap space
             INITIAL_OBSTACLE_SPEED_BASE: 2.8, // Adjusted speed for mobile
-            OBSTACLE_INTERVAL_MIN: 2600, // Increased for more breathing room on mobile - FURTHER INCREASED
-            OBSTACLE_INTERVAL_MAX: 3600, // Increased for more breathing room on mobile - FURTHER INCREASED
+            OBSTACLE_INTERVAL_MIN: 2600, 
+            OBSTACLE_INTERVAL_MAX: 3600, 
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -620,6 +646,7 @@
         const playerIcon = document.getElementById('playerIcon');
         const marketCapDisplay = document.getElementById('marketCap');
         const powerupStatusDisplay = document.getElementById('powerupStatus');
+        const speedUpText = document.getElementById('speedUpText'); // New element reference
 
         const deviceSelectionModal = document.getElementById('deviceSelectionModal'); 
         const playOnLaptopButton = document.getElementById('playOnLaptopButton');     
@@ -683,6 +710,7 @@
         window.shieldActive = false;
         window.shieldTimer = null;
         window.currentObstacleSpeed = 0; 
+        window.lastMarketCapSpeedMilestone = INITIAL_MARKET_CAP; // New variable for speed increase
 
         window.currentSpriteFrameIndex = 0;
         window.spriteAnimationInterval = null;
@@ -709,7 +737,10 @@
             // Apply current configuration parameters
             PLAYER_GRAVITY = currentConfig.PLAYER_GRAVITY_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
             PLAYER_FLAP_STRENGTH = currentConfig.PLAYER_FLAP_STRENGTH_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
-            window.currentObstacleSpeed = currentConfig.INITIAL_OBSTACLE_SPEED_BASE * (GAME_WIDTH / BASE_GAME_WIDTH); 
+            // currentObstacleSpeed is now handled dynamically in gameLoop, but needs initial value
+            if (window.currentObstacleSpeed === 0 || !window.gameStarted) { // Only set initial speed if not already in game
+                window.currentObstacleSpeed = currentConfig.INITIAL_OBSTACLE_SPEED_BASE * (GAME_WIDTH / BASE_GAME_WIDTH); 
+            }
             OBSTACLE_INTERVAL_MIN = currentConfig.OBSTACLE_INTERVAL_MIN;
             OBSTACLE_INTERVAL_MAX = currentConfig.OBSTACLE_INTERVAL_MAX;
 
@@ -764,6 +795,10 @@
             powerupStatusDisplay.style.fontSize = `${1.8 * scaleFactor}rem`;
             powerupStatusDisplay.style.padding = `${0.5 * scaleFactor}rem ${1 * scaleFactor}rem`;
             powerupStatusDisplay.style.borderRadius = `${0.5 * scaleFactor}rem`;
+
+            // Speed Up Text - Adjusted top position
+            speedUpText.style.fontSize = `${3.5 * scaleFactor}rem`;
+            speedUpText.style.top = `${GAME_HEIGHT * 0.20}px`; // 20% from the top
 
 
             // Message Box & Device Selection Modal
@@ -1304,6 +1339,16 @@
         // === End Particle System ===
 
         /**
+         * Displays a temporary "FLAPPY SPEED UP!" message.
+         */
+        function showSpeedUpMessage() {
+            speedUpText.classList.add('show');
+            setTimeout(() => {
+                speedUpText.classList.remove('show');
+            }, 1000); // Display for 1 second
+        }
+
+        /**
          * Updates the score display on the top bar.
          */
         function updateScoreDisplay() {
@@ -1323,6 +1368,14 @@
 
             window.marketCap += (MARKET_CAP_PER_BASE_CANDLE_WIDTH / currentConfig.CANDLE_WIDTH_BASE) * window.currentObstacleSpeed; 
             marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
+
+            // Check if market cap has increased enough to boost speed
+            if (window.marketCap >= window.lastMarketCapSpeedMilestone + 20000) { // Changed milestone to 20000
+                window.currentObstacleSpeed += 0.3; // Changed speed increment to 0.3
+                window.lastMarketCapSpeedMilestone += 20000; // Set the next milestone
+                console.log(`Speed increased to ${window.currentObstacleSpeed.toFixed(2)}. Next speed milestone at MC: ${formatCurrency(window.lastMarketCapSpeedMilestone + 20000)}`);
+                showSpeedUpMessage(); // Show the speed up animation
+            }
 
             updatePlayer();
             updateObstaclesAndItems();
@@ -1364,6 +1417,7 @@
             window.score = 0; 
             updateScoreDisplay(); 
             window.marketCap = INITIAL_MARKET_CAP; 
+            window.lastMarketCapSpeedMilestone = INITIAL_MARKET_CAP; // Reset milestone on new game
             marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
             
             calculateGameDimensions(); // Recalculate dimensions based on currentConfig
@@ -1882,7 +1936,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖�𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
@@ -1990,7 +2044,7 @@
                         currentProfile = await fetchUserProfile(currentUser.id); 
                         profileEmailDisplay.textContent = `Email: ${currentUser.email}`;
                         profileXAccountDisplay.textContent = `X Handle: ${currentProfile ? (currentProfile.x_account_name || 'Not set') : 'Not set'}`;
-                        profileXAccountNameInput.value = currentProfile && currentProfile.x_account_name ? currentProfile.x_account_name : '';
+                        profileXAccountNameInput.value = currentProfile && currentProfile.x_account_name ? currentConfig.x_account_name : '';
                         await displayUserRank(); // Fetch and display rank
                     } else {
                         profileEmailDisplay.textContent = 'Email: Not logged in';
@@ -2142,4 +2196,3 @@
     </script>
 </body>
 </html>
-�
