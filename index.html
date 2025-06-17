@@ -721,6 +721,12 @@
             GAME_WIDTH = window.innerWidth;
             GAME_HEIGHT = window.innerHeight;
 
+            // IMPORTANT: Add a guard to prevent calculations with zero dimensions
+            if (GAME_WIDTH === 0 || GAME_HEIGHT === 0) {
+                console.warn("calculateGameDimensions called with zero window dimensions. Skipping calculations for now.");
+                return; // Exit if dimensions are invalid
+            }
+
             // Apply current configuration parameters
             PLAYER_GRAVITY = currentConfig.PLAYER_GRAVITY_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
             PLAYER_FLAP_STRENGTH = currentConfig.PLAYER_FLAP_STRENGTH_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
@@ -740,10 +746,15 @@
             player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
 
             // Adjust player initial position based on new GAME_HEIGHT
-            window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
-            player.style.top = `${window.playerY}px`; 
-            player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
-            player.style.transform = `rotateZ(0deg)`; 
+            // Only set player initial position if game is not started or game over
+            // If game is running, player's position is managed by gameLoop
+            if (!window.gameStarted || window.gameOver) {
+                window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2); // Use player.offsetHeight after setting width/height
+                player.style.top = `${window.playerY}px`; 
+                player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
+                player.style.transform = `rotateZ(0deg)`; 
+            }
+            
 
             // Calculate current scaled candle width, min gap, and min candle section height
             currentScaledCandleWidth = Math.max(70, GAME_WIDTH * (currentConfig.CANDLE_WIDTH_BASE / BASE_GAME_WIDTH)); 
@@ -1028,17 +1039,20 @@
             const maxGapYPosition = GAME_HEIGHT - player.offsetHeight * 1.5 - gapHeight; 
 
             let actualGapY;
-            let debugTargetY = null; // Initialize for debug logging
+            // Initialize targetY with a default sensible value within the allowed range
+            // This ensures targetY is always defined before being used in debug logs or calculations.
+            let targetY = (minGapYPosition + maxGapYPosition) / 2; 
 
             if (minGapYPosition >= maxGapYPosition) { 
                 actualGapY = (GAME_HEIGHT - gapHeight) / 2; 
+                targetY = actualGapY; // Set targetY to the final value for logging consistency
             } else {
                 // Generate a random shift around 0 (positive or negative)
                 const randomShift = (Math.random() - 0.5) * MAX_VERTICAL_GAP_SHIFT * GAME_HEIGHT;
                 // Calculate the target Y for the new gap, centered around the last gap's Y
-                debugTargetY = window.lastGapY + randomShift; // Assign to debug variable
+                targetY = window.lastGapY + randomShift; // Re-assign if in the 'else' branch
                 // Ensure targetY stays within the overall allowed vertical bounds
-                actualGapY = Math.max(minGapYPosition, Math.min(maxGapYPosition, debugTargetY));
+                actualGapY = Math.max(minGapYPosition, Math.min(maxGapYPosition, targetY));
             }
             
             // Update lastGapY for the next obstacle calculation
@@ -1091,9 +1105,8 @@
             // --- DEBUG LOGGING ---
             console.log("--- createCandleObstacle Debug ---");
             console.log(`Calculated gapHeight: ${gapHeight.toFixed(2)}`);
-            if (debugTargetY !== null) { // Only log if debugTargetY was set
-                console.log(`Calculated actualGapY (before clamping): ${debugTargetY.toFixed(2)}`);
-            }
+            // Now targetY is always defined for logging
+            console.log(`Calculated actualGapY (before clamping): ${targetY.toFixed(2)}`); 
             console.log(`Final actualGapY (clamped): ${actualGapY.toFixed(2)}`);
             console.log(`Final newGapHeight: ${newGapHeight.toFixed(2)}`);
             console.log(`Final topCandleHeight: ${finalTopCandleHeight.toFixed(2)}`);
@@ -1969,7 +1982,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥�𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖�𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
@@ -2143,9 +2156,13 @@
             player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
             player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
             updatePlayerSize();
-            window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
-            player.style.top = `${window.playerY}px`; 
-            player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
+            // Player Y is calculated in calculateGameDimensions based on its dimensions, if valid.
+            // Only explicitly set here if calculateGameDimensions returned early due to zero dimensions.
+            if (window.innerWidth === 0 || window.innerHeight === 0) {
+                 window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
+                 player.style.top = `${window.playerY}px`; 
+                 player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
+            }
             player.style.transform = `rotateZ(0deg)`;
             marketCapDisplay.textContent = `MC: ${formatCurrency(INITIAL_MARKET_CAP)}`;
             updateScoreDisplay();
@@ -2229,4 +2246,3 @@
     </script>
 </body>
 </html>
-�
