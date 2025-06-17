@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     <title>Crypto Flap</title>
+    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tone.js CDN for audio -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <!-- Supabase Client CDN -->
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
         // IMPORTANT: This is your provided Supabase Project URL and anon public key.
@@ -736,17 +739,17 @@
             player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
             player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
 
-            // Calculate current scaled candle width, min gap, and min candle section height
-            currentScaledCandleWidth = Math.max(70, GAME_WIDTH * (currentConfig.CANDLE_WIDTH_BASE / BASE_GAME_WIDTH)); 
-            const scaleFactorForHeight = GAME_HEIGHT / BASE_GAME_HEIGHT;
-            currentScaledMinGapHeight = currentConfig.MIN_GAP_HEIGHT_BASE * scaleFactorForHeight;
-            currentScaledMinCandleSectionHeight = Math.max(70, currentConfig.MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight); 
-
             // Adjust player initial position based on new GAME_HEIGHT
             window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
             player.style.top = `${window.playerY}px`; 
             player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
             player.style.transform = `rotateZ(0deg)`; 
+
+            // Calculate current scaled candle width, min gap, and min candle section height
+            currentScaledCandleWidth = Math.max(70, GAME_WIDTH * (currentConfig.CANDLE_WIDTH_BASE / BASE_GAME_WIDTH)); 
+            const scaleFactorForHeight = GAME_HEIGHT / BASE_GAME_HEIGHT;
+            currentScaledMinGapHeight = currentConfig.MIN_GAP_HEIGHT_BASE * scaleFactorForHeight;
+            currentScaledMinCandleSectionHeight = Math.max(70, currentConfig.MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight); 
 
             // Adjust UI element sizes and positions based on a common scale factor
             const scaleFactor = Math.min(GAME_WIDTH / BASE_GAME_WIDTH, GAME_HEIGHT / BASE_GAME_HEIGHT);
@@ -963,6 +966,8 @@
             player.style.top = `${window.playerY}px`; 
             player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
             player.style.transform = `rotateZ(${rotationAngle}deg)`; 
+            // DEBUG: Log player position and velocity
+            // console.log(`[UpdatePlayer] Y: ${window.playerY.toFixed(2)}, Velocity: ${window.playerVelocity.toFixed(2)}, Gravity: ${PLAYER_GRAVITY.toFixed(2)}`);
         }
 
         /**
@@ -1001,6 +1006,8 @@
                 height: itemHeight,
                 type: itemType
             });
+            // DEBUG: Log item creation
+            // console.log(`[CreateCollectible] Created ${itemType} at x:${itemElement.style.left}, y:${itemElement.style.top}`);
         }
         
         /**
@@ -1082,13 +1089,13 @@
 
             // --- DEBUG LOGGING ---
             console.log("--- createCandleObstacle Debug ---");
-            console.log(`Calculated gapHeight: ${gapHeight}`);
-            console.log(`Calculated actualGapY (before clamping): ${targetY}`);
-            console.log(`Final actualGapY (clamped): ${actualGapY}`);
-            console.log(`Final newGapHeight: ${newGapHeight}`);
-            console.log(`Final topCandleHeight: ${finalTopCandleHeight}`);
-            console.log(`Final bottomCandleHeight: ${finalBottomCandleHeight}`);
-            console.log(`window.lastGapY (updated): ${window.lastGapY}`);
+            console.log(`Calculated gapHeight: ${gapHeight.toFixed(2)}`);
+            console.log(`Calculated actualGapY (before clamping): ${targetY.toFixed(2)}`);
+            console.log(`Final actualGapY (clamped): ${actualGapY.toFixed(2)}`);
+            console.log(`Final newGapHeight: ${newGapHeight.toFixed(2)}`);
+            console.log(`Final topCandleHeight: ${finalTopCandleHeight.toFixed(2)}`);
+            console.log(`Final bottomCandleHeight: ${finalBottomCandleHeight.toFixed(2)}`);
+            console.log(`window.lastGapY (updated): ${window.lastGapY.toFixed(2)}`);
             console.log("----------------------------------");
         }
 
@@ -1104,8 +1111,13 @@
                 obstacle.x -= window.currentObstacleSpeed; 
                 obstacle.greenElement.style.left = `${obstacle.x}px`; 
                 obstacle.redElement.style.left = `${obstacle.x}px`; 
+                // DEBUG: Log obstacle position
+                // console.log(`[UpdateObstacles] Obstacle ${i} x: ${obstacle.x.toFixed(2)}`);
+
 
                 if (obstacle.x + obstacle.width < 0) {
+                    // DEBUG: Log obstacle removal
+                    // console.log(`Removing obstacle ${i} (off-screen)`);
                     if (gameContainer.contains(obstacle.greenElement)) gameContainer.removeChild(obstacle.greenElement);
                     if (gameContainer.contains(obstacle.redElement)) gameContainer.removeChild(obstacle.redElement);
                     window.obstacles.splice(i, 1); 
@@ -1117,8 +1129,12 @@
                 const item = window.items[i]; 
                 item.x -= window.currentObstacleSpeed; 
                 item.element.style.left = `${item.x}px`;
+                // DEBUG: Log item position
+                // console.log(`[UpdateItems] Item ${i} x: ${item.x.toFixed(2)}`);
 
                 if (item.x + item.width < 0) {
+                    // DEBUG: Log item removal
+                    // console.log(`Removing item ${i} (off-screen)`);
                     if (gameContainer.contains(item.element)) gameContainer.removeChild(item.element);
                     window.items.splice(i, 1); 
                     i--;
@@ -1126,9 +1142,13 @@
             }
 
             const currentTime = Date.now();
-            if (currentTime - window.lastObstacleTime > Math.random() * (OBSTACLE_INTERVAL_MAX - OBSTACLE_INTERVAL_MIN) + OBSTACLE_INTERVAL_MIN) { 
+            const randomInterval = Math.random() * (OBSTACLE_INTERVAL_MAX - OBSTACLE_INTERVAL_MIN) + OBSTACLE_INTERVAL_MIN;
+            // DEBUG: Log interval
+            // console.log(`[Obstacle Creation] Time elapsed: ${currentTime - window.lastObstacleTime}ms, Random interval target: ${randomInterval.toFixed(0)}ms`);
+            if (currentTime - window.lastObstacleTime > randomInterval) { 
                 createCandleObstacle();
                 window.lastObstacleTime = currentTime; 
+                // console.log("New obstacle created!");
             }
         }
 
@@ -1359,27 +1379,36 @@
          * The main game loop.
          */
         function gameLoop() {
-            if (window.gameOver) { 
-                cancelAnimationFrame(window.animationFrameId); 
-                return;
+            try {
+                if (window.gameOver) { 
+                    cancelAnimationFrame(window.animationFrameId); 
+                    return;
+                }
+
+                window.marketCap += (MARKET_CAP_PER_BASE_CANDLE_WIDTH / currentConfig.CANDLE_WIDTH_BASE) * window.currentObstacleSpeed; 
+                marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
+
+                // Check if market cap has increased enough to boost speed
+                if (window.marketCap >= window.lastMarketCapSpeedMilestone + 20000) { 
+                    window.currentObstacleSpeed += 0.3; 
+                    window.lastMarketCapSpeedMilestone += 20000; 
+                    console.log(`Speed increased to ${window.currentObstacleSpeed.toFixed(2)}. Next speed milestone at MC: ${formatCurrency(window.lastMarketCapSpeedMilestone + 20000)}`);
+                    showSpeedUpMessage(); // Show the speed up animation
+                }
+
+                updatePlayer();
+                updateObstaclesAndItems();
+                checkCollisions();
+
+                window.animationFrameId = requestAnimationFrame(gameLoop); 
+            } catch (error) {
+                console.error("Error in gameLoop:", error);
+                // Optionally end game or show an error message to the user
+                if (!window.gameOver) {
+                    alert("A game error occurred. Please check the console for details. Ending game.");
+                    endGame();
+                }
             }
-
-            window.marketCap += (MARKET_CAP_PER_BASE_CANDLE_WIDTH / currentConfig.CANDLE_WIDTH_BASE) * window.currentObstacleSpeed; 
-            marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
-
-            // Check if market cap has increased enough to boost speed
-            if (window.marketCap >= window.lastMarketCapSpeedMilestone + 20000) { 
-                window.currentObstacleSpeed += 0.3; 
-                window.lastMarketCapSpeedMilestone += 20000; 
-                console.log(`Speed increased to ${window.currentObstacleSpeed.toFixed(2)}. Next speed milestone at MC: ${formatCurrency(window.lastMarketCapSpeedMilestone + 20000)}`);
-                showSpeedUpMessage(); // Show the speed up animation
-            }
-
-            updatePlayer();
-            updateObstaclesAndItems();
-            checkCollisions();
-
-            window.animationFrameId = requestAnimationFrame(gameLoop); 
         }
 
         /**
@@ -1421,7 +1450,7 @@
             calculateGameDimensions(); // Recalculate dimensions based on currentConfig
 
             // Reset lastGapY when starting a new game for consistent initial obstacle placement
-            window.lastGapY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2); // Center of screen
+            window.lastGapY = GAME_HEIGHT / 2; // Center of screen for first gap
 
             window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
             player.style.top = `${window.playerY}px`; 
@@ -1486,7 +1515,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔�𝗘 𝗢𝗩𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
@@ -1937,7 +1966,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 �𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
@@ -2197,4 +2226,3 @@
     </script>
 </body>
 </html>
-�
