@@ -1028,16 +1028,17 @@
             const maxGapYPosition = GAME_HEIGHT - player.offsetHeight * 1.5 - gapHeight; 
 
             let actualGapY;
+            let debugTargetY = null; // Initialize for debug logging
+
             if (minGapYPosition >= maxGapYPosition) { 
                 actualGapY = (GAME_HEIGHT - gapHeight) / 2; 
             } else {
                 // Generate a random shift around 0 (positive or negative)
                 const randomShift = (Math.random() - 0.5) * MAX_VERTICAL_GAP_SHIFT * GAME_HEIGHT;
                 // Calculate the target Y for the new gap, centered around the last gap's Y
-                let targetY = window.lastGapY + randomShift;
-
+                debugTargetY = window.lastGapY + randomShift; // Assign to debug variable
                 // Ensure targetY stays within the overall allowed vertical bounds
-                actualGapY = Math.max(minGapYPosition, Math.min(maxGapYPosition, targetY));
+                actualGapY = Math.max(minGapYPosition, Math.min(maxGapYPosition, debugTargetY));
             }
             
             // Update lastGapY for the next obstacle calculation
@@ -1090,7 +1091,9 @@
             // --- DEBUG LOGGING ---
             console.log("--- createCandleObstacle Debug ---");
             console.log(`Calculated gapHeight: ${gapHeight.toFixed(2)}`);
-            console.log(`Calculated actualGapY (before clamping): ${targetY.toFixed(2)}`);
+            if (debugTargetY !== null) { // Only log if debugTargetY was set
+                console.log(`Calculated actualGapY (before clamping): ${debugTargetY.toFixed(2)}`);
+            }
             console.log(`Final actualGapY (clamped): ${actualGapY.toFixed(2)}`);
             console.log(`Final newGapHeight: ${newGapHeight.toFixed(2)}`);
             console.log(`Final topCandleHeight: ${finalTopCandleHeight.toFixed(2)}`);
@@ -1966,7 +1969,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 �𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥�𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
@@ -2226,3 +2229,4 @@
     </script>
 </body>
 </html>
+�
