@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
     <title>Crypto Flap</title>
-    <!-- Tailwind CSS CDN for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tone.js CDN for audio -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
-    <!-- Supabase Client CDN -->
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
         // IMPORTANT: This is your provided Supabase Project URL and anon public key.
@@ -454,38 +451,28 @@
     </style>
 </head>
 <body>
-    <!-- Main game container -->
     <div id="gameContainer" class="game-container">
-        <!-- Canvas for particle effects -->
         <canvas id="particleCanvas"></canvas>
 
-        <!-- User Info & Profile/Logout Buttons -->
         <div id="userInfo" class="user-info">
             Welcome, <span id="userNameDisplay">Guest</span>!
             <button id="profileButton" class="flappy-button small-button">👤 Profile</button>
             <button id="logoutButton" class="flappy-button small-button">🚪 Logout</button>
         </div>
 
-        <!-- Top bar for scores and market cap -->
         <div class="top-bar">
-            <!-- Score display with player icon -->
             <div id="score" class="score">
                 <span id="playerIcon" class="player-icon"></span>
                 $FLAPPY: <span id="flappyScoreCounter">0</span>
             </div>
-            <!-- Market Cap display -->
             <div id="marketCap" class="market-cap">MC: $100,000</div>
         </div>
 
-        <!-- Power-up status display -->
         <div id="powerupStatus" class="powerup-status"></div>
-        <!-- Player character -->
         <div id="player" class="player"></div>
 
-        <!-- Speed Up Animation Text -->
         <div id="speedUpText" class="speed-up-text">FLAPPY SPEED UP!</div>
 
-        <!-- Device Selection Modal (New) -->
         <div id="deviceSelectionModal" class="device-selection-modal">
             <h2>Choose Your Device</h2>
             <p>Select the best experience for your device:</p>
@@ -495,7 +482,6 @@
             </div>
         </div>
 
-        <!-- Main Message Box (Start, Game Over, Auth) -->
         <div id="messageBox" class="message-box">
             <h2 id="messageTitle"></h2>
             <p id="messageText"></p>
@@ -510,12 +496,10 @@
             <button id="backToWelcomeButton" class="flappy-button hidden">🔙 BACK TO WELCOME</button>
         </div>
 
-        <!-- Leaderboard Modal -->
         <div id="leaderboardModal" class="leaderboard-modal">
             <div class="leaderboard-content">
                 <h3>🏆 Global Leaderboard</h3>
-                <div style="overflow-x: auto;"> <!-- Added for horizontal scrolling on small screens -->
-                    <table id="leaderboardTable" class="leaderboard-table">
+                <div style="overflow-x: auto;"> <table id="leaderboardTable" class="leaderboard-table">
                         <thead>
                             <tr>
                                 <th>Rank</th>
@@ -526,7 +510,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Leaderboard rows will be inserted here by JavaScript -->
                             <tr><td colspan="5">Loading Leaderboard...</td></tr>
                         </tbody>
                     </table>
@@ -535,14 +518,12 @@
             </div>
         </div>
 
-        <!-- Profile Modal -->
         <div id="profileModal" class="profile-modal">
             <div class="profile-content">
                 <h3>👤 Your Profile</h3>
                 <p id="profileEmailDisplay">Email: Not logged in</p>
                 <p id="profileXAccountDisplay">X Handle: Not set</p>
-                <p id="profileRankDisplay">Rank: Not available</p> <!-- New Rank Display -->
-                <input type="text" id="profileXAccountNameInput" placeholder="Enter your X (Twitter) handle">
+                <p id="profileRankDisplay">Rank: Not available</p> <input type="text" id="profileXAccountNameInput" placeholder="Enter your X (Twitter) handle">
                 <button id="profileSetXAccountNameButton" class="flappy-button">Update X Handle</button>
                 <div class="flex flex-col items-center mt-4">
                     <button id="profileSignInEmailLinkButton" class="flappy-button">📧 Sign In</button>
@@ -553,7 +534,6 @@
         </div>
     </div>
     
-    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <img src="https://i.imgur.com/N3fsA36.png" alt="Loading Coin">
         Loading...
@@ -578,8 +558,9 @@
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.15, // Reduced for more consistent and tighter gaps
             CANDLE_WIDTH_BASE: 150,
             INITIAL_OBSTACLE_SPEED_BASE: 2.5, // Reverted to original speed for laptop
-            OBSTACLE_INTERVAL_MIN: 1500, // Halved for closer obstacles
-            OBSTACLE_INTERVAL_MAX: 2250, // Halved for closer obstacles
+            OBSTACLE_INTERVAL_MIN: 1500, 
+            OBSTACLE_INTERVAL_MAX: 2250, 
+            MAX_VERTICAL_GAP_SHIFT: 0.25 // Max vertical shift between consecutive gaps (fraction of screen height)
         };
 
         const mobileConfig = {
@@ -592,8 +573,9 @@
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Slightly reduced random factor for tighter gaps
             CANDLE_WIDTH_BASE: 200, // Significantly reduced for more horizontal gap space
             INITIAL_OBSTACLE_SPEED_BASE: 5.6, // Doubled for mobile
-            OBSTACLE_INTERVAL_MIN: 1500, // Reduced for mobile
-            OBSTACLE_INTERVAL_MAX: 2500, // Reduced for mobile
+            OBSTACLE_INTERVAL_MIN: 1100, // Further Reduced for mobile
+            OBSTACLE_INTERVAL_MAX: 1700, // Further Reduced for mobile
+            MAX_VERTICAL_GAP_SHIFT: 0.15 // Reduced max vertical shift for mobile for smoother transitions
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -608,6 +590,7 @@
         let INITIAL_OBSTACLE_SPEED;
         let OBSTACLE_INTERVAL_MIN;
         let OBSTACLE_INTERVAL_MAX;
+        let MAX_VERTICAL_GAP_SHIFT;
 
 
         // Derived variables (calculated in calculateGameDimensions)
@@ -711,6 +694,7 @@
         window.shieldTimer = null;
         window.currentObstacleSpeed = 0; 
         window.lastMarketCapSpeedMilestone = INITIAL_MARKET_CAP; // New variable for speed increase
+        window.lastGapY = GAME_HEIGHT / 2; // Initialize for vertical consistency
 
         window.currentSpriteFrameIndex = 0;
         window.spriteAnimationInterval = null;
@@ -743,6 +727,7 @@
             }
             OBSTACLE_INTERVAL_MIN = currentConfig.OBSTACLE_INTERVAL_MIN;
             OBSTACLE_INTERVAL_MAX = currentConfig.OBSTACLE_INTERVAL_MAX;
+            MAX_VERTICAL_GAP_SHIFT = currentConfig.MAX_VERTICAL_GAP_SHIFT; // Get from config
 
 
             // Player dimensions scale with GAME_HEIGHT, with a higher minimum
@@ -883,6 +868,7 @@
             console.log(`currentScaledMinGapHeight: ${currentScaledMinGapHeight}`);
             console.log(`currentScaledMinCandleSectionHeight: ${currentScaledMinCandleSectionHeight}`);
             console.log(`OBSTACLE_INTERVAL_MIN: ${OBSTACLE_INTERVAL_MIN}, OBSTACLE_INTERVAL_MAX: ${OBSTACLE_INTERVAL_MAX}`);
+            console.log(`MAX_VERTICAL_GAP_SHIFT: ${MAX_VERTICAL_GAP_SHIFT}`);
             console.log("-------------------------------------");
         }
 
@@ -1030,15 +1016,25 @@
             const gapHeight = currentMinGap + Math.random() * (GAME_HEIGHT * currentConfig.AVAILABLE_SPACE_GAP_RANDOM_FACTOR); 
 
             // Define comfortable vertical bounds for the gap's top position
-            const minGapYPosition = player.offsetHeight * 1.5; // At least 1.5 player heights from the top
-            const maxGapYPosition = GAME_HEIGHT - player.offsetHeight * 1.5 - gapHeight; // At least 1.5 player heights from the bottom
+            // Increased minGapYPosition to keep candles from being too high
+            const minGapYPosition = player.offsetHeight * 2.5; 
+            const maxGapYPosition = GAME_HEIGHT - player.offsetHeight * 1.5 - gapHeight; 
 
             let actualGapY;
-            if (minGapYPosition >= maxGapYPosition) { // If screen is too small for the comfort zone
-                actualGapY = (GAME_HEIGHT - gapHeight) / 2; // Center the gap
+            if (minGapYPosition >= maxGapYPosition) { 
+                actualGapY = (GAME_HEIGHT - gapHeight) / 2; 
             } else {
-                actualGapY = minGapYPosition + Math.random() * (maxGapYPosition - minGapYPosition);
+                // Generate a random shift around 0 (positive or negative)
+                const randomShift = (Math.random() - 0.5) * MAX_VERTICAL_GAP_SHIFT * GAME_HEIGHT;
+                // Calculate the target Y for the new gap, centered around the last gap's Y
+                let targetY = window.lastGapY + randomShift;
+
+                // Ensure targetY stays within the overall allowed vertical bounds
+                actualGapY = Math.max(minGapYPosition, Math.min(maxGapYPosition, targetY));
             }
+            
+            // Update lastGapY for the next obstacle calculation
+            window.lastGapY = actualGapY;
 
             const topCandleHeight = actualGapY; 
             const bottomCandleHeight = GAME_HEIGHT - actualGapY - gapHeight;
@@ -1087,10 +1083,12 @@
             // --- DEBUG LOGGING ---
             console.log("--- createCandleObstacle Debug ---");
             console.log(`Calculated gapHeight: ${gapHeight}`);
-            console.log(`Calculated actualGapY: ${actualGapY}`);
+            console.log(`Calculated actualGapY (before clamping): ${targetY}`);
+            console.log(`Final actualGapY (clamped): ${actualGapY}`);
             console.log(`Final newGapHeight: ${newGapHeight}`);
             console.log(`Final topCandleHeight: ${finalTopCandleHeight}`);
             console.log(`Final bottomCandleHeight: ${finalBottomCandleHeight}`);
+            console.log(`window.lastGapY (updated): ${window.lastGapY}`);
             console.log("----------------------------------");
         }
 
@@ -1422,6 +1420,9 @@
             
             calculateGameDimensions(); // Recalculate dimensions based on currentConfig
 
+            // Reset lastGapY when starting a new game for consistent initial obstacle placement
+            window.lastGapY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2); // Center of screen
+
             window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
             player.style.top = `${window.playerY}px`; 
             player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
@@ -1485,7 +1486,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔�𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
@@ -1936,7 +1937,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖�𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
