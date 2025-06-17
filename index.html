@@ -567,18 +567,18 @@
         };
 
         const mobileConfig = {
-            PLAYER_SIZE_BASE: 110, // Significantly reduced for more screen space on smaller mobiles
-            PLAYER_GRAVITY_BASE: 0.25, // Adjusted to feel good with smaller player
-            PLAYER_FLAP_STRENGTH_BASE: -5.5, // Adjusted to feel good with smaller player
-            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, // Adjusted min candle section height
-            MIN_GAP_HEIGHT_BASE: 200, // Decreased for tighter vertical gaps on mobile
-            MIN_GAP_HEIGHT_MULTIPLIER: 1.8, // Decreased for tighter vertical gaps relative to player on mobile
-            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Slightly reduced random factor for tighter gaps
-            CANDLE_WIDTH_BASE: 200, // Significantly reduced for more horizontal gap space
-            INITIAL_OBSTACLE_SPEED_BASE: 5.6, // Doubled for mobile
-            OBSTACLE_INTERVAL_MIN: 1100, // Further Reduced for mobile
-            OBSTACLE_INTERVAL_MAX: 1700, // Further Reduced for mobile
-            MAX_VERTICAL_GAP_SHIFT: 0.15 // Reduced max vertical shift for mobile for smoother transitions
+            PLAYER_SIZE_BASE: 110, 
+            PLAYER_GRAVITY_BASE: 0.25, 
+            PLAYER_FLAP_STRENGTH_BASE: -5.5, 
+            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80,
+            MIN_GAP_HEIGHT_BASE: 220, // Adjusted for slightly taller gaps
+            MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
+            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, 
+            CANDLE_WIDTH_BASE: 120, // Significantly reduced for more horizontal space
+            INITIAL_OBSTACLE_SPEED_BASE: 5.6, 
+            OBSTACLE_INTERVAL_MIN: 1100, 
+            OBSTACLE_INTERVAL_MAX: 1700, 
+            MAX_VERTICAL_GAP_SHIFT: 0.15 
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -668,8 +668,7 @@
         const profileXAccountDisplay = document.getElementById('profileXAccountDisplay'); 
         const profileRankDisplay = document.getElementById('profileRankDisplay'); 
         const profileXAccountNameInput = document.getElementById('profileXAccountNameInput'); 
-        const profileSetXAccountNameButton = document.getElementById('profileSetXAccountNameButton'); 
-        const profileSignInEmailLinkButton = document.getElementById('profileSignInEmailLinkButton'); 
+        const profileSetXAccountNameButton = document.getElementById('profileXAccountNameButton'); 
         const profileLogoutButton = document.getElementById('profileLogoutButton'); 
         const profileCloseButton = document.getElementById('profileCloseButton'); 
 
@@ -1982,7 +1981,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖�𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
