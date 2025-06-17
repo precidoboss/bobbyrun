@@ -567,17 +567,17 @@
         };
 
         const mobileConfig = {
-            PLAYER_SIZE_BASE: 100, // Slightly reduced for more screen space on smaller mobiles
+            PLAYER_SIZE_BASE: 90, // Further reduced for more screen space on smaller mobiles
             PLAYER_GRAVITY_BASE: 0.25, 
-            PLAYER_FLAP_STRENGTH_BASE: -6.0, // Adjusted to feel good with smaller player
+            PLAYER_FLAP_STRENGTH_BASE: -5.5, // Adjusted to feel good with smaller player
             MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80,
-            MIN_GAP_HEIGHT_BASE: 240, // Adjusted for slightly taller gaps
+            MIN_GAP_HEIGHT_BASE: 240, 
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, 
-            CANDLE_WIDTH_BASE: 180, // Increased for more substantial candles
-            INITIAL_OBSTACLE_SPEED_BASE: 5.6, 
-            OBSTACLE_INTERVAL_MIN: 900, // Reduced for more frequent candles
-            OBSTACLE_INTERVAL_MAX: 1300, // Reduced for more frequent candles
+            CANDLE_WIDTH_BASE: 200, // Increased for more substantial candles
+            INITIAL_OBSTACLE_SPEED_BASE: 5.0, // Reduced for potentially smoother experience
+            OBSTACLE_INTERVAL_MIN: 900, 
+            OBSTACLE_INTERVAL_MAX: 1300, 
             MAX_VERTICAL_GAP_SHIFT: 0.15 
         };
 
@@ -1530,7 +1530,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢�𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
