@@ -577,7 +577,7 @@
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, // Decreased for tighter gaps relative to player
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.15, // Reduced for more consistent and tighter gaps
             CANDLE_WIDTH_BASE: 150,
-            INITIAL_OBSTACLE_SPEED_BASE: 2.5,
+            INITIAL_OBSTACLE_SPEED_BASE: 2.5, // Reverted to original speed for laptop
             OBSTACLE_INTERVAL_MIN: 1500, // Halved for closer obstacles
             OBSTACLE_INTERVAL_MAX: 2250, // Halved for closer obstacles
         };
@@ -591,7 +591,7 @@
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, // Decreased for tighter vertical gaps relative to player on mobile
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Slightly reduced random factor for tighter gaps
             CANDLE_WIDTH_BASE: 200, // Significantly reduced for more horizontal gap space
-            INITIAL_OBSTACLE_SPEED_BASE: 2.8, // Adjusted speed for mobile
+            INITIAL_OBSTACLE_SPEED_BASE: 5.6, // Doubled for mobile
             OBSTACLE_INTERVAL_MIN: 2600, 
             OBSTACLE_INTERVAL_MAX: 3600, 
         };
@@ -1370,9 +1370,9 @@
             marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
 
             // Check if market cap has increased enough to boost speed
-            if (window.marketCap >= window.lastMarketCapSpeedMilestone + 20000) { // Changed milestone to 20000
-                window.currentObstacleSpeed += 0.3; // Changed speed increment to 0.3
-                window.lastMarketCapSpeedMilestone += 20000; // Set the next milestone
+            if (window.marketCap >= window.lastMarketCapSpeedMilestone + 20000) { 
+                window.currentObstacleSpeed += 0.3; 
+                window.lastMarketCapSpeedMilestone += 20000; 
                 console.log(`Speed increased to ${window.currentObstacleSpeed.toFixed(2)}. Next speed milestone at MC: ${formatCurrency(window.lastMarketCapSpeedMilestone + 20000)}`);
                 showSpeedUpMessage(); // Show the speed up animation
             }
@@ -1485,7 +1485,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔�𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
@@ -1831,8 +1831,8 @@
                 alert("Error logging out: " + error.message);
             } else {
                 currentUser = null;
-                currentProfile = null;
                 isLoggedIn = false;
+                currentProfile = null;
                 updateAuthUI();
                 // After logout, always show the device selection if no preference is explicitly saved
                 // This ensures a clean slate and prompts for choice if device was auto-detected before
@@ -2044,7 +2044,7 @@
                         currentProfile = await fetchUserProfile(currentUser.id); 
                         profileEmailDisplay.textContent = `Email: ${currentUser.email}`;
                         profileXAccountDisplay.textContent = `X Handle: ${currentProfile ? (currentProfile.x_account_name || 'Not set') : 'Not set'}`;
-                        profileXAccountNameInput.value = currentProfile && currentProfile.x_account_name ? currentConfig.x_account_name : '';
+                        profileXAccountNameInput.value = currentProfile && currentProfile.x_account_name ? currentProfile.x_account_name : '';
                         await displayUserRank(); // Fetch and display rank
                     } else {
                         profileEmailDisplay.textContent = 'Email: Not logged in';
@@ -2196,3 +2196,4 @@
     </script>
 </body>
 </html>
+�
