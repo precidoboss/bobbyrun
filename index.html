@@ -592,8 +592,8 @@
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Slightly reduced random factor for tighter gaps
             CANDLE_WIDTH_BASE: 200, // Significantly reduced for more horizontal gap space
             INITIAL_OBSTACLE_SPEED_BASE: 5.6, // Doubled for mobile
-            OBSTACLE_INTERVAL_MIN: 2600, 
-            OBSTACLE_INTERVAL_MAX: 3600, 
+            OBSTACLE_INTERVAL_MIN: 1500, // Reduced for mobile
+            OBSTACLE_INTERVAL_MAX: 2500, // Reduced for mobile
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -1485,7 +1485,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔�𝗘 𝗢𝗩𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
@@ -1936,7 +1936,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖�𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
