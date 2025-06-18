@@ -586,7 +586,7 @@
 
         // Configuration for smaller mobile phones (e.g., iPhone 7)
         const smallMobileConfig = {
-            PLAYER_SIZE_BASE: 100, // Slightly smaller player
+            PLAYER_SIZE_BASE: 90, // Slightly smaller player for better performance
             PLAYER_GRAVITY_BASE: 0.25, 
             PLAYER_FLAP_STRENGTH_BASE: -5.5, 
             MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
@@ -595,8 +595,8 @@
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.25, // More variability, can lead to wider gaps
             CANDLE_WIDTH_BASE: 200, 
             INITIAL_OBSTACLE_SPEED_BASE: 3.2, // Keeping user's requested speed
-            OBSTACLE_INTERVAL_MIN: 2800, // Increased for more time between obstacles, less on screen
-            OBSTACLE_INTERVAL_MAX: 4000, // Increased for more time between obstacles
+            OBSTACLE_INTERVAL_MIN: 3200, // Increased for more time between obstacles, less on screen
+            OBSTACLE_INTERVAL_MAX: 4500, // Increased for more time between obstacles
             MAX_VERTICAL_GAP_SHIFT: 0.15 
         };
 
@@ -1345,7 +1345,8 @@
         // === Particle System for Welcome/Game Over Screens ===
         function createParticles() {
             particles = []; 
-            const numParticles = 100; 
+            // Reduce particle count for small mobile if performance is still an issue
+            const numParticles = currentConfig === smallMobileConfig ? 60 : 100; 
             for (let i = 0; i < numParticles; i++) {
                 particles.push({
                     x: Math.random() * particleCanvas.width,
@@ -2003,7 +2004,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙�𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
