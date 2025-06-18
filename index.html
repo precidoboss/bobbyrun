@@ -592,15 +592,15 @@
             PLAYER_GRAVITY_BASE: 0.25, 
             PLAYER_FLAP_STRENGTH_BASE: -5.5, 
             MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
-            MIN_GAP_HEIGHT_BASE: 190, // Reduced gap height for more challenge (was 220)
+            MIN_GAP_HEIGHT_BASE: 180, // Further reduced gap height for more challenge (was 190)
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
-            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Reduced randomness for tighter, more consistent gaps (was 0.25)
+            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Kept for balance between challenge and randomness
             CANDLE_WIDTH_BASE: 200, 
-            INITIAL_OBSTACLE_SPEED_BASE: 3.8, // Increased initial speed for a faster start (was 3.2)
-            OBSTACLE_INTERVAL_MIN: 3500, // Kept for performance (was 3200)
-            OBSTACLE_INTERVAL_MAX: 5000, // Kept for performance (was 4500)
+            INITIAL_OBSTACLE_SPEED_BASE: 4.2, // Increased initial speed for a faster start (was 3.8)
+            OBSTACLE_INTERVAL_MIN: 3500, // Kept for performance
+            OBSTACLE_INTERVAL_MAX: 5000, // Kept for performance
             MAX_VERTICAL_GAP_SHIFT: 0.15,
-            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 15000 // Speed up more frequently (was 20000)
+            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 12000 // Speed up even more frequently (was 15000)
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -2007,7 +2007,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥�𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
