@@ -460,6 +460,7 @@
         <div id="userInfo" class="user-info">
             Welcome, <span id="userNameDisplay">Guest</span>!
             <button id="profileButton" class="flappy-button small-button">👤 Profile</button>
+            <button id="deviceButton" class="flappy-button small-button">📱 Device</button> <!-- New Device Button -->
             <button id="logoutButton" class="flappy-button small-button">🚪 Logout</button>
         </div>
 
@@ -481,7 +482,8 @@
             <p>Select the best experience for your device:</p>
             <div class="flex flex-col items-center mt-4">
                 <button id="playOnLaptopButton" class="flappy-button">💻 PLAY ON LAPTOP</button>
-                <button id="playOnMobileButton" class="flappy-button">📱 PLAY ON MOBILE</button>
+                <button id="playOnLargeMobileButton" class="flappy-button">📱 PLAY ON LARGE MOBILE</button> <!-- New Large Mobile Option -->
+                <button id="playOnSmallMobileButton" class="flappy-button">📱 PLAY ON SMALL MOBILE</button> <!-- New Small Mobile Option -->
             </div>
         </div>
 
@@ -566,19 +568,36 @@
             MAX_VERTICAL_GAP_SHIFT: 0.25 // Max vertical shift between consecutive gaps (fraction of screen height)
         };
 
-        const mobileConfig = {
-            PLAYER_SIZE_BASE: 110, // Significantly reduced for more screen space on smaller mobiles
+        // Configuration for larger mobile phones (e.g., iPhone 12 Pro Max)
+        const largeMobileConfig = {
+            PLAYER_SIZE_BASE: 110, 
             PLAYER_GRAVITY_BASE: 0.25, 
             PLAYER_FLAP_STRENGTH_BASE: -5.5, 
             MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
-            MIN_GAP_HEIGHT_BASE: 200, // Decreased for tighter vertical gaps on mobile
+            MIN_GAP_HEIGHT_BASE: 200, 
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, 
-            CANDLE_WIDTH_BASE: 200, // Significantly reduced for more horizontal gap space
-            INITIAL_OBSTACLE_SPEED_BASE: 3.2, // Adjusted speed for mobile
-            OBSTACLE_INTERVAL_MIN: 2600, // Increased for more breathing room on mobile - FURTHER INCREASED
-            OBSTACLE_INTERVAL_MAX: 3600, // Increased for more breathing room on mobile - FURTHER INCREASED
-            MAX_VERTICAL_GAP_SHIFT: 0.15 // Retained from previous config as it was not specified in new
+            CANDLE_WIDTH_BASE: 200, 
+            INITIAL_OBSTACLE_SPEED_BASE: 3.2, // User's requested speed
+            OBSTACLE_INTERVAL_MIN: 2600, 
+            OBSTACLE_INTERVAL_MAX: 3600, 
+            MAX_VERTICAL_GAP_SHIFT: 0.15 
+        };
+
+        // Configuration for smaller mobile phones (e.g., iPhone 7)
+        const smallMobileConfig = {
+            PLAYER_SIZE_BASE: 100, // Slightly smaller player
+            PLAYER_GRAVITY_BASE: 0.25, 
+            PLAYER_FLAP_STRENGTH_BASE: -5.5, 
+            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
+            MIN_GAP_HEIGHT_BASE: 220, // Increased gap for more breathing room
+            MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
+            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.25, // More variability, can lead to wider gaps
+            CANDLE_WIDTH_BASE: 200, 
+            INITIAL_OBSTACLE_SPEED_BASE: 3.2, // Keeping user's requested speed
+            OBSTACLE_INTERVAL_MIN: 2800, // Increased for more time between obstacles, less on screen
+            OBSTACLE_INTERVAL_MAX: 4000, // Increased for more time between obstacles
+            MAX_VERTICAL_GAP_SHIFT: 0.15 
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -636,7 +655,8 @@
 
         const deviceSelectionModal = document.getElementById('deviceSelectionModal'); 
         const playOnLaptopButton = document.getElementById('playOnLaptopButton');     
-        const playOnMobileButton = document.getElementById('playOnMobileButton');     
+        const playOnLargeMobileButton = document.getElementById('playOnLargeMobileButton'); // New
+        const playOnSmallMobileButton = document.getElementById('playOnSmallMobileButton'); // New   
 
         const messageBox = document.getElementById('messageBox');
         const messageTitle = document.getElementById('messageTitle');
@@ -656,6 +676,7 @@
         const userInfoDisplay = document.getElementById('userInfo');
         const userNameDisplay = document.getElementById('userNameDisplay');
         const profileButton = document.getElementById('profileButton'); 
+        const deviceButton = document.getElementById('deviceButton'); // New
         const logoutButton = document.getElementById('logoutButton');
 
         // Modals and their elements
@@ -772,7 +793,7 @@
             document.querySelector('.score .player-icon').style.height = `${40 * scaleFactor}px`;
             document.querySelector('.market-cap').style.fontSize = `${2.2 * scaleFactor}rem`;
 
-            // User Info (Profile/Logout)
+            // User Info (Profile/Device/Logout)
             document.querySelector('.user-info').style.top = `${1 * scaleFactor}rem`;
             document.querySelector('.user-info').style.right = `${1 * scaleFactor}rem`;
             document.querySelector('.user-info').style.fontSize = `${1.2 * scaleFactor}rem`;
@@ -1530,7 +1551,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢�𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
@@ -1880,12 +1901,11 @@
                 currentProfile = null;
                 updateAuthUI();
                 // After logout, always show the device selection if no preference is explicitly saved
-                // This ensures a clean slate and prompts for choice if device was auto-detected before
                 const preferredDevice = localStorage.getItem('cryptoFlapDevice');
-                if (!preferredDevice) {
+                if (!preferredDevice) { // If no preference, show device selection
                     showDeviceSelection(); 
-                } else {
-                    showWelcomeScreen(false); // If a preference exists, go to welcome with that preference
+                } else { // If a preference exists, go to welcome with that preference
+                    showWelcomeScreen(false); 
                 }
                 alert("Logged out successfully!");
             }
@@ -1899,6 +1919,7 @@
                 userNameDisplay.textContent = formatPlayerName(currentProfile);
                 userInfoDisplay.style.display = 'flex'; // Ensure user info is shown when logged in
                 profileButton.style.display = 'inline-block';
+                deviceButton.style.display = 'inline-block'; // Show device button
                 logoutButton.style.display = 'inline-block';
                 signInEmailLinkButton.classList.add('hidden'); 
                 registerButton.classList.add('hidden');
@@ -1917,6 +1938,7 @@
                 userNameDisplay.textContent = 'Guest';
                 userInfoDisplay.style.display = 'none'; // Ensure user info is hidden when logged out unless on welcome screen
                 profileButton.style.display = 'none';
+                deviceButton.style.display = 'none'; // Hide device button
                 logoutButton.style.display = 'none';
                 signInEmailLinkButton.classList.remove('hidden'); 
                 registerButton.classList.add('hidden'); 
@@ -1981,7 +2003,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙�𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
@@ -1994,7 +2016,12 @@
             messageBox.style.display = 'none';
             leaderboardModal.style.display = 'none';
             profileModal.style.display = 'none';
-            userInfoDisplay.style.display = 'none'; // Hide user info bar initially
+            // Show userInfo if logged in and accessing via device button
+            if (isLoggedIn) { 
+                userInfoDisplay.style.display = 'flex'; 
+            } else {
+                userInfoDisplay.style.display = 'none'; 
+            }
             
             particleCanvas.style.display = 'block'; 
             if (!particleAnimationFrameId) { 
@@ -2004,29 +2031,27 @@
         }
 
         /**
-         * Detects the device type and sets the game configuration.
-         * Prioritizes localStorage preference, then automatic detection.
+         * Sets the current game configuration based on the selected device.
+         * @param {string} deviceType - 'laptop', 'smallMobile', or 'largeMobile'.
          */
-        function detectAndSetDeviceConfig() {
-            const preferredDevice = localStorage.getItem('cryptoFlapDevice');
-            if (preferredDevice === 'laptop') {
-                currentConfig = laptopConfig;
-                console.log("Device config set to LAPTOP (from localStorage)");
-            } else if (preferredDevice === 'mobile') {
-                currentConfig = mobileConfig;
-                console.log("Device config set to MOBILE (from localStorage)");
-            } else {
-                // Auto-detect if no preference saved
-                const isMobileAuto = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight <= 1024);
-                if (isMobileAuto) {
-                    currentConfig = mobileConfig;
-                    console.log("Device config set to MOBILE (auto-detected)");
-                } else {
+        function setDeviceConfig(deviceType) {
+            switch (deviceType) {
+                case 'laptop':
                     currentConfig = laptopConfig;
-                    console.log("Device config set to LAPTOP (auto-detected)");
-                }
+                    break;
+                case 'smallMobile':
+                    currentConfig = smallMobileConfig;
+                    break;
+                case 'largeMobile':
+                    currentConfig = largeMobileConfig;
+                    break;
+                default:
+                    console.warn("Unknown device type, defaulting to laptop config.");
+                    currentConfig = laptopConfig;
             }
-            calculateGameDimensions(); // Apply the determined config
+            localStorage.setItem('cryptoFlapDevice', deviceType);
+            calculateGameDimensions(); // Apply the new configuration
+            console.log(`Device config set to ${deviceType} (via selection or auto-detect)`);
         }
 
 
@@ -2061,15 +2086,14 @@
                 e.stopPropagation(); // Prevent this click from bubbling up to the gameContainer's general handler
 
                 if (e.target.closest('#playOnLaptopButton')) { 
-                    currentConfig = laptopConfig;
-                    localStorage.setItem('cryptoFlapDevice', 'laptop'); // Save choice
-                    calculateGameDimensions(); // Apply selected config
-                    showWelcomeScreen(false); // Move to welcome screen
-                } else if (e.target.closest('#playOnMobileButton')) { 
-                    currentConfig = mobileConfig;
-                    localStorage.setItem('cryptoFlapDevice', 'mobile'); // Save choice
-                    calculateGameDimensions(); // Apply selected config
-                    showWelcomeScreen(false); // Move to welcome screen
+                    setDeviceConfig('laptop');
+                    showWelcomeScreen(false); 
+                } else if (e.target.closest('#playOnLargeMobileButton')) { 
+                    setDeviceConfig('largeMobile');
+                    showWelcomeScreen(false); 
+                } else if (e.target.closest('#playOnSmallMobileButton')) { 
+                    setDeviceConfig('smallMobile');
+                    showWelcomeScreen(false); 
                 } else if (e.target.closest('#signInEmailLinkButton')) {
                     await handleSignInWithEmailLink();
                 } else if (e.target.closest('#startButton')) { 
@@ -2079,9 +2103,9 @@
                 } else if (e.target.closest('#leaderboardCloseButton')) {
                     leaderboardModal.style.display = 'none';
                     if (window.gameOver) {
-                        showWelcomeScreen(true); // Call updated function
+                        showWelcomeScreen(true); 
                     } else {
-                        showWelcomeScreen(false); // Call updated function
+                        showWelcomeScreen(false); 
                     }
                 } else if (e.target.closest('#profileButton')) { 
                     profileModal.style.display = 'flex';
@@ -2109,14 +2133,16 @@
                 else if (e.target.closest('#profileCloseButton')) { 
                     profileModal.style.display = 'none';
                     if (window.gameOver) {
-                        showWelcomeScreen(true); // Call updated function
+                        showWelcomeScreen(true); 
                     } else {
-                        showWelcomeScreen(false); // Call updated function
+                        showWelcomeScreen(false); 
                     }
                 } else if (e.target.closest('#backToWelcomeButton')) { 
-                    showWelcomeScreen(false); // Call updated function
+                    showWelcomeScreen(false); 
                 } else if (e.target.closest('#logoutButton')) { 
                     await handleLogout();
+                } else if (e.target.closest('#deviceButton')) { // Handle new Device button
+                    showDeviceSelection();
                 }
             } else { 
                 // This is a click on the game container itself, outside of specific buttons/modals
@@ -2129,27 +2155,22 @@
 
         // Named function for window.onload
         async function initializeGame() {
-            // Check local storage for preferred device.
-            // If not found, auto-detect and set, but don't save to localStorage yet.
+            // 1. Determine initial device config
             const preferredDevice = localStorage.getItem('cryptoFlapDevice');
-            if (preferredDevice === 'laptop') {
-                currentConfig = laptopConfig;
-                console.log("Device config set to LAPTOP (from localStorage)");
-            } else if (preferredDevice === 'mobile') {
-                currentConfig = mobileConfig;
-                console.log("Device config set to MOBILE (from localStorage)");
+            if (preferredDevice) {
+                setDeviceConfig(preferredDevice); // Use saved preference
             } else {
-                // Auto-detect if no preference saved
+                // Auto-detect and apply, but don't save. If mobile, will show selection.
                 const isMobileAuto = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight <= 1024);
                 if (isMobileAuto) {
-                    currentConfig = mobileConfig;
-                    console.log("Device config set to MOBILE (auto-detected)");
+                    currentConfig = largeMobileConfig; // Default mobile to large, then offer choice
+                    console.log("Auto-detected MOBILE, defaulting to largeMobileConfig for initial setup.");
                 } else {
                     currentConfig = laptopConfig;
-                    console.log("Device config set to LAPTOP (auto-detected)");
+                    console.log("Auto-detected LAPTOP, applying laptopConfig.");
                 }
+                calculateGameDimensions(); // Apply this initial config
             }
-            calculateGameDimensions(); // Apply the determined config
             
             // Initial player size setup (will be refined by calculateGameDimensions)
             player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
@@ -2180,7 +2201,8 @@
                         currentProfile = await fetchUserProfile(currentUser.id); 
                     }
                     updateAuthUI();
-                    showWelcomeScreen(window.gameOver); // User is logged in, show main screen (welcome/game over)
+                    // After login, show the welcome screen (or game over screen if applicable)
+                    showWelcomeScreen(window.gameOver); 
                 } else {
                     currentUser = null;
                     isLoggedIn = false;
@@ -2188,12 +2210,10 @@
                     updateAuthUI();
                     
                     const savedDevice = localStorage.getItem('cryptoFlapDevice');
-                    // If no saved device preference AND it's a mobile device, show device selection
-                    // Otherwise (if desktop or saved device preference), go straight to welcome
                     const isMobileAuto = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight <= 1024);
 
-                    if (!savedDevice && isMobileAuto) { // Only show device selection if no saved device AND it's a mobile device
-                        showDeviceSelection(); 
+                    if (!savedDevice && isMobileAuto) { 
+                        showDeviceSelection(); // Only show device selection if no saved device AND it's a mobile device
                     } else {
                         showWelcomeScreen(false); // Otherwise, go straight to welcome screen
                     }
