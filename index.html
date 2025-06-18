@@ -566,7 +566,9 @@
             OBSTACLE_INTERVAL_MIN: 1500, 
             OBSTACLE_INTERVAL_MAX: 2250, 
             MAX_VERTICAL_GAP_SHIFT: 0.25, // Max vertical shift between consecutive gaps (fraction of screen height)
-            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 20000 // How often speed increases based on MC
+            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 20000, // How often speed increases based on MC
+            PLAYER_HITBOX_SHRINK_X: 0.45, // Default shrinkage for laptop
+            PLAYER_HITBOX_SHRINK_Y: 0.45  // Default shrinkage for laptop
         };
 
         // Configuration for larger mobile phones (e.g., iPhone 12 Pro Max)
@@ -583,7 +585,9 @@
             OBSTACLE_INTERVAL_MIN: 2600, 
             OBSTACLE_INTERVAL_MAX: 3600, 
             MAX_VERTICAL_GAP_SHIFT: 0.15, 
-            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 20000
+            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 20000,
+            PLAYER_HITBOX_SHRINK_X: 0.45, 
+            PLAYER_HITBOX_SHRINK_Y: 0.45
         };
 
         // Configuration for smaller mobile phones (e.g., iPhone 7)
@@ -592,15 +596,17 @@
             PLAYER_GRAVITY_BASE: 0.25, 
             PLAYER_FLAP_STRENGTH_BASE: -5.5, 
             MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
-            MIN_GAP_HEIGHT_BASE: 180, // Further reduced gap height for more challenge (was 190)
+            MIN_GAP_HEIGHT_BASE: 170, // Further reduced gap height for more challenge (was 180)
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
-            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Kept for balance between challenge and randomness
+            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, 
             CANDLE_WIDTH_BASE: 200, 
-            INITIAL_OBSTACLE_SPEED_BASE: 4.2, // Increased initial speed for a faster start (was 3.8)
+            INITIAL_OBSTACLE_SPEED_BASE: 4.5, // Increased initial speed for a faster start (was 4.2)
             OBSTACLE_INTERVAL_MIN: 3500, // Kept for performance
             OBSTACLE_INTERVAL_MAX: 5000, // Kept for performance
             MAX_VERTICAL_GAP_SHIFT: 0.15,
-            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 12000 // Speed up even more frequently (was 15000)
+            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 12000, // Kept for frequent speed up
+            PLAYER_HITBOX_SHRINK_X: 0.35, // Reduced shrinkage for larger effective hitbox (was 0.45)
+            PLAYER_HITBOX_SHRINK_Y: 0.35  // Reduced shrinkage for larger effective hitbox (was 0.45)
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -616,6 +622,8 @@
         let OBSTACLE_INTERVAL_MIN;
         let OBSTACLE_INTERVAL_MAX;
         let MAX_VERTICAL_GAP_SHIFT;
+        let PLAYER_HITBOX_SHRINK_X;
+        let PLAYER_HITBOX_SHRINK_Y;
 
 
         // Derived variables (calculated in calculateGameDimensions)
@@ -760,6 +768,8 @@
             OBSTACLE_INTERVAL_MIN = currentConfig.OBSTACLE_INTERVAL_MIN;
             OBSTACLE_INTERVAL_MAX = currentConfig.OBSTACLE_INTERVAL_MAX;
             MAX_VERTICAL_GAP_SHIFT = currentConfig.MAX_VERTICAL_GAP_SHIFT; // Get from config
+            PLAYER_HITBOX_SHRINK_X = currentConfig.PLAYER_HITBOX_SHRINK_X; // New: Get from config
+            PLAYER_HITBOX_SHRINK_Y = currentConfig.PLAYER_HITBOX_SHRINK_Y; // New: Get from config
 
 
             // Player dimensions scale with GAME_HEIGHT, with a higher minimum
@@ -906,6 +916,7 @@
             console.log(`currentScaledMinCandleSectionHeight: ${currentScaledMinCandleSectionHeight}`);
             console.log(`OBSTACLE_INTERVAL_MIN: ${OBSTACLE_INTERVAL_MIN}, OBSTACLE_INTERVAL_MAX: ${OBSTACLE_INTERVAL_MAX}`);
             console.log(`MAX_VERTICAL_GAP_SHIFT: ${MAX_VERTICAL_GAP_SHIFT}`);
+            console.log(`PLAYER_HITBOX_SHRINK_X: ${PLAYER_HITBOX_SHRINK_X}, PLAYER_HITBOX_SHRINK_Y: ${PLAYER_HITBOX_SHRINK_Y}`);
             console.log("-------------------------------------");
         }
 
@@ -1202,8 +1213,8 @@
             const playerRect = player.getBoundingClientRect();
             
             // Define player's effective collision box, slightly smaller than visual for forgiveness
-            const playerHitboxShrinkAmountX = playerRect.width * 0.45; 
-            const playerHitboxShrinkAmountY = playerRect.height * 0.45;
+            const playerHitboxShrinkAmountX = PLAYER_HITBOX_SHRINK_X * playerRect.width; 
+            const playerHitboxShrinkAmountY = PLAYER_HITBOX_SHRINK_Y * playerRect.height;
 
             const playerCollision = {
                 x: playerRect.left + playerHitboxShrinkAmountX,
@@ -2200,7 +2211,7 @@
                     isLoggedIn = true;
                     currentProfile = await fetchUserProfile(currentUser.id);
                     if (!currentProfile) {
-                        // Create profile if it doesn't exist
+                        // Create profile if it's not present
                         await upsertUserProfile({ id: currentUser.id, email: currentUser.email, x_account_name: null });
                         currentProfile = await fetchUserProfile(currentUser.id); 
                     }
