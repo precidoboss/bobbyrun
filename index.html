@@ -565,7 +565,8 @@
             INITIAL_OBSTACLE_SPEED_BASE: 2.5, // Reverted to original speed for laptop
             OBSTACLE_INTERVAL_MIN: 1500, 
             OBSTACLE_INTERVAL_MAX: 2250, 
-            MAX_VERTICAL_GAP_SHIFT: 0.25 // Max vertical shift between consecutive gaps (fraction of screen height)
+            MAX_VERTICAL_GAP_SHIFT: 0.25, // Max vertical shift between consecutive gaps (fraction of screen height)
+            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 20000 // How often speed increases based on MC
         };
 
         // Configuration for larger mobile phones (e.g., iPhone 12 Pro Max)
@@ -581,23 +582,25 @@
             INITIAL_OBSTACLE_SPEED_BASE: 3.2, // User's requested speed
             OBSTACLE_INTERVAL_MIN: 2600, 
             OBSTACLE_INTERVAL_MAX: 3600, 
-            MAX_VERTICAL_GAP_SHIFT: 0.15 
+            MAX_VERTICAL_GAP_SHIFT: 0.15, 
+            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 20000
         };
 
         // Configuration for smaller mobile phones (e.g., iPhone 7)
         const smallMobileConfig = {
-            PLAYER_SIZE_BASE: 90, // Slightly smaller player for better performance
+            PLAYER_SIZE_BASE: 80, // Further reduced player size for better performance and agile feel
             PLAYER_GRAVITY_BASE: 0.25, 
             PLAYER_FLAP_STRENGTH_BASE: -5.5, 
             MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
-            MIN_GAP_HEIGHT_BASE: 220, // Increased gap for more breathing room
+            MIN_GAP_HEIGHT_BASE: 190, // Reduced gap height for more challenge (was 220)
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
-            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.25, // More variability, can lead to wider gaps
+            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, // Reduced randomness for tighter, more consistent gaps (was 0.25)
             CANDLE_WIDTH_BASE: 200, 
-            INITIAL_OBSTACLE_SPEED_BASE: 3.2, // Keeping user's requested speed
-            OBSTACLE_INTERVAL_MIN: 3200, // Increased for more time between obstacles, less on screen
-            OBSTACLE_INTERVAL_MAX: 4500, // Increased for more time between obstacles
-            MAX_VERTICAL_GAP_SHIFT: 0.15 
+            INITIAL_OBSTACLE_SPEED_BASE: 3.8, // Increased initial speed for a faster start (was 3.2)
+            OBSTACLE_INTERVAL_MIN: 3500, // Kept for performance (was 3200)
+            OBSTACLE_INTERVAL_MAX: 5000, // Kept for performance (was 4500)
+            MAX_VERTICAL_GAP_SHIFT: 0.15,
+            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 15000 // Speed up more frequently (was 20000)
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -642,7 +645,7 @@
         const POTION_IMAGE_URL = "https://i.imgur.com/cL2ndoI.png";
         const FLAPPY_COIN_IMAGE_URL = "https://i.imgur.com/JZRXMxr.png";
 
-        const SPRITE_ANIMATION_SPEED = 200; 
+        const SPRITE_ANIMATION_SPEED = 250; // Increased for less frequent updates, better performance 
 
         // DOM element references
         const gameContainer = document.getElementById('gameContainer');
@@ -1346,7 +1349,7 @@
         function createParticles() {
             particles = []; 
             // Reduce particle count for small mobile if performance is still an issue
-            const numParticles = currentConfig === smallMobileConfig ? 60 : 100; 
+            const numParticles = currentConfig === smallMobileConfig ? 40 : 100; // Further reduced for small mobile
             for (let i = 0; i < numParticles; i++) {
                 particles.push({
                     x: Math.random() * particleCanvas.width,
@@ -1426,10 +1429,10 @@
                 marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
 
                 // Check if market cap has increased enough to boost speed
-                if (window.marketCap >= window.lastMarketCapSpeedMilestone + 20000) { 
+                if (window.marketCap >= window.lastMarketCapSpeedMilestone + currentConfig.SPEED_INCREASE_MILESTONE_MC_INCREMENT) { 
                     window.currentObstacleSpeed += 0.3; 
-                    window.lastMarketCapSpeedMilestone += 20000; 
-                    console.log(`Speed increased to ${window.currentObstacleSpeed.toFixed(2)}. Next speed milestone at MC: ${formatCurrency(window.lastMarketCapSpeedMilestone + 20000)}`);
+                    window.lastMarketCapSpeedMilestone += currentConfig.SPEED_INCREASE_MILESTONE_MC_INCREMENT; 
+                    console.log(`Speed increased to ${window.currentObstacleSpeed.toFixed(2)}. Next speed milestone at MC: ${formatCurrency(window.lastMarketCapSpeedMilestone + currentConfig.SPEED_INCREASE_MILESTONE_MC_INCREMENT)}`);
                     showSpeedUpMessage(); // Show the speed up animation
                 }
 
@@ -2004,7 +2007,7 @@
             }
 
             if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
+                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥�𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
                 messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
             } 
         }
