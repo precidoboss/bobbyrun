@@ -567,18 +567,18 @@
         };
 
         const mobileConfig = {
-            PLAYER_SIZE_BASE: 90, // Further reduced for more screen space on smaller mobiles
+            PLAYER_SIZE_BASE: 110, // Significantly reduced for more screen space on smaller mobiles
             PLAYER_GRAVITY_BASE: 0.25, 
-            PLAYER_FLAP_STRENGTH_BASE: -5.5, // Adjusted to feel good with smaller player
-            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80,
-            MIN_GAP_HEIGHT_BASE: 240, 
+            PLAYER_FLAP_STRENGTH_BASE: -5.5, 
+            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
+            MIN_GAP_HEIGHT_BASE: 200, // Decreased for tighter vertical gaps on mobile
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, 
-            CANDLE_WIDTH_BASE: 200, // Increased for more substantial candles
-            INITIAL_OBSTACLE_SPEED_BASE: 5.0, // Reduced for potentially smoother experience
-            OBSTACLE_INTERVAL_MIN: 900, 
-            OBSTACLE_INTERVAL_MAX: 1300, 
-            MAX_VERTICAL_GAP_SHIFT: 0.15 
+            CANDLE_WIDTH_BASE: 200, // Significantly reduced for more horizontal gap space
+            INITIAL_OBSTACLE_SPEED_BASE: 2.8, // Adjusted speed for mobile
+            OBSTACLE_INTERVAL_MIN: 2600, // Increased for more breathing room on mobile - FURTHER INCREASED
+            OBSTACLE_INTERVAL_MAX: 3600, // Increased for more breathing room on mobile - FURTHER INCREASED
+            MAX_VERTICAL_GAP_SHIFT: 0.15 // Retained from previous config as it was not specified in new
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
