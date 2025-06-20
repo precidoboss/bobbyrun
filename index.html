@@ -595,18 +595,18 @@
             PLAYER_SIZE_BASE: 80, // Further reduced player size for better performance and agile feel
             PLAYER_GRAVITY_BASE: 0.25, 
             PLAYER_FLAP_STRENGTH_BASE: -5.5, 
-            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
-            MIN_GAP_HEIGHT_BASE: 170, // Further reduced gap height for more challenge (was 180)
+            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 75, // Slightly adjusted for more vertical play
+            MIN_GAP_HEIGHT_BASE: 160, // Further reduced gap height for more challenge (was 170)
             MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
             AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, 
             CANDLE_WIDTH_BASE: 200, 
-            INITIAL_OBSTACLE_SPEED_BASE: 4.5, // Increased initial speed for a faster start (was 4.2)
+            INITIAL_OBSTACLE_SPEED_BASE: 4.8, // Increased initial speed for a faster start (was 4.5)
             OBSTACLE_INTERVAL_MIN: 3500, // Kept for performance
             OBSTACLE_INTERVAL_MAX: 5000, // Kept for performance
-            MAX_VERTICAL_GAP_SHIFT: 0.15,
+            MAX_VERTICAL_GAP_SHIFT: 0.35, // Increased for more dynamic vertical movement (was 0.15)
             SPEED_INCREASE_MILESTONE_MC_INCREMENT: 12000, // Kept for frequent speed up
-            PLAYER_HITBOX_SHRINK_X: 0.35, // Reduced shrinkage for larger effective hitbox (was 0.45)
-            PLAYER_HITBOX_SHRINK_Y: 0.35  // Reduced shrinkage for larger effective hitbox (was 0.45)
+            PLAYER_HITBOX_SHRINK_X: 0.25, // Reduced shrinkage for larger effective hitbox (was 0.35)
+            PLAYER_HITBOX_SHRINK_Y: 0.25  // Reduced shrinkage for larger effective hitbox (was 0.35)
         };
 
         let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
@@ -1566,7 +1566,7 @@
 
             const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
             
-            messageTitle.textContent = "💀 𝗚𝗔𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
+            messageTitle.textContent = "💀 𝗚�𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
             messageText.innerHTML = `
                 🪙 Your $FLAPPY: ${window.score}<br>
                 📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
