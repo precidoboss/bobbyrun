@@ -480,6 +480,115 @@
             transform: translateY(-3px);
         }
 
+        /* Audio Player */
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background-color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+        .audio-button {
+            background-color: #00BFFF;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .audio-button:hover {
+            background-color: #0099CC;
+        }
+        .volume-slider {
+            width: 120px;
+            -webkit-appearance: none;
+            height: 8px;
+            background: #ddd;
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        .volume-slider:hover {
+            opacity: 1;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #FF69B4;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .volume-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #FF69B4;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Leet/Jeet Board specific styles */
+        .leet-board-row, .jeet-board-row {
+            transition: all 0.3s ease-in-out;
+        }
+        .leet-board-row:hover, .jeet-board-row:hover {
+            background-color: #e6f7ff; /* Light blue on hover */
+            transform: scale(1.01);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .profit-text {
+            color: #10B981; /* Green */
+            font-weight: bold;
+        }
+        .loss-text {
+            color: #EF4444; /* Red */
+            font-weight: bold;
+        }
+        .animated-emoji {
+            display: inline-block;
+            animation: float 1.5s infinite ease-in-out;
+            margin-left: 0.5rem;
+        }
+
+        /* Disclaimer Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #555;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -487,27 +596,40 @@
     <!-- Custom Emoji Cursor -->
     <div id="custom-cursor">✨</div>
 
+    <!-- Background Audio -->
+    <audio id="backgroundAudio" loop>
+        <source src="https://github.com/precidoboss/my-game-sprites/blob/main/Vocaroo%2013XFquwczgWx.mp3?raw=true" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Audio Controls -->
+    <div class="fixed bottom-4 left-4 z-50">
+        <div class="audio-controls">
+            <button id="playPauseAudioBtn" class="audio-button">▶️ Play</button>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5" class="volume-slider">
+            <span class="text-gray-700 text-sm">Volume</span>
+        </div>
+    </div>
+
     <!-- Header/Navbar -->
     <header class="bg-white shadow-md py-4 px-6 md:px-12 rounded-b-3xl z-20 relative">
         <nav class="container mx-auto flex justify-between items-center">
             <a href="#" class="text-3xl font-extrabold gradient-text">EmogiNation 🚀</a>
             <div class="hidden md:flex space-x-8 text-sm">
                 <a href="#about" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">About</a>
+                <a href="#countdown" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Launch ⏳</a>
                 <a href="#token-info" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Tokenomics 📊</a>
-                <a href="#portfolio-tracker" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Portfolio 📈</a>
-                <a href="#revenue" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Revenue 💸</a>
                 <a href="#swap-interface" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Swap 🔄</a>
                 <a href="#staking-pool" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Staking 💰</a>
-                <a href="#emoji-chat" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Emoji Chat 💬</a>
                 <a href="#nft-minting" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">NFT Minting 🖼️</a>
                 <a href="#emoji-video-creator" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Emoji Video 🎬</a>
-                <a href="#tipping-bot-test" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Tipping Bot 🤖</a>
-                <a href="#roadmap" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Roadmap 🗺️</a>
+                <a href="#dao" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">DAO 🗳️</a>
+                <a href="#leaderboards" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Boards 🏆</a>
                 <a href="#collaborations" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Partnerships 🤝</a>
                 <a href="#merchandise" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Merch 👕</a>
                 <a href="#exchanges" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Exchanges 🏦</a>
+                <a href="#sponsors" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Sponsors ✨</a>
                 <a href="#team" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Team 🫂</a>
-                <a href="#memes" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Memes 😂</a>
                 <a href="#faq" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">FAQ ❓</a>
                 <a href="#community-metrics" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Community 🌐</a>
                 <a href="#social-feed" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Social Feed 🐦</a>
@@ -987,6 +1109,222 @@
         </div>
     </section>
 
+    <!-- EmogiNation DAO Section -->
+    <section id="dao" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation DAO: Empowering the Community! 🗳️🤝</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                The EmogiNation Decentralized Autonomous Organization (DAO) puts the power directly into the hands of our community! Holders of $EMOJI will be able to vote on key decisions, including which other promising meme coins to support and invest in.
+            </p>
+
+            <div class="bg-purple-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-purple-800 mb-6">DAO Treasury & Supported Projects (Simulated) 💰</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="flex flex-col items-center">
+                        <span class="text-5xl mb-2">Treasury:</span>
+                        <p class="text-4xl font-extrabold text-purple-700">$500,000</p>
+                        <p class="text-gray-600 mt-2">Funds for community initiatives & investments.</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-5xl mb-2">Votes:</span>
+                        <p class="text-4xl font-extrabold text-indigo-700">12,345</p>
+                        <p class="text-gray-600 mt-2">Total community votes cast this month.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-2xl font-semibold text-gray-800 mb-4">DAO-Approved Meme Coins to Support:</h4>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full flex items-center space-x-2">
+                        <span class="text-2xl">🐕</span> <span>DogeCoin</span>
+                    </span>
+                    <span class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full flex items-center space-x-2">
+                        <span class="text-2xl">🐱</span> <span>CatCoin</span>
+                    </span>
+                    <span class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full flex items-center space-x-2">
+                        <span class="text-2xl">🐸</span> <span>PepeCoin</span>
+                    </span>
+                    <span class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full flex items-center space-x-2">
+                        <span class="text-2xl">🌕</span> <span>MoonCoin</span>
+                    </span>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *This DAO functionality and supported projects are simulated. Real DAO decisions would be on-chain.
+            </p>
+        </div>
+    </section>
+
+    <!-- Presale Leaderboards Section -->
+    <section id="leaderboards" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Presale Boards: Diamond Hands vs. Paper Hands! 💎📉</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Celebrating our true believers and transparently tracking those who couldn't resist the urge to sell. See who's holding strong and who's taken profits (or losses) from the EmogiNation presale!
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- LeetBoard (Diamond Handers) -->
+                <div>
+                    <h3 class="text-3xl font-bold text-green-700 mb-6">💎 LeetBoard: The Diamond Handers! 💎</h3>
+                    <p class="text-lg text-gray-700 mb-4">These are the OGs who bought in presale and are holding strong, or even bought more!</p>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="min-w-full bg-white rounded-lg shadow-md">
+                            <thead>
+                                <tr class="bg-green-100 text-green-800 uppercase text-sm leading-normal">
+                                    <th class="py-3 px-4 text-left">Rank</th>
+                                    <th class="py-3 px-4 text-left">Wallet/Handle</th>
+                                    <th class="py-3 px-4 text-left">Bought (Presale)</th>
+                                    <th class="py-3 px-4 text-left">Current Holdings</th>
+                                    <th class="py-3 px-4 text-left">% Remaining</th>
+                                    <th class="py-3 px-4 text-left">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 text-sm font-light">
+                                <tr class="border-b border-gray-200 leet-board-row">
+                                    <td class="py-3 px-4 text-left">1</td>
+                                    <td class="py-3 px-4 text-left">0xABC...123 <span class="animated-emoji">✨</span></td>
+                                    <td class="py-3 px-4 text-left">1,000,000</td>
+                                    <td class="py-3 px-4 text-left">1,200,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="profit-text">120%</span></td>
+                                    <td class="py-3 px-4 text-left">HODLing Strong 💪</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 leet-board-row">
+                                    <td class="py-3 px-4 text-left">2</td>
+                                    <td class="py-3 px-4 text-left">0xDEF...456 <span class="animated-emoji">🚀</span></td>
+                                    <td class="py-3 px-4 text-left">800,000</td>
+                                    <td class="py-3 px-4 text-left">800,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td>
+                                    <td class="py-3 px-4 text-left">True Believer 🙏</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 leet-board-row">
+                                    <td class="py-3 px-4 text-left">3</td>
+                                    <td class="py-3 px-4 text-left">0xGHI...789 <span class="animated-emoji">🌟</span></td>
+                                    <td class="py-3 px-4 text-left">750,000</td>
+                                    <td class="py-3 px-4 text-left">700,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="profit-text">93.3%</span></td>
+                                    <td class="py-3 px-4 text-left">Solid Holder ✅</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 leet-board-row">
+                                    <td class="py-3 px-4 text-left">4</td>
+                                    <td class="py-3 px-4 text-left">0xJKL...012 <span class="animated-emoji">💖</span></td>
+                                    <td class="py-3 px-4 text-left">600,000</td>
+                                    <td class="py-3 px-4 text-left">600,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td>
+                                    <td class="py-3 px-4 text-left">Diamond Hands 💎</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 leet-board-row">
+                                    <td class="py-3 px-4 text-left">5</td>
+                                    <td class="py-3 px-4 text-left">0xMNO...345 <span class="animated-emoji">📈</span></td>
+                                    <td class="py-3 px-4 text-left">550,000</td>
+                                    <td class="py-3 px-4 text-left">580,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="profit-text">105.4%</span></td>
+                                    <td class="py-3 px-4 text-left">Accumulator 💰</td>
+                                </tr>
+                                <!-- Add 15 more simulated entries -->
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">6</td><td class="py-3 px-4 text-left">0xPQR...678</td><td class="py-3 px-4 text-left">500,000</td><td class="py-3 px-4 text-left">480,000</td><td class="py-3 px-4 text-left">96%</td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">7</td><td class="py-3 px-4 text-left">0xSTU...901</td><td class="py-3 px-4 text-left">450,000</td><td class="py-3 px-4 text-left">450,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">8</td><td class="py-3 px-4 text-left">0xVWX...234</td><td class="py-3 px-4 text-left">400,000</td><td class="py-3 px-4 text-left">420,000</td><td class="py-3 px-4 text-left"><span class="profit-text">105%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">9</td><td class="py-3 px-4 text-left">0xYZA...567</td><td class="py-3 px-4 text-left">380,000</td><td class="py-3 px-4 text-left">380,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">10</td><td class="py-3 px-4 text-left">0xBCD...890</td><td class="py-3 px-4 text-left">350,000</td><td class="py-3 px-4 text-left">340,000</td><td class="py-3 px-4 text-left">97.1%</td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">11</td><td class="py-3 px-4 text-left">0xEFG...123</td><td class="py-3 px-4 text-left">320,000</td><td class="py-3 px-4 text-left">320,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">12</td><td class="py-3 px-4 text-left">0xHIJ...456</td><td class="py-3 px-4 text-left">300,000</td><td class="py-3 px-4 text-left">310,000</td><td class="py-3 px-4 text-left"><span class="profit-text">103.3%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">13</td><td class="py-3 px-4 text-left">0xKLM...789</td><td class="py-3 px-4 text-left">280,000</td><td class="py-3 px-4 text-left">270,000</td><td class="py-3 px-4 text-left">96.4%</td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">14</td><td class="py-3 px-4 text-left">0xNOP...012</td><td class="py-3 px-4 text-left">250,000</td><td class="py-3 px-4 text-left">250,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">15</td><td class="py-3 px-4 text-left">0xQRS...345</td><td class="py-3 px-4 text-left">230,000</td><td class="py-3 px-4 text-left">240,000</td><td class="py-3 px-4 text-left"><span class="profit-text">104.3%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">16</td><td class="py-3 px-4 text-left">0xTUV...678</td><td class="py-3 px-4 text-left">200,000</td><td class="py-3 px-4 text-left">190,000</td><td class="py-3 px-4 text-left">95%</td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">17</td><td class="py-3 px-4 text-left">0xWXY...901</td><td class="py-3 px-4 text-left">180,000</td><td class="py-3 px-4 text-left">180,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">18</td><td class="py-3 px-4 text-left">0xZAB...234</td><td class="py-3 px-4 text-left">160,000</td><td class="py-3 px-4 text-left">170,000</td><td class="py-3 px-4 text-left"><span class="profit-text">106.3%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">19</td><td class="py-3 px-4 text-left">0xCDE...567</td><td class="py-3 px-4 text-left">140,000</td><td class="py-3 px-4 text-left">130,000</td><td class="py-3 px-4 text-left">92.9%</td><td class="py-3 px-4 text-left">Holding</td></tr>
+                                <tr class="leet-board-row"><td class="py-3 px-4 text-left">20</td><td class="py-3 px-4 text-left">0xFGH...890</td><td class="py-3 px-4 text-left">120,000</td><td class="py-3 px-4 text-left">120,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- JeetBoard (Paper Handers) -->
+                <div>
+                    <h3 class="text-3xl font-bold text-red-700 mb-6">📉 JeetBoard: The Paper Handers! 📉</h3>
+                    <p class="text-lg text-gray-700 mb-4">These are the ones who sold their presale allocations. Some took profits, some took losses.</p>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="min-w-full bg-white rounded-lg shadow-md">
+                            <thead>
+                                <tr class="bg-red-100 text-red-800 uppercase text-sm leading-normal">
+                                    <th class="py-3 px-4 text-left">Rank</th>
+                                    <th class="py-3 px-4 text-left">Wallet/Handle</th>
+                                    <th class="py-3 px-4 text-left">Bought (Presale)</th>
+                                    <th class="py-3 px-4 text-left">Amount Sold</th>
+                                    <th class="py-3 px-4 text-left">% P/L (from Sale)</th>
+                                    <th class="py-3 px-4 text-left">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 text-sm font-light">
+                                <tr class="border-b border-gray-200 jeet-board-row">
+                                    <td class="py-3 px-4 text-left">1</td>
+                                    <td class="py-3 px-4 text-left">0x123...ABC <span class="animated-emoji">💸</span></td>
+                                    <td class="py-3 px-4 text-left">500,000</td>
+                                    <td class="py-3 px-4 text-left">500,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="profit-text">+25%</span></td>
+                                    <td class="py-3 px-4 text-left">Early Profit 🤑</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 jeet-board-row">
+                                    <td class="py-3 px-4 text-left">2</td>
+                                    <td class="py-3 px-4 text-left">0x456...DEF <span class="animated-emoji">📉</span></td>
+                                    <td class="py-3 px-4 text-left">700,000</td>
+                                    <td class="py-3 px-4 text-left">700,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="loss-text">-10%</span></td>
+                                    <td class="py-3 px-4 text-left">Panic Sold 😥</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 jeet-board-row">
+                                    <td class="py-3 px-4 text-left">3</td>
+                                    <td class="py-3 px-4 text-left">0x789...GHI <span class="animated-emoji">💨</span></td>
+                                    <td class="py-3 px-4 text-left">400,000</td>
+                                    <td class="py-3 px-4 text-left">400,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="profit-text">+5%</span></td>
+                                    <td class="py-3 px-4 text-left">Small Gain ✅</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 jeet-board-row">
+                                    <td class="py-3 px-4 text-left">4</td>
+                                    <td class="py-3 px-4 text-left">0x012...JKL <span class="animated-emoji">😭</span></td>
+                                    <td class="py-3 px-4 text-left">600,000</td>
+                                    <td class="py-3 px-4 text-left">600,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="loss-text">-20%</span></td>
+                                    <td class="py-3 px-4 text-left">Regrets 💔</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 jeet-board-row">
+                                    <td class="py-3 px-4 text-left">5</td>
+                                    <td class="py-3 px-4 text-left">0x345...MNO <span class="animated-emoji">🤷‍♀️</span></td>
+                                    <td class="py-3 px-4 text-left">300,000</td>
+                                    <td class="py-3 px-4 text-left">300,000</td>
+                                    <td class="py-3 px-4 text-left"><span class="profit-text">+10%</span></td>
+                                    <td class="py-3 px-4 text-left">Good Enough 👍</td>
+                                </tr>
+                                <!-- Add 15 more simulated entries -->
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">6</td><td class="py-3 px-4 text-left">0x678...PQR</td><td class="py-3 px-4 text-left">250,000</td><td class="py-3 px-4 text-left">250,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-5%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">7</td><td class="py-3 px-4 text-left">0x901...STU</td><td class="py-3 px-4 text-left">200,000</td><td class="py-3 px-4 text-left">200,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+15%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">8</td><td class="py-3 px-4 text-left">0x234...VWX</td><td class="py-3 px-4 text-left">180,000</td><td class="py-3 px-4 text-left">180,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-12%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">9</td><td class="py-3 px-4 text-left">0x567...YZA</td><td class="py-3 px-4 text-left">150,000</td><td class="py-3 px-4 text-left">150,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+8%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">10</td><td class="py-3 px-4 text-left">0x890...BCD</td><td class="py-3 px-4 text-left">120,000</td><td class="py-3 px-4 text-left">120,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-7%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">11</td><td class="py-3 px-4 text-left">0x123...EFG</td><td class="py-3 px-4 text-left">100,000</td><td class="py-3 px-4 text-left">100,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+3%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">12</td><td class="py-3 px-4 text-left">0x456...HIJ</td><td class="py-3 px-4 text-left">90,000</td><td class="py-3 px-4 text-left">90,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-18%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">13</td><td class="py-3 px-4 text-left">0x789...KLM</td><td class="py-3 px-4 text-left">80,000</td><td class="py-3 px-4 text-left">80,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+20%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">14</td><td class="py-3 px-4 text-left">0x012...NOP</td><td class="py-3 px-4 text-left">70,000</td><td class="py-3 px-4 text-left">70,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-2%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">15</td><td class="py-3 px-4 text-left">0x345...QRS</td><td class="py-3 px-4 text-left">60,000</td><td class="py-3 px-4 text-left">60,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+12%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">16</td><td class="py-3 px-4 text-left">0x678...TUV</td><td class="py-3 px-4 text-left">55,000</td><td class="py-3 px-4 text-left">55,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-9%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">17</td><td class="py-3 px-4 text-left">0x901...WXY</td><td class="py-3 px-4 text-left">50,000</td><td class="py-3 px-4 text-left">50,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+7%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">18</td><td class="py-3 px-4 text-left">0x234...ZAB</td><td class="py-3 px-4 text-left">45,000</td><td class="py-3 px-4 text-left">45,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-15%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">19</td><td class="py-3 px-4 text-left">0x567...CDE</td><td class="py-3 px-4 text-left">40,000</td><td class="py-3 px-4 text-left">40,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+1%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                                <tr class="jeet-board-row"><td class="py-3 px-4 text-left">20</td><td class="py-3 px-4 text-left">0x890...FGH</td><td class="py-3 px-4 text-left">35,000</td><td class="py-3 px-4 text-left">35,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-10%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *These leaderboards are simulated and do not reflect real-time on-chain data. Profit/Loss is calculated based on a hypothetical launch price relative to the presale price.
+            </p>
+        </div>
+    </section>
+
     <!-- Tipping Bot Live Test Utility Section -->
     <section id="tipping-bot-test" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
         <div class="card p-8 md:p-12 text-center">
@@ -1202,6 +1540,37 @@
         </div>
     </section>
 
+    <!-- IRL Event Sponsors Section -->
+    <section id="sponsors" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">IRL Event Sponsors: Powering Our Community Gatherings! ✨🤝</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                EmogiNation is planning exciting real-world events to connect our community! We're proud to acknowledge our simulated sponsors who help make these gatherings possible.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 rounded-xl bg-gray-50 shadow-inner flex flex-col items-center justify-center">
+                    <img src="https://placehold.co/150x80/E0F2F7/2C3E50?text=CryptoCon+Global" alt="CryptoCon Global Logo" class="h-20 mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">CryptoCon Global</h3>
+                    <p class="text-gray-700 text-center">Leading blockchain conference organizer.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-gray-50 shadow-inner flex flex-col items-center justify-center">
+                    <img src="https://placehold.co/150x80/FFD700/2C3E50?text=Decentralized+Ventures" alt="Decentralized Ventures Logo" class="h-20 mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">Decentralized Ventures</h3>
+                    <p class="text-gray-700 text-center">Early-stage crypto project investor.</p>
+                </div>
+                <div class="p-6 rounded-xl bg-gray-50 shadow-inner flex flex-col items-center justify-center">
+                    <img src="https://placehold.co/150x80/FF69B4/FFFFFF?text=NFT+Art+Gallery" alt="NFT Art Gallery Logo" class="h-20 mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800">NFT Art Gallery</h3>
+                    <p class="text-gray-700 text-center">Promoting digital art and collectibles.</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-8">
+                *These sponsors are simulated for illustrative purposes. Real sponsors will be announced closer to event dates.
+            </p>
+        </div>
+    </section>
+
     <!-- Presale Section -->
     <section id="presale" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
         <div class="card p-8 md:p-12 text-center">
@@ -1309,7 +1678,7 @@
                 </div>
                 <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">How can I buy $EMOJI? 🛒</h3>
-                    <p class="text-gray-700">You can acquire $EMOJI during our presale event (check the Presale section!) or after launch on decentralized exchanges like PancakeSwap/Uniswap. We'll also be targeting major CEX listings!</p>
+                    <p class="text-700">You can acquire $EMOJI during our presale event (check the Presale section!) or after launch on decentralized exchanges like PancakeSwap/Uniswap. We'll also be targeting major CEX listings!</p>
                 </div>
                 <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">What are the utilities of $EMOJI? 💡</h3>
@@ -1597,6 +1966,16 @@
         </div>
     </section>
 
+    <!-- Disclaimer Section -->
+    <section id="disclaimer" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center bg-red-50 border border-red-200">
+            <h2 class="text-3xl font-extrabold text-red-700 mb-6">Important Disclaimer ⚠️</h2>
+            <p class="text-lg text-gray-700 leading-relaxed">
+                Cryptocurrency investments are subject to high market risk, including the possibility of losing the entire amount invested. Please conduct your own thorough research and seek independent financial advice before making any investment decisions. EmogiNation is a meme coin and its value is highly speculative and volatile. This website's content is for informational and entertainment purposes only and does not constitute financial advice.
+            </p>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-gray-800 text-white py-8 mt-12 rounded-t-3xl">
         <div class="container mx-auto text-center px-4">
@@ -1610,7 +1989,7 @@
 
     <script>
         // Array of emojis to use for animations
-        const emojis = ['😂', '🤩', '🚀', '💖', '✨', '💰', '🌐', '📈', '🎨', '👍', '🥳', '🌟', '🎉', '💡', '🔥', '💎', '💯', '✅', '🔒', '🎯', '🫂', '�', '🎊', '💫', '😎', '🤯', '🤑', '🙌', '👑', '🌕', '🏆', '🌱', '🎁', '💬', '🖼️', '🦄', '🐶', '🐱', '🦊', '🐼', '🐻', '🐯', '🦁', '🐸', '🐢', '🐍', '🐲', '🐳', '🐬', '🐠', '🦀', '🐞', '🦋', '🌸', '🌼', '🌻', '🍎', '🍊', '🍋', '🍉', '🍇', '🍓', '🍕', '🍔', '🍟', '🌮', '🍣', '🍦', '🍩', '🍪', '🍫', '☕', '🥛', '🍺', '🍷', '🍸', '🍹', '🎈', '🎁', '🎉', '🎊', '🎀', '🎵', '🎶', '🎤', '🎧', '🥁', '🎸', '🎹', '🎺', '🎻', '🎲', '🧩', '🎮', '🕹️', '👾', '🤖', '👻', '👽', '🎃', '🎄', '🎅', '🤶', '👼', '🤴', '👸', '🤵', '👰', '🧙', '🧚', '🧛', '🧜', '🧝', '🧞', '🧟', '🧑‍🎄', '🦸', '🦹', '🧑‍🚀', '🧑‍✈️', '👮', '👷', '💂', '🕵️', '🧑‍⚕️', '🧑‍🌾', '🧑‍🍳', '🧑‍🎓', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️', '🧑‍✈️', '🧑‍🚀', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️'];
+        const emojis = ['😂', '🤩', '🚀', '💖', '✨', '💰', '🌐', '📈', '🎨', '👍', '🥳', '🌟', '🎉', '💡', '🔥', '💎', '💯', '✅', '🔒', '🎯', '🫂', '🌈', '🎊', '💫', '😎', '🤯', '🤑', '🙌', '👑', '🌕', '🏆', '🌱', '🎁', '💬', '🖼️', '🦄', '🐶', '🐱', '🦊', '🐼', '🐻', '🐯', '🦁', '🐸', '🐢', '🐍', '🐲', '🐳', '🐬', '🐠', '🦀', '🐞', '🦋', '🌸', '🌼', '🌻', '🍎', '🍊', '🍋', '🍉', '🍇', '🍓', '🍕', '🍔', '🍟', '🌮', '🍣', '🍦', '🍩', '🍪', '🍫', '☕', '🥛', '🍺', '🍷', '🍸', '🍹', '🎈', '🎁', '🎉', '🎊', '🎀', '🎵', '🎶', '🎤', '🎧', '🥁', '🎸', '🎹', '🎺', '🎻', '🎲', '🧩', '🎮', '🕹️', '👾', '🤖', '👻', '👽', '🎃', '🎄', '🎅', '🤶', '👼', '🤴', '👸', '🤵', '👰', '🧙', '🧚', '🧛', '🧜', '🧝', '🧞', '🧟', '🧑‍🎄', '🦸', '🦹', '🧑‍🚀', '🧑‍✈️', '👮', '👷', '💂', '🕵️', '🧑‍⚕️', '🧑‍🌾', '🧑‍🍳', '🧑‍🎓', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️', '🧑‍✈️', '🧑‍🚀', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️'];
         const cursorEmojis = ['✨', '🌟', '💖', '🚀', '💎', '🔥', '💯', '🥳', '💡', '🎨']; // Emojis for the cursor
 
         // --- Custom Mouse Pointer ---
@@ -2259,7 +2638,49 @@
 
         calculateSwapOutput(); // Initial calculation for swap interface
 
+        // --- Background Audio Controls ---
+        const backgroundAudio = document.getElementById('backgroundAudio');
+        const playPauseAudioBtn = document.getElementById('playPauseAudioBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        // Set initial volume
+        backgroundAudio.volume = volumeSlider.value;
+
+        playPauseAudioBtn.addEventListener('click', () => {
+            if (backgroundAudio.paused) {
+                backgroundAudio.play().catch(e => console.error("Audio play failed:", e));
+                playPauseAudioBtn.textContent = '⏸️ Pause';
+            } else {
+                backgroundAudio.pause();
+                playPauseAudioBtn.textContent = '▶️ Play';
+            }
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            backgroundAudio.volume = volumeSlider.value;
+        });
+
+        // Autoplay on user interaction (common browser restriction workaround)
+        document.addEventListener('DOMContentLoaded', () => {
+            const tryPlayAudio = () => {
+                if (backgroundAudio.paused) {
+                    backgroundAudio.play().then(() => {
+                        playPauseAudioBtn.textContent = '⏸️ Pause';
+                    }).catch(e => {
+                        console.log("Autoplay blocked, user interaction needed:", e);
+                        playPauseAudioBtn.textContent = '▶️ Play'; // Ensure button shows play if blocked
+                    });
+                }
+                // Remove listener once played to prevent multiple attempts
+                document.removeEventListener('click', tryPlayAudio);
+                document.removeEventListener('touchstart', tryPlayAudio);
+            };
+
+            // Try to play audio on first user interaction
+            document.addEventListener('click', tryPlayAudio);
+            document.addEventListener('touchstart', tryPlayAudio);
+        });
+
     </script>
 </body>
 </html>
-�
