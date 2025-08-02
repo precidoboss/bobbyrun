@@ -442,6 +442,44 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        /* Countdown Timer */
+        .countdown-item {
+            background-color: #fff;
+            padding: 1.5rem 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 100px;
+            max-width: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .countdown-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00BFFF;
+        }
+        .countdown-label {
+            font-size: 1rem;
+            color: #555;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        /* Social Feed Post */
+        .social-post {
+            background-color: #fff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease-in-out;
+        }
+        .social-post:hover {
+            transform: translateY(-3px);
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -453,23 +491,26 @@
     <header class="bg-white shadow-md py-4 px-6 md:px-12 rounded-b-3xl z-20 relative">
         <nav class="container mx-auto flex justify-between items-center">
             <a href="#" class="text-3xl font-extrabold gradient-text">EmogiNation 🚀</a>
-            <div class="hidden md:flex space-x-8">
+            <div class="hidden md:flex space-x-8 text-sm">
                 <a href="#about" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">About</a>
-                <a href="#features" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Why Emojis?</a>
                 <a href="#token-info" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Tokenomics 📊</a>
                 <a href="#portfolio-tracker" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Portfolio 📈</a>
                 <a href="#revenue" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Revenue 💸</a>
-                <a href="#staking-pool" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Staking Pool 💰</a>
+                <a href="#swap-interface" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Swap 🔄</a>
+                <a href="#staking-pool" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Staking 💰</a>
                 <a href="#emoji-chat" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Emoji Chat 💬</a>
                 <a href="#nft-minting" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">NFT Minting 🖼️</a>
                 <a href="#emoji-video-creator" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Emoji Video 🎬</a>
                 <a href="#tipping-bot-test" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Tipping Bot 🤖</a>
-                <a href="#utility" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Send $EMOJI 💡</a>
                 <a href="#roadmap" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Roadmap 🗺️</a>
-                <a href="#presale" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Presale! 🔥</a>
+                <a href="#collaborations" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Partnerships 🤝</a>
+                <a href="#merchandise" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Merch 👕</a>
+                <a href="#exchanges" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Exchanges 🏦</a>
                 <a href="#team" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Team 🫂</a>
                 <a href="#memes" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Memes 😂</a>
-                <a href="#how-to-get" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Community</a>
+                <a href="#faq" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">FAQ ❓</a>
+                <a href="#community-metrics" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Community 🌐</a>
+                <a href="#social-feed" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Social Feed 🐦</a>
             </div>
             <button class="md:hidden text-gray-700 focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
@@ -495,6 +536,35 @@
                     Discover Our Vision 📚
                 </a>
             </div>
+        </div>
+    </section>
+
+    <!-- Countdown Timer Section -->
+    <section id="countdown" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Launch Countdown: The Future is Nigh! ⏳🚀</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Get ready for the official launch of EmogiNation! The countdown has begun for an exciting new era of emoji-powered finance.
+            </p>
+            <div class="flex justify-center flex-wrap gap-6" id="countdown-timer">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="countdown-days">00</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="countdown-hours">00</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="countdown-minutes">00</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="countdown-seconds">00</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+            <p class="text-xl font-bold text-gray-800 mt-8" id="countdown-message">Stay tuned for more updates! 🎉</p>
         </div>
     </section>
 
@@ -737,6 +807,58 @@
         </div>
     </section>
 
+    <!-- Swap Interface Section -->
+    <section id="swap-interface" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Swap Interface (Simulated) 🔄</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Experience seamless token swaps with our simulated interface. Convert your favorite cryptos to $EMOJI and back, with transparent details on routes, slippage, and price impact.
+            </p>
+
+            <div class="bg-blue-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-blue-800 mb-6">Swap Your Tokens! 🚀</h3>
+                <div class="flex flex-col gap-4 mb-6">
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="swapInputAmount" placeholder="Amount to Swap" class="flex-grow p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" min="0.001" step="0.001" />
+                        <select id="swapInputToken" class="p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
+                            <option value="ETH">ETH</option>
+                            <option value="BNB">BNB</option>
+                            <option value="EMOJI">$EMOJI</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-center my-2">
+                        <button id="swapDirectionBtn" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition duration-300">
+                            <span class="text-2xl">⬇️⬆️</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="swapOutputAmount" placeholder="Receive Amount" class="flex-grow p-3 rounded-lg border-2 border-blue-300 bg-gray-100 text-gray-700 cursor-not-allowed" readonly />
+                        <select id="swapOutputToken" class="p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
+                            <option value="EMOJI">$EMOJI</option>
+                            <option value="ETH">ETH</option>
+                            <option value="BNB">BNB</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="text-left text-gray-700 text-sm mb-6 space-y-2">
+                    <p><strong>Route:</strong> <span id="swapRoute">ETH &gt; WETH &gt; $EMOJI</span></p>
+                    <p><strong>Slippage:</strong> <span id="swapSlippage">0.5%</span></p>
+                    <p><strong>Price Impact:</strong> <span id="swapPriceImpact">~0.01%</span></p>
+                    <p><strong>Min. Received:</strong> <span id="swapMinReceived">0 $EMOJI</span></p>
+                </div>
+
+                <button id="confirmSwapBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2 mx-auto">
+                    Confirm Swap! ✅
+                </button>
+                <p id="swapStatus" class="text-lg font-semibold mt-4"></p>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *This is a simulated swap interface for demonstration purposes. No actual transactions occur.
+            </p>
+        </div>
+    </section>
+
     <!-- Staking Pool Section -->
     <section id="staking-pool" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
         <div class="card p-8 md:p-12 text-center">
@@ -868,7 +990,7 @@
     <!-- Tipping Bot Live Test Utility Section -->
     <section id="tipping-bot-test" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
         <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Live Test: EmogiNation Tipping Bot! �💸</h2>
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Live Test: EmogiNation Tipping Bot! 🤖💸</h2>
             <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
                 Experience the magic of emoji tipping! Interact with our simulated bot by sending up to 5 emojis, and watch as it confirms your $EMOJI tip. It's seamless, fun, and powered by emotions!
             </p>
@@ -984,6 +1106,102 @@
         </div>
     </section>
 
+    <!-- Collaborations Section -->
+    <section id="collaborations" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Collaborations: Stronger Together! 🤝</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                We believe in building bridges, not walls! EmogiNation is actively forging strategic partnerships with innovative projects and influential figures across the crypto space to expand our reach and utility.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 rounded-xl bg-purple-50 shadow-inner flex flex-col items-center justify-center text-center">
+                    <span class="text-5xl mb-4">🔗</span>
+                    <h3 class="text-2xl font-semibold mb-2">Project Alpha</h3>
+                    <p class="text-gray-700">Integrating $EMOJI for their NFT marketplace. A match made in digital heaven! 🖼️</p>
+                </div>
+                <div class="p-6 rounded-xl bg-yellow-50 shadow-inner flex flex-col items-center justify-center text-center">
+                    <span class="text-5xl mb-4">🌟</span>
+                    <h3 class="text-2xl font-semibold mb-2">CryptoGuru X</h3>
+                    <p class="text-gray-700">Strategic partnership with a top crypto influencer for massive exposure. 📢</p>
+                </div>
+                <div class="p-6 rounded-xl bg-green-50 shadow-inner flex flex-col items-center justify-center text-center">
+                    <span class="text-5xl mb-4">🎮</span>
+                    <h3 class="text-2xl font-semibold mb-2">GameFi Studios</h3>
+                    <p class="text-gray-700">Exploring $EMOJI integration into their upcoming play-to-earn game. Get ready to game! 🕹️</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-8">
+                *These are simulated collaborations for illustrative purposes. More real partnerships to be announced!
+            </p>
+        </div>
+    </section>
+
+    <!-- Merchandise Section -->
+    <section id="merchandise" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Merchandise: Wear Your Emotions! 👕🛍️</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Show your EmogiNation pride with our exclusive merchandise! Express yourself with our unique emoji-inspired designs.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-4 rounded-xl bg-gray-100 shadow-inner flex flex-col items-center text-center">
+                    <img src="https://placehold.co/300x300/FFD700/2C3E50?text=%F0%9F%91%95%0A%24EMOJI+T-Shirt" alt="Emoji T-Shirt" class="w-full h-auto rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-2">EmogiNation T-Shirt</h3>
+                    <p class="text-gray-700">Rock the original laughing emoji! 😂</p>
+                    <p class="text-lg font-bold mt-2">25 $EMOJI</p>
+                </div>
+                <div class="p-4 rounded-xl bg-gray-100 shadow-inner flex flex-col items-center text-center">
+                    <img src="https://placehold.co/300x300/00BFFF/FFFFFF?text=%F0%9F%A7%A2%0A%24EMOJI+Hoodie" alt="Emoji Hoodie" class="w-full h-auto rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-2">EmogiNation Hoodie</h3>
+                    <p class="text-gray-700">Stay cozy and star-struck! 🤩</p>
+                    <p class="text-lg font-bold mt-2">50 $EMOJI</p>
+                </div>
+                <div class="p-4 rounded-xl bg-gray-100 shadow-inner flex flex-col items-center text-center">
+                    <img src="https://placehold.co/300x300/FF69B4/FFFFFF?text=%F0%9F%8C%9F%0A%24EMOJI+Mug" alt="Emoji Mug" class="w-full h-auto rounded-lg mb-4">
+                    <h3 class="text-xl font-semibold mb-2">EmogiNation Mug</h3>
+                    <p class="text-gray-700">Sip your coffee with a rocket! 🚀</p>
+                    <p class="text-lg font-bold mt-2">15 $EMOJI</p>
+                </div>
+            </div>
+            <a href="#" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold inline-block mt-10">
+                Shop Now! (Coming Soon) 🛒
+            </a>
+        </div>
+    </section>
+
+    <!-- Big Exchange Listings Section -->
+    <section id="exchanges" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Major Exchange Listings: Expanding Our Reach! 🏦📈</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                EmogiNation is set for global recognition! We are actively pursuing listings on the world's leading cryptocurrency exchanges to ensure maximum accessibility and liquidity for our community.
+            </p>
+
+            <div class="flex flex-wrap justify-center items-center gap-10">
+                <div class="flex flex-col items-center text-center p-4 bg-gray-50 rounded-lg shadow-sm">
+                    <img src="https://placehold.co/100x100/FFF/000?text=Binance" alt="Binance Logo" class="h-20 mb-2">
+                    <p class="font-semibold text-lg">Binance</p>
+                    <span class="text-sm text-green-600">🚀 Targeted Q4 2025</span>
+                </div>
+                <div class="flex flex-col items-center text-center p-4 bg-gray-50 rounded-lg shadow-sm">
+                    <img src="https://placehold.co/100x100/FFF/000?text=Coinbase" alt="Coinbase Logo" class="h-20 mb-2">
+                    <p class="font-semibold text-lg">Coinbase</p>
+                    <span class="text-sm text-green-600">🌟 Targeted Q1 2026</span>
+                </div>
+                <div class="flex flex-col items-center text-center p-4 bg-gray-50 rounded-lg shadow-sm">
+                    <img src="https://placehold.co/100x100/FFF/000?text=Kraken" alt="Kraken Logo" class="h-20 mb-2">
+                    <p class="font-semibold text-lg">Kraken</p>
+                    <span class="text-sm text-green-600">🔥 Targeted Q4 2025</span>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-8">
+                *These are target exchange listings and are subject to change based on market conditions and exchange requirements.
+            </p>
+        </div>
+    </section>
+
     <!-- Presale Section -->
     <section id="presale" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
         <div class="card p-8 md:p-12 text-center">
@@ -1076,6 +1294,252 @@
         </div>
     </section>
 
+    <!-- FAQ Section -->
+    <section id="faq" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Frequently Asked Questions (FAQ) ❓</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Got questions about EmogiNation? We've got answers! Dive into our most common inquiries.
+            </p>
+
+            <div class="text-left max-w-3xl mx-auto space-y-6">
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">What is EmogiNation ($EMOJI)? 🤔</h3>
+                    <p class="text-gray-700">EmogiNation ($EMOJI) is a revolutionary meme coin that aims to combine the universal language of emojis with decentralized finance. It's about making crypto fun, expressive, and accessible to everyone!</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">How can I buy $EMOJI? 🛒</h3>
+                    <p class="text-gray-700">You can acquire $EMOJI during our presale event (check the Presale section!) or after launch on decentralized exchanges like PancakeSwap/Uniswap. We'll also be targeting major CEX listings!</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">What are the utilities of $EMOJI? 💡</h3>
+                    <p class="text-gray-700">$EMOJI offers unique utilities like emoji-powered transactions (sending crypto with emojis), NFT minting based on emojis, staking for passive income, and powering our Telegram tipping bots. More utilities are on the roadmap!</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Is EmogiNation secure? 🔒</h3>
+                    <p class="text-gray-700">Yes! We prioritize security. Our smart contract will undergo rigorous audits, and liquidity will be locked to ensure investor confidence. Always do your own research (DYOR) as well!</p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">How can I get involved in the community? 🫂</h3>
+                    <p class="text-gray-700">Join our vibrant community on Telegram, Twitter, and Discord! Participate in discussions, share your emoji memes, and help us shape the future of EmogiNation. Links are in the Community section!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Metrics Section -->
+    <section id="community-metrics" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Community Metrics: Growing Strong! 🌐📈</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Our community is the heart of EmogiNation! See how we're growing and engaging across our platforms.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="p-6 rounded-xl bg-blue-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">👥</span>
+                    <h3 class="text-2xl font-semibold mb-2">Telegram Members</h3>
+                    <p class="text-4xl font-extrabold text-blue-700">15,000+</p>
+                    <p class="text-gray-600 mt-2">Active and passionate emoji enthusiasts!</p>
+                </div>
+                <div class="p-6 rounded-xl bg-pink-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">🐦</span>
+                    <h3 class="text-2xl font-semibold mb-2">Twitter Followers</h3>
+                    <p class="text-4xl font-extrabold text-pink-700">25,000+</p>
+                    <p class="text-gray-600 mt-2">Spreading the emoji revolution far and wide!</p>
+                </div>
+                <div class="p-6 rounded-xl bg-yellow-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">💬</span>
+                    <h3 class="text-2xl font-semibold mb-2">Daily Engagements</h3>
+                    <p class="text-4xl font-extrabold text-yellow-700">5,000+</p>
+                    <p class="text-gray-600 mt-2">Vibrant discussions and emoji interactions!</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *All metrics are simulated for demonstration purposes.
+            </p>
+        </div>
+    </section>
+
+    <!-- Yappers on X Leaderboard & Social Feed Section -->
+    <section id="social-feed" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Social Hub: Yappers & Vibes! 🐦✨</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                See who's making waves on X (Twitter) and check out the latest buzz from the EmogiNation community!
+            </p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Yappers Leaderboard -->
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">Top 10 Yappers on X (7-Day Mindshare) 🏆</h3>
+                    <div class="overflow-x-auto mb-6">
+                        <table class="min-w-full bg-white rounded-lg shadow-md">
+                            <thead>
+                                <tr class="bg-indigo-100 text-indigo-800 uppercase text-sm leading-normal">
+                                    <th class="py-3 px-6 text-left">Rank</th>
+                                    <th class="py-3 px-6 text-left">X Handle 🐦</th>
+                                    <th class="py-3 px-6 text-left">Mindshare (%) 🧠</th>
+                                    <th class="py-3 px-6 text-left">Weekly Earnings ($EMOJI) 💰</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 text-sm font-light">
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">1</td>
+                                    <td class="py-3 px-6 text-left">@CryptoWhale_ETH</td>
+                                    <td class="py-3 px-6 text-left">18.5%</td>
+                                    <td class="py-3 px-6 text-left">15,000</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">2</td>
+                                    <td class="py-3 px-6 text-left">@EmojiQueen_NFT</td>
+                                    <td class="py-3 px-6 text-left">14.2%</td>
+                                    <td class="py-3 px-6 text-left">12,000</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">3</td>
+                                    <td class="py-3 px-6 text-left">@Moonshot_Maniac</td>
+                                    <td class="py-3 px-6 text-left">11.8%</td>
+                                    <td class="py-3 px-6 text-left">10,000</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">4</td>
+                                    <td class="py-3 px-6 text-left">@DeFi_Degen</td>
+                                    <td class="py-3 px-6 text-left">9.1%</td>
+                                    <td class="py-3 px-6 text-left">8,000</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">5</td>
+                                    <td class="py-3 px-6 text-left">@EmogiNationFan</td>
+                                    <td class="py-3 px-6 text-left">7.5%</td>
+                                    <td class="py-3 px-6 text-left">6,500</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">6</td>
+                                    <td class="py-3 px-6 text-left">@HODL_Hero</td>
+                                    <td class="py-3 px-6 text-left">6.3%</td>
+                                    <td class="py-3 px-6 text-left">5,000</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">7</td>
+                                    <td class="py-3 px-6 text-left">@NFT_Collector</td>
+                                    <td class="py-3 px-6 text-left">5.9%</td>
+                                    <td class="py-3 px-6 text-left">4,500</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">8</td>
+                                    <td class="py-3 px-6 text-left">@BlockchainBabe</td>
+                                    <td class="py-3 px-6 text-left">4.8%</td>
+                                    <td class="py-3 px-6 text-left">3,500</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">9</td>
+                                    <td class="py-3 px-6 text-left">@MemeLord_X</td>
+                                    <td class="py-3 px-6 text-left">3.7%</td>
+                                    <td class="py-3 px-6 text-left">2,500</td>
+                                </tr>
+                                <tr class="hover:bg-gray-100">
+                                    <td class="py-3 px-6 text-left">10</td>
+                                    <td class="py-3 px-6 text-left">@Token_Talker</td>
+                                    <td class="py-3 px-6 text-left">2.9%</td>
+                                    <td class="py-3 px-6 text-left">1,500</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">
+                        *This leaderboard is simulated and does not reflect real-time X (Twitter) data.
+                    </p>
+                </div>
+
+                <!-- Social Feed -->
+                <div>
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">Latest EmogiNation Buzz! 📢</h3>
+                    <div class="space-y-6">
+                        <div class="social-post animate-fade-in-up">
+                            <div class="flex items-center mb-2">
+                                <img src="https://placehold.co/40x40/FFD700/FFF?text=🐦" alt="Profile Pic" class="rounded-full mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-900">EmogiNation Official <span class="text-blue-500">@EmogiNation_</span></p>
+                                    <p class="text-gray-500 text-sm">2 hours ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-800">🚀 Our launch countdown is LIVE! Get ready for the most expressive crypto revolution! Check it out on our website! #EmogiNation #Crypto #Launch</p>
+                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
+                                <span>❤️ 1.2K</span>
+                                <span>🔁 350</span>
+                                <span>💬 120</span>
+                            </div>
+                        </div>
+                        <div class="social-post animate-fade-in-up delay-1">
+                            <div class="flex items-center mb-2">
+                                <img src="https://placehold.co/40x40/00BFFF/FFF?text=👑" alt="Profile Pic" class="rounded-full mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-900">CryptoKing 👑 <span class="text-blue-500">@CryptoWhale_ETH</span></p>
+                                    <p class="text-gray-500 text-sm">5 hours ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-800">$EMOJI staking pool is looking juicy! Passive income with emojis? Sign me up! 🌱💰 #DeFi #EmogiNation</p>
+                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
+                                <span>❤️ 800</span>
+                                <span>🔁 210</span>
+                                <span>💬 75</span>
+                            </div>
+                        </div>
+                        <div class="social-post animate-fade-in-up delay-2">
+                            <div class="flex items-center mb-2">
+                                <img src="https://placehold.co/40x40/FF69B4/FFF?text=🎨" alt="Profile Pic" class="rounded-full mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-900">NFT Artist Jane <span class="text-blue-500">@EmojiQueen_NFT</span></p>
+                                    <p class="text-gray-500 text-sm">1 day ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-800">Just minted my first emoji NFT on EmogiNation! This is truly innovative. My 🦄 is now an official collectible! 🖼️✨ #NFTs #EmogiNation</p>
+                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
+                                <span>❤️ 650</span>
+                                <span>🔁 180</span>
+                                <span>💬 60</span>
+                            </div>
+                        </div>
+                        <div class="social-post animate-fade-in-up delay-3">
+                            <div class="flex items-center mb-2">
+                                <img src="https://placehold.co/40x40/8A2BE2/FFF?text=🤝" alt="Profile Pic" class="rounded-full mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-900">DeFi Degen <span class="text-blue-500">@DeFi_Degen</span></p>
+                                    <p class="text-gray-500 text-sm">2 days ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-800">The EmogiNation team is building some solid partnerships. This project has serious long-term potential! 📈 #EmogiNation #Partnerships</p>
+                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
+                                <span>❤️ 500</span>
+                                <span>🔁 150</span>
+                                <span>💬 40</span>
+                            </div>
+                        </div>
+                        <div class="social-post animate-fade-in-up delay-4">
+                            <div class="flex items-center mb-2">
+                                <img src="https://placehold.co/40x40/32CD32/FFF?text=🤖" alt="Profile Pic" class="rounded-full mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-900">Bot Master <span class="text-blue-500">@Bot_Builder</span></p>
+                                    <p class="text-gray-500 text-sm">3 days ago</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-800">Tested the EmogiNation tipping bot. It's so smooth! Easy way to send appreciation with $EMOJI. Great utility! 👍💸 #TippingBot #EmogiNation</p>
+                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
+                                <span>❤️ 400</span>
+                                <span>🔁 100</span>
+                                <span>💬 30</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-8">
+                *The social feed content is simulated and does not reflect real-time posts from X (Twitter).
+            </p>
+        </div>
+    </section>
+
     <!-- How To Get Section -->
     <section id="how-to-get" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
         <div class="card p-8 md:p-12 text-center">
@@ -1146,7 +1610,7 @@
 
     <script>
         // Array of emojis to use for animations
-        const emojis = ['😂', '🤩', '🚀', '💖', '✨', '💰', '🌐', '📈', '🎨', '👍', '🥳', '🌟', '🎉', '💡', '🔥', '💎', '💯', '✅', '🔒', '🎯', '🫂', '🌈', '🎊', '💫', '😎', '🤯', '🤑', '🙌', '👑', '🌕', '🏆', '🌱', '🎁', '💬', '🖼️', '🦄', '🐶', '🐱', '🦊', '🐼', '🐻', '🐯', '🦁', '🐸', '🐢', '🐍', '🐲', '🐳', '🐬', '🐠', '🦀', '🐞', '🦋', '🌸', '🌼', '🌻', '🍎', '🍊', '🍋', '🍉', '🍇', '🍓', '🍕', '🍔', '🍟', '🌮', '🍣', '🍦', '🍩', '🍪', '🍫', '☕', '🥛', '🍺', '🍷', '🍸', '🍹', '🎈', '🎁', '🎉', '🎊', '🎀', '🎵', '🎶', '🎤', '🎧', '🥁', '🎸', '🎹', '🎺', '🎻', '🎲', '🧩', '🎮', '🕹️', '👾', '🤖', '👻', '👽', '🎃', '🎄', '🎅', '🤶', '👼', '🤴', '👸', '🤵', '👰', '🧙', '🧚', '🧛', '🧜', '🧝', '🧞', '🧟', '🧑‍🎄', '🦸', '🦹', '🧑‍🚀', '🧑‍✈️', '👮', '👷', '💂', '🕵️', '🧑‍⚕️', '🧑‍🌾', '🧑‍🍳', '🧑‍🎓', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️', '🧑‍✈️', '🧑‍🚀', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️'];
+        const emojis = ['😂', '🤩', '🚀', '💖', '✨', '💰', '🌐', '📈', '🎨', '👍', '🥳', '🌟', '🎉', '💡', '🔥', '💎', '💯', '✅', '🔒', '🎯', '🫂', '�', '🎊', '💫', '😎', '🤯', '🤑', '🙌', '👑', '🌕', '🏆', '🌱', '🎁', '💬', '🖼️', '🦄', '🐶', '🐱', '🦊', '🐼', '🐻', '🐯', '🦁', '🐸', '🐢', '🐍', '🐲', '🐳', '🐬', '🐠', '🦀', '🐞', '🦋', '🌸', '🌼', '🌻', '🍎', '🍊', '🍋', '🍉', '🍇', '🍓', '🍕', '🍔', '🍟', '🌮', '🍣', '🍦', '🍩', '🍪', '🍫', '☕', '🥛', '🍺', '🍷', '🍸', '🍹', '🎈', '🎁', '🎉', '🎊', '🎀', '🎵', '🎶', '🎤', '🎧', '🥁', '🎸', '🎹', '🎺', '🎻', '🎲', '🧩', '🎮', '🕹️', '👾', '🤖', '👻', '👽', '🎃', '🎄', '🎅', '🤶', '👼', '🤴', '👸', '🤵', '👰', '🧙', '🧚', '🧛', '🧜', '🧝', '🧞', '🧟', '🧑‍🎄', '🦸', '🦹', '🧑‍🚀', '🧑‍✈️', '👮', '👷', '💂', '🕵️', '🧑‍⚕️', '🧑‍🌾', '🧑‍🍳', '🧑‍🎓', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️', '🧑‍✈️', '🧑‍🚀', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️'];
         const cursorEmojis = ['✨', '🌟', '💖', '🚀', '💎', '🔥', '💯', '🥳', '💡', '🎨']; // Emojis for the cursor
 
         // --- Custom Mouse Pointer ---
@@ -1641,6 +2105,159 @@
 
         // Initial draw for the canvas
         drawCurrentEmoji();
+
+        // --- Countdown Timer Logic ---
+        const launchDate = new Date();
+        launchDate.setDate(launchDate.getDate() + 30); // Set launch 30 days from now
+
+        const countdownDays = document.getElementById('countdown-days');
+        const countdownHours = document.getElementById('countdown-hours');
+        const countdownMinutes = document.getElementById('countdown-minutes');
+        const countdownSeconds = document.getElementById('countdown-seconds');
+        const countdownMessage = document.getElementById('countdown-message');
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = launchDate.getTime() - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownDays.textContent = String(days).padStart(2, '0');
+            countdownHours.textContent = String(hours).padStart(2, '0');
+            countdownMinutes.textContent = String(minutes).padStart(2, '0');
+            countdownSeconds.textContent = String(seconds).padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                countdownMessage.textContent = "EmogiNation has launched! Let's go! 🚀";
+                countdownMessage.style.color = '#10B981';
+                countdownDays.textContent = '00';
+                countdownHours.textContent = '00';
+                countdownMinutes.textContent = '00';
+                countdownSeconds.textContent = '00';
+            }
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call to display immediately
+
+        // --- Swap Interface Logic ---
+        const swapInputAmount = document.getElementById('swapInputAmount');
+        const swapInputToken = document.getElementById('swapInputToken');
+        const swapOutputAmount = document.getElementById('swapOutputAmount');
+        const swapOutputToken = document.getElementById('swapOutputToken');
+        const swapDirectionBtn = document.getElementById('swapDirectionBtn');
+        const swapRoute = document.getElementById('swapRoute');
+        const swapSlippage = document.getElementById('swapSlippage');
+        const swapPriceImpact = document.getElementById('swapPriceImpact');
+        const swapMinReceived = document.getElementById('swapMinReceived');
+        const confirmSwapBtn = document.getElementById('confirmSwapBtn');
+        const swapStatus = document.getElementById('swapStatus');
+
+        const exchangeRates = {
+            'ETH_EMOJI': 500000, // 1 ETH = 500,000 $EMOJI
+            'BNB_EMOJI': 150000, // 1 BNB = 150,000 $EMOJI
+            'EMOJI_ETH': 1 / 500000,
+            'EMOJI_BNB': 1 / 150000
+        };
+        const fixedSlippage = 0.5; // 0.5%
+        const fixedPriceImpact = 0.01; // 0.01%
+
+        function calculateSwapOutput() {
+            const inputAmount = parseFloat(swapInputAmount.value);
+            const inputToken = swapInputToken.value;
+            const outputToken = swapOutputToken.value;
+
+            if (isNaN(inputAmount) || inputAmount <= 0) {
+                swapOutputAmount.value = '';
+                swapMinReceived.textContent = '0 $EMOJI'; // Reset if input is invalid
+                return;
+            }
+
+            let rateKey;
+            if (inputToken === 'ETH' && outputToken === '$EMOJI') rateKey = 'ETH_EMOJI';
+            else if (inputToken === 'BNB' && outputToken === '$EMOJI') rateKey = 'BNB_EMOJI';
+            else if (inputToken === '$EMOJI' && outputToken === 'ETH') rateKey = 'EMOJI_ETH';
+            else if (inputToken === '$EMOJI' && outputToken === 'BNB') rateKey = 'EMOJI_BNB';
+            else { // Swap between ETH and BNB (via $EMOJI as intermediary)
+                if (inputToken === 'ETH' && outputToken === 'BNB') {
+                    const intermediateEmoji = inputAmount * exchangeRates['ETH_EMOJI'];
+                    const finalOutput = intermediateEmoji * exchangeRates['EMOJI_BNB'];
+                    swapOutputAmount.value = finalOutput.toFixed(6);
+                    swapRoute.textContent = 'ETH > $EMOJI > BNB';
+                } else if (inputToken === 'BNB' && outputToken === 'ETH') {
+                    const intermediateEmoji = inputAmount * exchangeRates['BNB_EMOJI'];
+                    const finalOutput = intermediateEmoji * exchangeRates['EMOJI_ETH'];
+                    swapOutputAmount.value = finalOutput.toFixed(6);
+                    swapRoute.textContent = 'BNB > $EMOJI > ETH';
+                }
+                const outputValue = parseFloat(swapOutputAmount.value);
+                const minReceived = outputValue * (1 - fixedSlippage / 100);
+                swapMinReceived.textContent = `${minReceived.toFixed(6)} ${outputToken}`;
+                return;
+            }
+
+            const outputValue = inputAmount * exchangeRates[rateKey];
+            const minReceived = outputValue * (1 - fixedSlippage / 100);
+
+            swapOutputAmount.value = outputValue.toFixed(6);
+            swapMinReceived.textContent = `${minReceived.toFixed(6)} ${outputToken}`;
+
+            // Update route based on selected tokens
+            if (inputToken === '$EMOJI' || outputToken === '$EMOJI') {
+                swapRoute.textContent = `${inputToken} > ${outputToken}`;
+            } else {
+                swapRoute.textContent = `${inputToken} > $EMOJI > ${outputToken}`;
+            }
+            swapSlippage.textContent = `${fixedSlippage}%`;
+            swapPriceImpact.textContent = `~${fixedPriceImpact}%`;
+        }
+
+        swapInputAmount.addEventListener('input', calculateSwapOutput);
+        swapInputToken.addEventListener('change', calculateSwapOutput);
+        swapOutputToken.addEventListener('change', calculateSwapOutput);
+
+        swapDirectionBtn.addEventListener('click', () => {
+            const tempInput = swapInputToken.value;
+            const tempOutput = swapOutputToken.value;
+            swapInputToken.value = tempOutput;
+            swapOutputToken.value = tempInput;
+            calculateSwapOutput(); // Recalculate after swapping
+        });
+
+        confirmSwapBtn.addEventListener('click', () => {
+            const inputAmount = parseFloat(swapInputAmount.value);
+            const outputAmount = parseFloat(swapOutputAmount.value);
+            const inputToken = swapInputToken.value;
+            const outputToken = swapOutputToken.value;
+
+            if (isNaN(inputAmount) || inputAmount <= 0) {
+                swapStatus.textContent = 'Please enter a valid amount to swap! ⚠️';
+                swapStatus.style.color = '#EF4444';
+                return;
+            }
+            if (isNaN(outputAmount) || outputAmount <= 0) {
+                swapStatus.textContent = 'Invalid swap calculation. Please check inputs. ⚠️';
+                swapStatus.style.color = '#EF4444';
+                return;
+            }
+
+            swapStatus.textContent = `Confirming swap of ${inputAmount} ${inputToken} for ${outputAmount.toFixed(6)} ${outputToken}... ⏳`;
+            swapStatus.style.color = '#2563EB';
+
+            setTimeout(() => {
+                swapStatus.textContent = `Swap successful! You received ${outputAmount.toFixed(6)} ${outputToken}! ✅`;
+                swapStatus.style.color = '#10B981';
+                swapInputAmount.value = '';
+                swapOutputAmount.value = '';
+                swapMinReceived.textContent = `0 ${outputToken}`;
+            }, 2000);
+        });
+
+        calculateSwapOutput(); // Initial calculation for swap interface
 
     </script>
 </body>
