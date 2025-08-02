@@ -2,2281 +2,1647 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
-    <title>Crypto Flap</title>
-    <!-- Tailwind CSS CDN for styling -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmogiNation: The Universal Language of Wealth</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tone.js CDN for audio -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
-    <!-- Supabase Client CDN -->
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-        // IMPORTANT: This is your provided Supabase Project URL and anon public key.
-        // Ensure this exactly matches your Supabase Project Settings > API.
-        window.supabase = createClient(
-            'https://ahnpnodecccftvscffbx.supabase.co', // Your Supabase Project URL
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFobnBub2RlY2NjZnR2c2NmZmJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4OTc4NTgsImV4cCI6MjA2NTQ3Mzg1OH0.hsGLtErR5gfySWetNGrdo-EjoOl2kuCnOAU4q0Zu_SY', // Your Supabase anon public key
-            {
-                auth: {
-                    persistSession: true // This ensures the session persists across browser closures
-                }
-            }
-        );
-        console.log("Supabase client initialized with session persistence.");
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Import Luckiest Guy font */
-        @import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap');
-        /* Apply Inter font family to the entire body */
         body {
-            font-family: 'Inter', Arial, sans-serif;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            width: 100vw;
-            background-image: url('https://i.imgur.com/ESwrOre.png'); 
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            color: #333;
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from emoji animations */
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #FFD700, #FF69B4, #00BFFF); /* Gold, Hot Pink, Deep Sky Blue */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .emoji-bg {
+            background-image: url('https://placehold.co/1200x600/E0F2F7/2C3E50?text=%F0%9F%98%84%F0%9F%98%8A%F0%9F%98%8D%F0%9F%92%B0%F0%9F%92%A5%F0%9F%8C%88%F0%9F%A4%AF'); /* Placeholder with more emojis */
             background-size: cover;
-            background-repeat: no-repeat;
             background-position: center;
+            background-repeat: no-repeat;
         }
-        .game-container {
+        .btn-primary {
+            background-color: #FFD700; /* Gold */
+            color: #333;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: pulse 2s infinite; /* Added pulse animation */
+        }
+        .btn-primary:hover {
+            background-color: #FFC107; /* Darker Gold */
+            transform: translateY(-2px) scale(1.02); /* Slight scale on hover */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        .card {
+            background-color: white;
+            border-radius: 1.5rem; /* More rounded */
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out; /* Added transition for hover */
+        }
+        .card:hover {
+            transform: translateY(-5px); /* Lift card on hover */
+        }
+
+        /* Keyframes for animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes floatUpFade {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-200px) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Custom cursor style */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 2.5rem; /* Larger emoji cursor */
+            line-height: 1;
+            transform: translate(-50%, -50%); /* Center the emoji */
+            transition: transform 0.05s ease-out; /* Smooth movement */
+        }
+
+        /* Scrolling emoji particles */
+        .scrolling-emoji {
+            position: fixed;
+            bottom: -50px; /* Start below viewport */
+            left: 0;
+            font-size: 2rem;
+            opacity: 0;
+            animation: floatUpFade 4s forwards ease-out;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Click effect emoji particles */
+        .click-emoji {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 1;
+            animation: clickBurst 1s forwards ease-out;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        @keyframes clickBurst {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Chart Simulation Styles */
+        .chart-container {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            background-image: none;
-            background-color: transparent;
+            height: 200px;
+            background: linear-gradient(to top, #e0f2f7, #ffffff); /* Light gradient background */
+            border-radius: 1rem;
             overflow: hidden;
-            border-radius: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: none;
-            box-sizing: border-box;
         }
-        canvas#particleCanvas {
+        .chart-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #00BFFF, #FF69B4, #FFD700); /* Blue, Pink, Gold gradient */
+            clip-path: polygon(
+                0% 100%,
+                10% 80%,
+                20% 90%,
+                30% 70%,
+                40% 85%,
+                50% 60%,
+                60% 75%,
+                70% 50%,
+                80% 65%,
+                90% 40%,
+                100% 55%,
+                100% 100%
+            );
+            animation: chartGrow 2s ease-out forwards;
+        }
+
+        @keyframes chartGrow {
+            from { clip-path: polygon(0% 100%, 10% 100%, 20% 100%, 30% 100%, 40% 100%, 50% 100%, 60% 100%, 70% 100%, 80% 100%, 90% 100%, 100% 100%, 100% 100%); }
+            to { /* Uses the defined clip-path */ }
+        }
+
+        /* Presale Progress Bar */
+        .progress-bar-container {
+            background-color: #e0e0e0;
+            border-radius: 9999px; /* Full rounded corners */
+            height: 2.5rem; /* Height of the bar */
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .progress-bar-fill {
+            background: linear-gradient(to right, #00BFFF, #FF69B4); /* Blue to Pink gradient */
+            height: 100%;
+            border-radius: 9999px;
+            width: 50%; /* 50% filled */
+            transition: width 1s ease-out;
+            position: relative;
+            overflow: hidden;
+            animation: progressPulse 1.5s infinite alternate; /* Pulsing effect */
+        }
+        .progress-bar-fill::after {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 25;
+            background: repeating-linear-gradient(
+                -45deg,
+                rgba(255, 255, 255, 0.1) 0px,
+                rgba(255, 255, 255, 0.1) 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            animation: stripes 2s linear infinite;
+        }
+
+        @keyframes progressPulse {
+            0% { transform: scaleX(1); }
+            100% { transform: scaleX(1.01); }
+        }
+        @keyframes stripes {
+            from { background-position: 0 0; }
+            to { background-position: 40px 0; }
+        }
+
+        /* Scroll-triggered animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .animate-on-scroll.slide-in-left {
+            transform: translateX(-50px);
+        }
+        .animate-on-scroll.slide-in-left.is-visible {
+            transform: translateX(0);
+        }
+        .animate-on-scroll.slide-in-right {
+            transform: translateX(50px);
+        }
+        .animate-on-scroll.slide-in-right.is-visible {
+            transform: translateX(0);
+        }
+
+        /* Existing animations */
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-slow { animation: bounce-slow 3s infinite ease-in-out; }
+        .animate-bounce-slow.delay-1 { animation-delay: 0.2s; }
+        .animate-bounce-slow.delay-2 { animation-delay: 0.4s; }
+        .animate-bounce-slow.delay-3 { animation-delay: 0.6s; }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow { animation: spin-slow 10s linear infinite; }
+
+        @keyframes bounce-fast {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-fast { animation: bounce-fast 1s infinite ease-in-out; }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+        .animate-wiggle { animation: wiggle 0.8s infinite ease-in-out; }
+        .animate-wiggle-slow { animation: wiggle 2s infinite ease-in-out; }
+
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-float { animation: float 2.5s infinite ease-in-out; }
+
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .animate-pulse-slow { animation: pulse-slow 3s infinite ease-in-out; }
+
+        @keyframes rotate-y {
+            0%, 100% { transform: perspective(1000px) rotateY(0deg); }
+            50% { transform: perspective(1000px) rotateY(180deg); }
+        }
+        .animate-rotate-y { animation: rotate-y 2s infinite ease-in-out; }
+
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in { animation: fade-in 1.5s ease-out forwards; }
+
+        @keyframes bounce-in {
+            0% { transform: scale(0.5); opacity: 0; }
+            60% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+        .animate-bounce-in { animation: bounce-in 1s ease-out forwards; }
+
+        @keyframes fade-in-up {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fade-in-up 1s ease-out forwards; }
+
+        /* Emoji Send Animation */
+        @keyframes sendEmoji {
+            0% { transform: translateX(0) translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateX(100px) translateY(-50px) scale(1.2); opacity: 0.8; }
+            100% { transform: translateX(200px) translateY(0) scale(0.5); opacity: 0; }
+        }
+        .sending-emoji {
+            position: absolute;
+            font-size: 3rem;
+            animation: sendEmoji 1.5s forwards ease-out;
             pointer-events: none;
-            display: none;
+            z-index: 1000;
         }
-        .player {
-            position: absolute;
-            background-image: url('https://i.imgur.com/N3fsA36.png'); 
-            background-size: auto 100%;
-            background-repeat: no-repeat;
-            background-position: 0 0;
-            z-index: 10;
-            will-change: transform, top, left, background-position;
-        }
-        .player.shielded {
-            box-shadow: 0 0 15px 8px rgba(0, 255, 255, 0.7);
-            outline: 3px solid cyan;
-            outline-offset: -3px;
-        }
-        .candle-obstacle {
-            position: absolute;
-            background-size: 100% 100%; /* Changed to stretch the image to fill the div */
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 5;
-        }
-        .candle-obstacle.red-candle { 
-            background-image: url('https://i.imgur.com/yCs6SVg.png');
-        }
-        .candle-obstacle.green-candle { 
-            background-image: url('https://i.imgur.com/uUbXFff.png');
-        }
-        .collectible-item {
-            position: absolute;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 7;
-        }
-        .collectible-item.potion {
-            background-image: url('https://i.imgur.com/cL2ndoI.png');
-        }
-        .collectible-item.flappy-coin {
-            background-image: url('https://i.imgur.com/JZRXMxr.png');
-        }
-        .top-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background-color: rgba(0, 0, 0, 0.4);
-            border-bottom-left-radius: 1rem;
-            border-bottom-right-radius: 1rem;
-            z-index: 20;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-        }
-        .score {
-            font-family: 'Inter', monospace, sans-serif;
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: white;
-            text-shadow: 
-                0 0 5px #fff,    
-                0 0 10px #FFD700, 
-                0 0 20px #FFD700, 
-                0 0 30px #FFD700, 
-                0 0 40px rgba(0, 0, 0, 0.7); 
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .score .player-icon {
-            background-image: url('https://i.imgur.com/N3fsA36.png'); 
-            background-size: auto 100%;
-            background-position: 0 0;
-            background-repeat: no-repeat;
+
+        /* Pie Chart for Token Distribution */
+        .pie-chart-container {
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
-            overflow: hidden;
+            background: conic-gradient(
+                #FFD700 0% 30%, /* Presale */
+                #00BFFF 30% 60%, /* Liquidity */
+                #FF69B4 60% 75%, /* Marketing */
+                #8A2BE2 75% 85%, /* Team */
+                #32CD32 85% 90%, /* Airdrop */
+                #FF4500 90% 100% /* Community */
+            );
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
         }
-        .market-cap {
-            font-family: 'Inter', monospace, sans-serif;
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #FFD700;
-            text-shadow: 
-                0 0 5px #fff,    
-                0 0 10px #FFD700, 
-                0 0 20px #FFD700, 
-                0 0 30px #FFD700, 
-                0 0 40px rgba(0, 0, 0, 0.7); 
-        }
-        .user-info {
-            position: absolute;
-            top: 1rem; /* Kept for consistent spacing */
-            right: 1rem; /* Kept for consistent spacing */
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #FFFFFF;
-            text-shadow: 
-                0 0 3px #fff, 
-                0 0 7px rgba(0, 0, 0, 0.8); 
-            z-index: 21;
-            background-color: rgba(0,0,0,0.4);
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            display: none; /* Initially hidden, JS controls visibility */
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .user-info.in-game {
-            display: none !important;
-        }
-        .user-info.in-game-over { 
-            display: none !important;
-        }
-        .user-info button {
-            background: none;
-            border: 1px solid #FFD700;
-            color: #FFD700;
-            border-radius: 0.3rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            font-weight: 600; 
-        }
-        .user-info button:hover {
-            background-color: #FFD700;
-            color: #1a202c;
-        }
-        .powerup-status {
-            font-weight: 800;
-            color: #FFD700;
-            text-shadow: 
-                0 0 5px #fff,    
-                0 0 10px #00FFFF, 
-                0 0 20px #00FFFF, 
-                0 0 30px rgba(0, 0, 0, 0.7); 
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 0.5rem;
-            display: none; 
-            position: absolute;
-            z-index: 20;
-        }
-        .message-box, .device-selection-modal {
+        .pie-chart-container::before {
+            content: '';
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%); 
-            background-color: rgba(0, 0, 0, 0.95);
-            color: white;
-            border-radius: 1.5rem; 
-            text-align: center;
-            z-index: 30;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); 
-            display: none; /* Hidden by default, JS controls visibility */
-            max-width: 80%;
-            max-height: 80%;
-            overflow-y: auto;
-            border: 3px solid #FFD700;
-            box-sizing: border-box; 
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border-radius: 50%;
+            z-index: 1;
         }
-        .message-box h2, .device-selection-modal h2 {
-            font-weight: 900;
-            color: #FFD700;
-            text-shadow: 
-                0 0 7px #fff,     
-                0 0 15px #FFD700, 
-                0 0 30px #FFD700, 
-                0 0 45px #FFD700, 
-                0 0 60px rgba(0, 0, 0, 0.8); 
-            font-family: 'Inter', monospace, sans-serif; 
-        }
-        .message-box p, .device-selection-modal p {
-            font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7); 
-            font-family: 'Inter', monospace, sans-serif; 
-        }
-        .message-box input {
-            padding: 0.75rem 1rem;
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #ddd;
-            width: 80%;
-            max-width: 300px;
-            text-align: center;
-            background-color: #333;
-            color: white;
-            font-size: 1rem;
-            font-weight: 500;
-            text-shadow: 0 0 2px rgba(0,0,0,0.5);
-        }
-        .message-box input::placeholder {
-            color: #bbb;
-        }
-        .flappy-button {
-            background: linear-gradient(to right, #ffe600, #ff9900);
-            color: #000;
-            font-family: 'Luckiest Guy', cursive;
-            border: 4px solid #fff;
-            border-radius: 18px;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.4), 0 0 10px #ff0 inset;
-            text-shadow: 2px 2px #fff;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            margin: 6px;
-            -webkit-appearance: none; 
-            -moz-appearance: none;    
-            appearance: none;         
-        }
-        .flappy-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px #ff0, 0 0 40px #ff9900;
-        }
-        .flappy-button:active {
-            transform: scale(0.98);
-        }
-        .leaderboard-modal, .profile-modal { 
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 40;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            display: none; 
-        }
-        .leaderboard-content, .profile-content { 
-            background-color: rgba(26, 32, 44, 0.98); 
-            color: white;
-            padding: 2rem;
-            border-radius: 1.5rem;
-            text-align: center;
-            max-width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
-            border: 3px solid #FFD700;
-            box-sizing: border-box;
-        }
-        .leaderboard-content h3, .profile-content h3 { 
-            font-size: 2.8rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            color: #FFD700;
-            text-shadow: 
-                0 0 5px #fff,    
-                0 0 10px #FFD700, 
-                0 0 20px #FFD700, 
-                0 0 30px rgba(0, 0, 0, 0.7); 
-        }
-        /* Leaderboard table specific styles */
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            font-size: 0.9rem; /* Smaller font for more columns */
-        }
-        .leaderboard-table th, .leaderboard-table td {
-            padding: 0.6rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: left;
-        }
-        .leaderboard-table th {
-            background-color: rgba(255, 215, 0, 0.2); /* Goldish header */
-            color: #FFD700;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .leaderboard-table tbody tr:nth-child(odd) {
-            background-color: rgba(45, 55, 72, 0.7);
-        }
-        .leaderboard-table tbody tr:nth-child(even) {
-            background-color: rgba(45, 55, 72, 0.9);
-        }
-        .leaderboard-table tbody tr.current-user {
-            background-color: #3B82F6; /* Blue for current user */
-            color: white;
-            font-weight: bold;
-            border: 2px solid #FFD700;
-        }
-        .leaderboard-table tbody tr.top-3 {
-            background-color: rgba(255, 215, 0, 0.3); /* Lighter gold for top 3 */
-            border: 2px solid #FFD700;
-        }
-        /* Make columns responsive */
-        .leaderboard-table td:nth-child(1), .leaderboard-table th:nth-child(1) { width: 10%; } /* Rank */
-        .leaderboard-table td:nth-child(2), .leaderboard-table th:nth-child(2) { width: 35%; } /* Player */
-        .leaderboard-table td:nth-child(3), .leaderboard-table th:nth-child(3) { width: 15%; } /* Flappy Score */
-        .leaderboard-table td:nth-child(4), .leaderboard-table th:nth-child(4) { width: 20%; } /* Market Cap */
-        .leaderboard-table td:nth-child(5), .leaderboard-table th:nth-child(5) { width: 20%; } /* Combined Score */
-
-        @media (max-width: 768px) {
-            .leaderboard-table th, .leaderboard-table td {
-                padding: 0.4rem;
-                font-size: 0.75rem; /* Even smaller font on mobile */
-            }
-        }
-
-        .profile-content p {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            color: #CBD5E0; 
-        }
-        .profile-content input {
-            margin-top: 1rem;
-        }
-        .close-button {
-            background-color: #E53E3E; 
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 0.75rem;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            font-weight: 700; 
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
-            margin-top: 1.5rem;
-        }
-        .close-button:hover {
-            background-color: #C53030;
-        }
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: white;
-            font-size: 2rem;
-            font-family: 'Luckiest Guy', cursive;
-            display: none; /* Hidden by default */
-        }
-        .loading-overlay img {
-            width: 80px;
-            height: 80px;
-            animation: spin 1s linear infinite;
-            margin-right: 20px;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .glowing-score {
-            color: #00FFFF; /* Cyan */
-            text-shadow: 
-                0 0 5px #fff,    
-                0 0 10px #00FFFF, 
-                0 0 20px #00FFFF, 
-                0 0 30px rgba(0, 255, 255, 0.7); 
-            font-weight: bold;
-        }
-        /* New styles for speed-up text animation */
-        .speed-up-text {
+        .pie-chart-container span {
             position: absolute;
-            top: 20%; /* Adjusted position */
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-family: 'Luckiest Guy', cursive;
-            font-size: 3.5rem; /* Adjust as needed */
-            font-weight: 900;
-            color: #FFD700; /* Gold color for impact */
-            text-shadow: 
-                0 0 10px #fff,
-                0 0 20px #FFD700,
-                0 0 40px #FFD700,
-                0 0 80px #FFD700;
-            opacity: 0; /* Start hidden */
-            transition: opacity 0.5s ease-in-out; /* Smooth fade */
-            z-index: 50; /* Above other elements */
-            pointer-events: none; /* Do not block clicks */
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            z-index: 2;
         }
-        .speed-up-text.show {
-            opacity: 1; /* Fade in */
+
+        /* Team Profile Picture Animation */
+        .profile-emoji {
+            font-size: 8rem; /* Large emoji */
+            transition: transform 0.5s ease-in-out;
+            display: inline-block;
+            animation: bounce-slow 3s infinite ease-in-out;
         }
+        .profile-emoji:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        /* Meme Section Styles */
+        .meme-container {
+            border: 4px solid #FFD700; /* Gold border */
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        .meme-container:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+        .meme-text {
+            background-color: #FFD700;
+            color: #333;
+            font-weight: bold;
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 1.25rem;
+        }
+
+        /* Chat Box Styles */
+        .chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            background-color: #fcfcfc;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .chat-message {
+            background-color: #e6f7ff; /* Light blue bubble */
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            align-self: flex-start;
+            max-width: 80%;
+        }
+        .chat-message.self {
+            background-color: #fff0e6; /* Light orange bubble */
+            align-self: flex-end;
+        }
+
+        /* NFT Display */
+        .nft-display {
+            width: 200px;
+            height: 200px;
+            background-color: #f0f0f0;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+        .nft-display:hover {
+            transform: scale(1.05);
+        }
+
+        /* Tipping Bot Test */
+        .tipping-bot-chat {
+            height: 150px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            background-color: #fcfcfc;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .tipping-bot-message {
+            background-color: #e0f7fa; /* Light cyan */
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            align-self: flex-start;
+            max-width: 80%;
+        }
+        .tipping-bot-message.user {
+            background-color: #f3e5f5; /* Light purple */
+            align-self: flex-end;
+        }
+
+        /* Emoji Video Creator */
+        #emojiVideoCanvas {
+            background-color: #000;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
     </style>
 </head>
-<body>
-    <div id="gameContainer" class="game-container">
-        <canvas id="particleCanvas"></canvas>
+<body class="antialiased">
 
-        <div id="userInfo" class="user-info">
-            Welcome, <span id="userNameDisplay">Guest</span>!
-            <button id="profileButton" class="flappy-button small-button">👤 Profile</button>
-            <button id="deviceButton" class="flappy-button small-button">📱 Device</button> <!-- New Device Button -->
-            <button id="logoutButton" class="flappy-button small-button">🚪 Logout</button>
-        </div>
+    <!-- Custom Emoji Cursor -->
+    <div id="custom-cursor">✨</div>
 
-        <div class="top-bar">
-            <div id="score" class="score">
-                <span id="playerIcon" class="player-icon"></span>
-                $FLAPPY: <span id="flappyScoreCounter">0</span>
+    <!-- Header/Navbar -->
+    <header class="bg-white shadow-md py-4 px-6 md:px-12 rounded-b-3xl z-20 relative">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-3xl font-extrabold gradient-text">EmogiNation 🚀</a>
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">About</a>
+                <a href="#features" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Why Emojis?</a>
+                <a href="#token-info" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Tokenomics 📊</a>
+                <a href="#portfolio-tracker" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Portfolio 📈</a>
+                <a href="#revenue" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Revenue 💸</a>
+                <a href="#staking-pool" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Staking Pool 💰</a>
+                <a href="#emoji-chat" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Emoji Chat 💬</a>
+                <a href="#nft-minting" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">NFT Minting 🖼️</a>
+                <a href="#emoji-video-creator" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Emoji Video 🎬</a>
+                <a href="#tipping-bot-test" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Tipping Bot 🤖</a>
+                <a href="#utility" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Send $EMOJI 💡</a>
+                <a href="#roadmap" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Roadmap 🗺️</a>
+                <a href="#presale" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Presale! 🔥</a>
+                <a href="#team" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Team 🫂</a>
+                <a href="#memes" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Memes 😂</a>
+                <a href="#how-to-get" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Community</a>
             </div>
-            <div id="marketCap" class="market-cap">MC: $100,000</div>
-        </div>
+            <button class="md:hidden text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+    </header>
 
-        <div id="powerupStatus" class="powerup-status"></div>
-        <div id="player" class="player"></div>
-
-        <div id="speedUpText" class="speed-up-text">FLAPPY SPEED UP!</div>
-
-        <div id="deviceSelectionModal" class="device-selection-modal">
-            <h2>Choose Your Device</h2>
-            <p>Select the best experience for your device:</p>
-            <div class="flex flex-col items-center mt-4">
-                <button id="playOnLaptopButton" class="flappy-button">💻 PLAY ON LAPTOP</button>
-                <button id="playOnLargeMobileButton" class="flappy-button">📱 PLAY ON LARGE MOBILE</button> <!-- New Large Mobile Option -->
-                <button id="playOnSmallMobileButton" class="flappy-button">📱 PLAY ON SMALL MOBILE</button> <!-- New Small Mobile Option -->
+    <!-- Hero Section -->
+    <section class="relative text-center py-20 md:py-32 emoji-bg rounded-b-3xl mx-4 my-8 overflow-hidden">
+        <div class="absolute inset-0 bg-black opacity-60 rounded-b-3xl"></div>
+        <div class="relative z-10 container mx-auto px-4">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6 animate-bounce-in">
+                Unleash the <span class="gradient-text">Power of Emojis</span> and Transform Your Wealth! 🤩✨
+            </h1>
+            <p class="text-xl md:text-2xl text-white mb-10 max-w-3xl mx-auto animate-fade-in">
+                EmogiNation isn't just a meme coin; it's a revolutionary movement uniting the world through the universal language of emotions and the boundless potential of decentralized finance. Get ready for a financial future that truly speaks to you!
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <a href="#how-to-get" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold inline-block">
+                    Join the Emoji Revolution Today! 🚀
+                </a>
+                <a href="#about" class="bg-white text-blue-600 py-3 px-8 rounded-full text-lg font-semibold inline-block hover:bg-gray-100 transition duration-300">
+                    Discover Our Vision 📚
+                </a>
             </div>
         </div>
+    </section>
 
-        <div id="messageBox" class="message-box">
-            <h2 id="messageTitle"></h2>
-            <p id="messageText"></p>
-            <input type="email" id="emailInput" placeholder="Enter your email">
-            <input type="text" id="xAccountNameInput" placeholder="Enter your X (Twitter) handle (e.g., @MyFlappyX)">
-            <div id="authButtons" class="flex flex-col items-center">
-                <button id="signInEmailLinkButton" class="flappy-button">📧 SIGN IN WITH EMAIL LINK</button>
-                <button id="registerButton" class="flappy-button hidden">REGISTER (AUTO-LOGIN)</button>
+    <!-- About Section -->
+    <section id="about" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">The Epic Saga of EmogiNation 📖</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                In a digital realm often shrouded in complex jargon and intimidating financial barriers, a brilliant idea ignited: **What if true wealth could communicate in a language everyone instinctively understood?** This profound question birthed **EmogiNation**! Imagine a cryptocurrency powered by the very symbols that effortlessly transcend cultures, age, and geographical boundaries – **emojis!** 🌍🌐
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                Our incredible journey commenced with a solitary **😂 Laughing Emoji**, symbolizing pure joy, vibrant community, and infectious optimism. From this humble beginning, it rapidly evolved, embracing the **🤩 Star-Struck Emoji** for audacious ambition and groundbreaking innovation, the **🤝 Handshake Emoji** for unbreakable unity and collaborative spirit, and the **🚀 Rocket Emoji** for limitless potential and meteoric growth. Each emoji is far more than a mere picture; it's a pixelated pledge of a brighter, more expressive, and profoundly inclusive financial future.
+            </p>
+            <p class="text-lg text-gray-700 leading-relaxed">
+                EmogiNation is meticulously crafted on the core belief that finance should be exhilarating, universally accessible, and deeply connect people through shared emotions. We are meticulously transforming fleeting digital expressions into enduring digital assets, one resounding **👍 Thumbs Up** at a time. Join us as we brilliantly paint the blockchain with every magnificent shade of human feeling and aspiration! 🎨💖
+            </p>
+            <div class="flex justify-center mt-8 space-x-4">
+                <span class="text-6xl animate-bounce-slow">😂</span>
+                <span class="text-6xl animate-bounce-slow delay-1">🤩</span>
+                <span class="text-6xl animate-bounce-slow delay-2">🤝</span>
+                <span class="text-6xl animate-bounce-slow delay-3">🚀</span>
             </div>
-            <button id="startButton" class="flappy-button">🕹️ START GAME (GUEST)</button>
-            <button id="leaderboardButton" class="flappy-button">🏆 LEADERBOARD</button>
-            <button id="backToWelcomeButton" class="flappy-button hidden">🔙 BACK TO WELCOME</button>
         </div>
+    </section>
 
-        <div id="leaderboardModal" class="leaderboard-modal">
-            <div class="leaderboard-content">
-                <h3>🏆 Global Leaderboard</h3>
-                <div style="overflow-x: auto;"> <table id="leaderboardTable" class="leaderboard-table">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Player</th>
-                                <th>$FLAPPY</th>
-                                <th>Market Cap</th>
-                                <th>Combined Score</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td colspan="5">Loading Leaderboard...</td></tr>
-                        </tbody>
-                    </table>
+    <!-- Token Info / Simulation Section -->
+    <section id="token-info" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Tokenomics: A Glimpse into the Future! 📊📈</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Witness the potential of EmogiNation with our simulated market data. This isn't just a chart; it's a visual representation of our community's growing strength and the coin's upward trajectory! 🚀
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="p-6 rounded-xl bg-blue-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">💰</span>
+                    <h3 class="text-2xl font-semibold mb-2">Current Market Cap</h3>
+                    <p class="text-4xl font-extrabold text-blue-700 animate-pulse-slow">$12,345,678 <span class="text-xl text-green-500">📈 (+15%)</span></p>
+                    <p class="text-gray-600 mt-2">The collective value of all EmogiNation tokens in circulation. Growing daily! 🌟</p>
                 </div>
-                <button id="leaderboardCloseButton" class="close-button">🔙 BACK</button>
-            </div>
-        </div>
-
-        <div id="profileModal" class="profile-modal">
-            <div class="profile-content">
-                <h3>👤 Your Profile</h3>
-                <p id="profileEmailDisplay">Email: Not logged in</p>
-                <p id="profileXAccountDisplay">X Handle: Not set</p>
-                <p id="profileRankDisplay">Rank: Not available</p> <input type="text" id="profileXAccountNameInput" placeholder="Enter your X (Twitter) handle">
-                <button id="profileSetXAccountNameButton" class="flappy-button">Update X Handle</button>
-                <div class="flex flex-col items-center mt-4">
-                    <button id="profileSignInEmailLinkButton" class="flappy-button">📧 Sign In</button>
-                    <button id="profileLogoutButton" class="flappy-button">🚪 Logout</button>
+                <div class="p-6 rounded-xl bg-pink-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">💧</span>
+                    <h3 class="text-2xl font-semibold mb-2">Total Liquidity</h3>
+                    <p class="text-4xl font-extrabold text-pink-700 animate-pulse-slow">$8,765,432 <span class="text-xl text-green-500">✅ (Locked)</span></p>
+                    <p class="text-gray-600 mt-2">Ensuring smooth and stable trading for all our holders. Security first! 🔒</p>
                 </div>
-                <button id="profileCloseButton" class="close-button">🔙 BACK</button>
+            </div>
+
+            <h3 class="text-3xl font-bold text-gray-800 mb-6">EmogiNation Price Chart Simulation 📈</h3>
+            <div class="chart-container mx-auto max-w-4xl">
+                <div class="chart-line"></div>
+            </div>
+            <p class="text-sm text-gray-500 mt-4 mb-12">
+                *This chart is a simulation for illustrative purposes and does not represent live market data.
+                However, it vividly depicts the vibrant growth we envision for EmogiNation! 🚀
+            </p>
+
+            <h3 class="text-3xl font-extrabold gradient-text mb-6">Token Distribution: Spreading the Emoji Love! 💖</h3>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 mb-12">
+                <div class="pie-chart-container">
+                    <span>$EMOJI</span>
+                </div>
+                <div class="text-left">
+                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-yellow-400 mr-2"></span>Presale: 30% (300,000,000 $EMOJI)</p>
+                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-blue-400 mr-2"></span>Liquidity: 30% (300,000,000 $EMOJI)</p>
+                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-pink-400 mr-2"></span>Marketing: 15% (150,000,000 $EMOJI)</p>
+                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-purple-600 mr-2"></span>Team: 10% (100,000,000 $EMOJI)</p>
+                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-green-500 mr-2"></span>Airdrop: 5% (50,000,000 $EMOJI)</p>
+                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-red-500 mr-2"></span>Community & Ecosystem: 10% (100,000,000 $EMOJI)</p>
+                    <p class="text-xl font-bold mt-4">Total Supply: 1,000,000,000 $EMOJI 💯</p>
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-extrabold gradient-text mb-6">Buy & Sell Tax: Fueling the EmogiNation! ⛽</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="p-6 rounded-xl bg-green-50 shadow-inner">
+                    <span class="text-5xl mb-4 block">🛒</span>
+                    <h4 class="text-2xl font-semibold mb-2">Buy Tax: 5%</h4>
+                    <ul class="list-disc list-inside text-gray-700 text-left mx-auto max-w-xs">
+                        <li>2% to Liquidity Pool 💧</li>
+                        <li>2% to Marketing Wallet 📢</li>
+                        <li>1% to Development Fund 🛠️</li>
+                    </ul>
+                </div>
+                <div class="p-6 rounded-xl bg-red-50 shadow-inner">
+                    <span class="text-5xl mb-4 block">💸</span>
+                    <h4 class="text-2xl font-semibold mb-2">Sell Tax: 7%</h4>
+                    <ul class="list-disc list-inside text-gray-700 text-left mx-auto max-w-xs">
+                        <li>3% to Liquidity Pool 💧</li>
+                        <li>3% to Marketing Wallet 📢</li>
+                        <li>1% to Development Fund 🛠️</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-extrabold gradient-text mb-6">Airdrop Leaderboard: Top Emoji Contributors! 🏆</h3>
+            <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                A total of **10,000,000 $EMOJI** (1% of total supply) will be airdropped to our most dedicated early supporters! Here's a simulated look at our top contributors:
+            </p>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white rounded-lg shadow-md">
+                    <thead>
+                        <tr class="bg-blue-100 text-blue-800 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Rank</th>
+                            <th class="py-3 px-6 text-left">Name ✨</th>
+                            <th class="py-3 px-6 text-left">Portion ($EMOJI) 💰</th>
+                            <th class="py-3 px-6 text-left">Percentage (%) 📊</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm font-light">
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left whitespace-nowrap">1</td>
+                            <td class="py-3 px-6 text-left">CryptoKing 👑</td>
+                            <td class="py-3 px-6 text-left">3,500,000</td>
+                            <td class="py-3 px-6 text-left">35%</td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">2</td>
+                            <td class="py-3 px-6 text-left">MoonLover 🌕</td>
+                            <td class="py-3 px-6 text-left">2,500,000</td>
+                            <td class="py-3 px-6 text-left">25%</td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">3</td>
+                            <td class="py-3 px-6 text-left">EmojiMaster 🎨</td>
+                            <td class="py-3 px-6 text-left">2,000,000</td>
+                            <td class="py-3 px-6 text-left">20%</td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">4</td>
+                            <td class="py-3 px-6 text-left">HODLQueen 💪</td>
+                            <td class="py-3 px-6 text-left">1,200,000</td>
+                            <td class="py-3 px-6 text-left">12%</td>
+                        </tr>
+                        <tr class="hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">5</td>
+                            <td class="py-3 px-6 text-left">DiamondHands 💎</td>
+                            <td class="py-3 px-6 text-left">800,000</td>
+                            <td class="py-3 px-6 text-left">8%</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
-    
-    <div id="loadingOverlay" class="loading-overlay">
-        <img src="https://i.imgur.com/N3fsA36.png" alt="Loading Coin">
-        Loading...
-    </div>
+    </section>
+
+    <!-- Portfolio Tracker Section -->
+    <section id="portfolio-tracker" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Dev Wallet & Tax Earnings Tracker (Simulated) 📈</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Transparency is key! Here's a simulated look at the EmogiNation development wallet's supply and the earnings generated from buy and sell taxes, fueling our growth and innovation.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="p-6 rounded-xl bg-purple-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">💼</span>
+                    <h3 class="text-2xl font-semibold mb-2">Dev Wallet Supply</h3>
+                    <p class="text-4xl font-extrabold text-purple-700 animate-pulse-slow" id="devWalletSupply">100,000,000 $EMOJI</p>
+                    <p class="text-gray-600 mt-2">Dedicated to project development and future innovations. 🛠️</p>
+                </div>
+                <div class="p-6 rounded-xl bg-orange-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">💸</span>
+                    <h3 class="text-2xl font-semibold mb-2">Total Tax Collected</h3>
+                    <p class="text-4xl font-extrabold text-orange-700 animate-pulse-slow" id="totalTaxCollected">$50,000</p>
+                    <p class="text-gray-600 mt-2">Accumulated from transaction taxes, powering marketing and liquidity. 📊</p>
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-bold text-gray-800 mb-6">Recent Tax Earnings (Simulated) 🧾</h3>
+            <div class="overflow-x-auto mb-6">
+                <table class="min-w-full bg-white rounded-lg shadow-md">
+                    <thead>
+                        <tr class="bg-yellow-100 text-yellow-800 uppercase text-sm leading-normal">
+                            <th class="py-3 px-6 text-left">Date 🗓️</th>
+                            <th class="py-3 px-6 text-left">Type 🏷️</th>
+                            <th class="py-3 px-6 text-left">Amount ($) 💰</th>
+                            <th class="py-3 px-6 text-left">Source 🌐</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-700 text-sm font-light">
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left whitespace-nowrap">2025-07-30</td>
+                            <td class="py-3 px-6 text-left">Buy Tax</td>
+                            <td class="py-3 px-6 text-left">$1,200</td>
+                            <td class="py-3 px-6 text-left">DEX Trades</td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">2025-07-29</td>
+                            <td class="py-3 px-6 text-left">Sell Tax</td>
+                            <td class="py-3 px-6 text-left">$850</td>
+                            <td class="py-3 px-6 text-left">DEX Trades</td>
+                        </tr>
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">2025-07-28</td>
+                            <td class="py-3 px-6 text-left">Buy Tax</td>
+                            <td class="py-3 px-6 text-left">$1,500</td>
+                            <td class="py-3 px-6 text-left">DEX Trades</td>
+                        </tr>
+                        <tr class="hover:bg-gray-100">
+                            <td class="py-3 px-6 text-left">2025-07-27</td>
+                            <td class="py-3 px-6 text-left">Sell Tax</td>
+                            <td class="py-3 px-6 text-left">$700</td>
+                            <td class="py-3 px-6 text-left">DEX Trades</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *All figures are simulated and for illustrative purposes only. Actual data would be available on-chain.
+            </p>
+        </div>
+    </section>
+
+    <!-- Revenue Section -->
+    <section id="revenue" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Revenue: Powering Growth & Buybacks! 💸</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                EmogiNation isn't just about fun; it's about sustainable growth! We generate revenue by offering a premium service: helping communities integrate **$EMOJI tipping bots** into their Telegram groups and other platforms. This service creates value and directly fuels our token's ecosystem.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="p-6 rounded-xl bg-green-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">Earned:</span>
+                    <h3 class="text-2xl font-semibold mb-2">Total Revenue Generated</h3>
+                    <p class="text-4xl font-extrabold text-green-700 animate-pulse-slow" id="totalRevenueEarned">$75,000</p>
+                    <p class="text-gray-600 mt-2">From successful tipping bot setups and integrations. 🤖</p>
+                </div>
+                <div class="p-6 rounded-xl bg-red-50 shadow-inner flex flex-col items-center justify-center">
+                    <span class="text-5xl mb-4">Used for Buybacks:</span>
+                    <h3 class="text-2xl font-semibold mb-2">Revenue Used for Buybacks</h3>
+                    <p class="text-4xl font-extrabold text-red-700 animate-pulse-slow" id="revenueUsedForBuybacks">$30,000</p>
+                    <p class="text-gray-600 mt-2">Directly buying back $EMOJI from the market to support price and liquidity. 🔥</p>
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *Figures are simulated and demonstrate our commitment to a healthy token economy.
+            </p>
+        </div>
+    </section>
+
+    <!-- Staking Pool Section -->
+    <section id="staking-pool" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Staking Pool: Grow Your Emojis! 💰🚀</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Stake your $EMOJI tokens and watch your holdings grow! Our simulated staking pool offers a fun way to envision passive income with your favorite meme coin.
+            </p>
+
+            <div class="bg-green-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-green-800 mb-6">Your Staking Dashboard (Simulation) 🌱</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="flex flex-col items-center">
+                        <span class="text-5xl mb-2"> staked:</span>
+                        <p class="text-4xl font-extrabold text-green-700" id="stakedAmount">0 $EMOJI</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-5xl mb-2"> earnings:</span>
+                        <p class="text-4xl font-extrabold text-yellow-600" id="estimatedEarnings">0 $EMOJI</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+                    <input type="number" id="stakeInput" placeholder="Amount to Stake ($EMOJI)" class="flex-grow p-3 rounded-lg border-2 border-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700" min="1" />
+                    <button id="stakeBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
+                        Stake Emojis! ✅
+                    </button>
+                </div>
+                <button id="claimBtn" class="bg-purple-600 text-white py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2 mx-auto hover:bg-purple-700 transition duration-300">
+                    Claim Earnings 🎁
+                </button>
+                <p id="stakingStatus" class="text-lg font-semibold mt-4"></p>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *This is a simulated staking pool for demonstration purposes. Real staking involves smart contracts and network fees.
+            </p>
+        </div>
+    </section>
+
+    <!-- Emoji Chat Box Section -->
+    <section id="emoji-chat" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Emoji Chat: Express Yourself! 💬</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Welcome to the EmogiNation chat! Here, words are optional – let your emojis do the talking. Each message costs a small amount of $EMOJI, making every expression valuable!
+            </p>
+
+            <div class="bg-purple-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-purple-800 mb-6">Your Emoji Wallet: <span id="chatWalletBalance">1000 $EMOJI</span> 💰</h3>
+                <div class="chat-box mb-6" id="chatBox">
+                    <div class="chat-message">Welcome to the EmogiNation Chat! 👋</div>
+                    <div class="chat-message self">Let's chat with emojis! 🎉</div>
+                </div>
+                <div class="flex gap-4">
+                    <input type="text" id="emojiChatInput" placeholder="Send an emoji! (e.g., 😂)" class="flex-grow p-3 rounded-lg border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700" maxlength="2" />
+                    <button id="sendChatEmojiBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
+                        Send (10 $EMOJI) ➡️
+                    </button>
+                </div>
+                <p id="chatStatus" class="text-lg font-semibold mt-4"></p>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *This chat is simulated and does not store messages or connect to a real blockchain.
+            </p>
+        </div>
+    </section>
+
+    <!-- NFT Minting Section -->
+    <section id="nft-minting" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation NFT Minting: Your Emoji, Your Art! 🖼️✨</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Turn your favorite emojis into unique, digital collectibles! Input any emoji, and our system will simulate minting it as a one-of-a-kind EmogiNation NFT.
+            </p>
+
+            <div class="bg-yellow-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-yellow-800 mb-6">Mint Your Emoji NFT (Simulation) 🎨</h3>
+                <div class="flex justify-center items-center gap-4 mb-6">
+                    <input type="text" id="nftEmojiInput" placeholder="Enter an emoji (e.g., 🦄)" class="p-3 rounded-lg border-2 border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-700" maxlength="2" />
+                    <button id="mintNftBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
+                        Mint NFT (50 $EMOJI) 💎
+                    </button>
+                </div>
+                <div class="nft-display mb-6" id="mintedNftDisplay">
+                    ❓
+                </div>
+                <p id="nftMintStatus" class="text-lg font-semibold mt-4"></p>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *This is a simulated NFT minting process. Real NFTs are minted on a blockchain and incur gas fees.
+            </p>
+        </div>
+    </section>
+
+    <!-- Emoji Video Creator Section -->
+    <section id="emoji-video-creator" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Emoji Video Creator: Your Story in Emojis! 🎬✨</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Unleash your inner emoji director! Create short, animated "videos" by inputting a sequence of your favorite emojis. Watch your story unfold, one expressive symbol at a time!
+            </p>
+
+            <div class="bg-indigo-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-indigo-800 mb-6">Craft Your Emoji Masterpiece! 🎥</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+                    <input type="text" id="videoEmojisInput" placeholder="Enter emojis (e.g., 🚀🌕😂)" class="flex-grow p-3 rounded-lg border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700" maxlength="20" />
+                    <input type="number" id="emojiDurationInput" placeholder="Duration per Emoji (seconds)" value="1" min="0.5" step="0.5" class="w-full md:w-auto p-3 rounded-lg border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700" />
+                </div>
+                <div class="flex justify-center gap-4 mb-8">
+                    <button id="createVideoBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
+                        Create Video! 🎬
+                    </button>
+                    <button id="playVideoBtn" class="bg-green-500 text-white py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-green-600 transition duration-300" disabled>
+                        Play ▶️
+                    </button>
+                    <button id="stopVideoBtn" class="bg-red-500 text-white py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-red-600 transition duration-300" disabled>
+                        Stop ⏹️
+                    </button>
+                </div>
+
+                <canvas id="emojiVideoCanvas" width="600" height="300" class="w-full max-w-full h-auto mx-auto"></canvas>
+                <p id="videoStatus" class="text-lg font-semibold mt-4"></p>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *This is a simulated video creator. The output is an animation on the canvas, not a downloadable video file.
+            </p>
+        </div>
+    </section>
+
+    <!-- Tipping Bot Live Test Utility Section -->
+    <section id="tipping-bot-test" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Live Test: EmogiNation Tipping Bot! �💸</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Experience the magic of emoji tipping! Interact with our simulated bot by sending up to 5 emojis, and watch as it confirms your $EMOJI tip. It's seamless, fun, and powered by emotions!
+            </p>
+
+            <div class="bg-blue-100 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-blue-800 mb-6">Chat with the EmogiNation Tipping Bot! 💬</h3>
+                <div class="tipping-bot-chat mb-6" id="tippingBotChatBox">
+                    <div class="tipping-bot-message">🤖: Hello! Send me some emojis to tip! Max 5 per message.</div>
+                </div>
+                <div class="flex gap-4">
+                    <input type="text" id="tippingEmojiInput" placeholder="Send emojis to tip! (e.g., 🚀💖😂)" class="flex-grow p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" maxlength="10" />
+                    <button id="sendTipBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
+                        Tip! ✨
+                    </button>
+                </div>
+                <p id="tippingStatus" class="text-lg font-semibold mt-4"></p>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *This is a simulated interaction. No real $EMOJI is transacted.
+            </p>
+        </div>
+    </section>
+
+    <!-- Utility Section: Send Emojis -->
+    <section id="utility" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Utility: Send $EMOJI with Emojis! 💡</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Imagine sending cryptocurrency as easily and expressively as sending an emoji! With EmogiNation, this dream becomes a reality. Our innovative utility allows you to send $EMOJI tokens to your friends using simple emoji commands. Experience the future of fun finance!
+            </p>
+
+            <div class="bg-blue-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
+                <h3 class="text-3xl font-bold text-blue-800 mb-6">Live Demo: Emoji-Powered Transactions! 🚀</h3>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
+                    <input type="text" id="recipientAddress" placeholder="Recipient Address (e.g., @friend_wallet)" class="flex-grow p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
+                    <input type="number" id="emojiAmount" placeholder="Amount ($EMOJI)" class="w-full md:w-auto p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" min="1" />
+                </div>
+                <div class="flex items-center justify-center gap-4 mb-8">
+                    <input type="text" id="emojiToSend" placeholder="Your Emoji (e.g., 🎉)" class="w-full md:w-auto p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" maxlength="2" />
+                    <button id="sendEmojiBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
+                        Send $EMOJI! <span class="text-2xl">➡️</span>
+                    </button>
+                </div>
+                <div id="transactionStatus" class="text-lg font-semibold text-green-600"></div>
+                <div id="sendingAnimationContainer" class="relative h-20 w-full mt-8 flex justify-center items-center">
+                    <!-- Sending emoji animation will appear here -->
+                </div>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+                *This is a simulated demonstration. Actual transactions require a connected wallet and network fees.
+            </p>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Roadmap: Our Journey to the Stars! 🗺️🚀</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Our path is clear, guided by community and innovation. Here's a glimpse into the exciting milestones ahead for EmogiNation!
+            </p>
+
+            <div class="relative flex flex-col items-center">
+                <!-- Phase 1 -->
+                <div class="w-full max-w-2xl bg-blue-50 p-6 rounded-xl shadow-md mb-8 text-left animate-fade-in-up">
+                    <h3 class="text-2xl font-bold text-blue-700 mb-3">Phase 1: The Genesis 🌟 (Completed)</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Concept & Whitepaper Release ✅</li>
+                        <li>Website Launch (You're here! 😉) ✅</li>
+                        <li>Community Building & Social Media Presence 🫂</li>
+                        <li>Initial Marketing Campaigns 📢</li>
+                    </ul>
+                </div>
+                <div class="absolute h-16 w-1 bg-blue-300 rounded-full top-[180px] md:top-[160px] z-0"></div>
+
+                <!-- Phase 2 -->
+                <div class="w-full max-w-2xl bg-pink-50 p-6 rounded-xl shadow-md mb-8 text-left animate-fade-in-up delay-1">
+                    <h3 class="text-2xl font-bold text-pink-700 mb-3">Phase 2: Ignition 🚀 (Current)</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Presale Launch & Completion 🔥</li>
+                        <li>Smart Contract Audit 🔒</li>
+                        <li>PancakeSwap/Uniswap Listing 📈</li>
+                        <li>Initial Liquidity Provision 💧</li>
+                        <li>First Airdrop Distribution 🎁</li>
+                    </ul>
+                </div>
+                <div class="absolute h-16 w-1 bg-pink-300 rounded-full top-[420px] md:top-[400px] z-0"></div>
+
+                <!-- Phase 3 -->
+                <div class="w-full max-w-2xl bg-yellow-50 p-6 rounded-xl shadow-md mb-8 text-left animate-fade-in-up delay-2">
+                    <h3 class="text-2xl font-bold text-yellow-700 mb-3">Phase 3: Ascension 🌕 (Future)</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Major CEX Listings 🏦</li>
+                        <li>NFT Collection Launch 🖼️</li>
+                        <li>EmogiNation Merch Store 👕</li>
+                        <li>Partnerships & Collaborations 🤝</li>
+                        <li>Community Governance & DAO 🗳️</li>
+                    </ul>
+                </div>
+                <div class="absolute h-16 w-1 bg-yellow-300 rounded-full top-[660px] md:top-[640px] z-0"></div>
+
+                <!-- Phase 4 -->
+                <div class="w-full max-w-2xl bg-green-50 p-6 rounded-xl shadow-md text-left animate-fade-in-up delay-3">
+                    <h3 class="text-2xl font-bold text-green-700 mb-3">Phase 4: Universal Domination 🌍 (Long-term)</h3>
+                    <ul class="list-disc list-inside text-gray-700 space-y-2">
+                        <li>Cross-Chain Integration 🔗</li>
+                        <li>EmogiNation Mobile App 📱</li>
+                        <li>Metaverse Integration & Gaming 🎮</li>
+                        <li>Global Adoption & Beyond! ✨</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Presale Section -->
+    <section id="presale" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Presale: Your Chance to Join Early! 🔥</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                The EmogiNation presale is your golden ticket to becoming an early adopter of the most expressive meme coin on the blockchain! Don't miss out on this incredible opportunity to secure your share. 💎
+            </p>
+
+            <div class="bg-yellow-100 rounded-xl p-6 mb-10 shadow-md">
+                <h3 class="text-3xl font-bold text-yellow-800 mb-4">Presale Progress: Halfway to the Moon! 🌕</h3>
+                <div class="flex justify-between text-xl font-semibold text-gray-700 mb-2">
+                    <span>Current: <span class="text-blue-600">$25,000</span> 🎉</span>
+                    <span>Goal: <span class="text-green-600">$50,000</span> 🎯</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 50%;"></div>
+                </div>
+                <p class="text-lg text-gray-700 mt-4 font-medium">
+                    We've raised **$25,000** towards our **$50,000** goal! The community is growing fast! Join the excitement! 🥳
+                </p>
+            </div>
+
+            <p class="text-xl text-gray-800 mb-8 font-semibold">
+                Contribute now and be a part of history! Every contribution fuels our journey to the stars! ⭐
+            </p>
+            <a href="#" class="btn-primary py-4 px-10 rounded-full text-xl font-bold inline-block animate-wiggle-slow">
+                Contribute to Presale Now! 🚀💸
+            </a>
+            <p class="text-sm text-gray-500 mt-4">
+                *Minimum contribution: 0.1 ETH. Details on official channels.
+            </p>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Meet the EmogiNation Visionary! 🫂</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Behind every great movement is a passionate leader. Meet the driving force behind EmogiNation!
+            </p>
+
+            <div class="flex flex-col items-center justify-center">
+                <div id="precidoboss-profile" class="relative w-48 h-48 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden mb-6 shadow-xl">
+                    <span id="profile-emoji" class="profile-emoji">😎</span>
+                </div>
+                <h3 class="text-3xl font-extrabold text-gray-800 mb-2">PRECIDOBOSS</h3>
+                <a href="https://twitter.com/PRECIDOBOS" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline text-xl font-semibold mb-4">@PRECIDOBOS 🐦</a>
+                <p class="text-lg text-gray-700 max-w-xl mx-auto">
+                    The mastermind behind EmogiNation, PRECIDOBOSS is a seasoned crypto enthusiast with a vision to make finance fun, accessible, and universally expressive through the power of emojis. Their dedication and innovative spirit are the rocket fuel for our journey! 🚀💡
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meme Section -->
+    <section id="memes" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Meme Gallery: Laugh Your Way to the Moon! 😂</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                Because what's a meme coin without some epic memes? Get ready for a dose of pure emoji-infused humor!
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="meme-container animate-fade-in-up">
+                    <img src="https://placehold.co/400x300/FFD700/2C3E50?text=Me+waiting+for+%24EMOJI+to+pump%0A%F0%9F%98%82%F0%9F%92%A5" alt="Meme 1" class="w-full h-auto rounded-t-lg">
+                    <div class="meme-text">When the chart looks like your mood! 📈😂</div>
+                </div>
+                <div class="meme-container animate-fade-in-up delay-1">
+                    <img src="https://placehold.co/400x300/00BFFF/FFFFFF?text=My+wallet+after+buying+%24EMOJI%0A%F0%9F%A4%AF%F0%9F%92%B0" alt="Meme 2" class="w-full h-auto rounded-t-lg">
+                    <div class="meme-text">Feeling rich with $EMOJI! 🤑</div>
+                </div>
+                <div class="meme-container animate-fade-in-up delay-2">
+                    <img src="https://placehold.co/400x300/FF69B4/FFFFFF?text=HODLing+%24EMOJI+like...%0A%F0%9F%92%8E%F0%9F%92%AA" alt="Meme 3" class="w-full h-auto rounded-t-lg">
+                    <div class="meme-text">Diamond Hands forever! 💎🙌</div>
+                </div>
+                <div class="meme-container animate-fade-in-up delay-3">
+                    <img src="https://placehold.co/400x300/32CD32/FFFFFF?text=When+you+send+money+with+an+emoji%0A%F0%9F%98%8E%F0%9F%91%8D" alt="Meme 4" class="w-full h-auto rounded-t-lg">
+                    <div class="meme-text">The power of emoji transactions! 😎</div>
+                </div>
+                <div class="meme-container animate-fade-in-up delay-4">
+                    <img src="https://placehold.co/400x300/8A2BE2/FFFFFF?text=Me+explaining+%24EMOJI+to+my+friends%0A%F0%9F%AA%A8%F0%9F%98%85" alt="Meme 5" class="w-full h-auto rounded-t-lg">
+                    <div class="meme-text">It's simple, really! 🤯</div>
+                </div>
+                <div class="meme-container animate-fade-in-up delay-5">
+                    <img src="https://placehold.co/400x300/FF4500/FFFFFF?text=EmogiNation+community+vibes%0A%F0%9F%A5%B3%F0%9F%8E%89" alt="Meme 6" class="w-full h-auto rounded-t-lg">
+                    <div class="meme-text">Best community ever! 🎉</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How To Get Section -->
+    <section id="how-to-get" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">How to Get Your Emojis! Your Path to EmogiNation Wealth! 💰</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-8 max-w-2xl mx-auto">
+                Embarking on your EmogiNation journey is as delightfully simple as sending your favorite smiley face! Follow these straightforward steps to seamlessly become an integral part of our thriving and expressive community. 👇
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="p-6 rounded-xl bg-green-50 shadow-inner flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
+                    <span class="text-5xl mb-4 animate-float">1️⃣</span>
+                    <h3 class="text-2xl font-semibold mb-3">Secure Your Wallet</h3>
+                    <p class="text-gray-700">Download and set up MetaMask or your preferred, trusted crypto wallet. This will be your secure and personalized portal to the exciting emojiverse! 🦊🔒</p>
+                </div>
+                <div class="p-6 rounded-xl bg-purple-50 shadow-inner flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
+                    <span class="text-5xl mb-4 animate-pulse-slow">2️⃣</span>
+                    <h3 class="text-2xl font-semibold mb-3">Fuel Your Wallet</h3>
+                    <p class="text-gray-700">Acquire some ETH or BNB and transfer it to your wallet. These foundational cryptocurrencies are essential for swapping into your coveted EmogiNation tokens. 💸💎</p>
+                </div>
+                <div class="p-6 rounded-xl bg-orange-50 shadow-inner flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
+                    <span class="text-5xl mb-4 animate-rotate-y">3️⃣</span>
+                    <h3 class="text-2xl font-semibold mb-3">Swap for EmogiNation!</h3>
+                    <p class="text-gray-700">Visit our highly anticipated official swap link (launching soon!) and effortlessly exchange your crypto for EmogiNation tokens. Prepare to truly express yourself financially! 🔄🎉</p>
+                </div>
+            </div>
+            <a href="#" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold inline-block mt-12 animate-wiggle-slow">
+                Official Swap Link (Launching Soon!) 🔗✨
+            </a>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
+        <div class="card p-8 md:p-12 text-center">
+            <h2 class="text-4xl font-extrabold gradient-text mb-8">Join the Thriving EmogiNation Community! 🫂</h2>
+            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
+                The unparalleled strength of EmogiNation resides within its incredibly vibrant and passionate community. Connect instantly with fellow emoji enthusiasts, passionately share groundbreaking ideas, and actively help us collectively sculpt the magnificent future of EmogiNation!
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="#" class="bg-blue-600 text-white py-3 px-6 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-blue-700 transition duration-300 transform hover:scale-105">
+                    <span class="text-2xl">💬</span> <span>Telegram</span>
+                </a>
+                <a href="#" class="bg-gray-800 text-white py-3 px-6 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-gray-900 transition duration-300 transform hover:scale-105">
+                    <span class="text-2xl">🐦</span> <span>Twitter</span>
+                </a>
+                <a href="#" class="bg-purple-700 text-white py-3 px-6 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-purple-800 transition duration-300 transform hover:scale-105">
+                    <span class="text-2xl">👾</span> <span>Discord</span>
+                </a>
+                <a href="#" class="bg-red-600 text-white py-3 px-6 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-red-700 transition duration-300 transform hover:scale-105">
+                    <span class="text-2xl">📹</span> <span>YouTube</span>
+                </a>
+            </div>
+            <p class="text-xl text-gray-800 mt-10 font-extrabold animate-fade-in-up">
+                Together, let's forge a world where every emotion is profoundly valued, and every emoji represents a triumphant leap towards ultimate financial freedom! 💖🚀
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12 rounded-t-3xl">
+        <div class="container mx-auto text-center px-4">
+            <p class="mb-4">&copy; 2025 EmogiNation. All rights reserved. Crafted with immense ❤️ and countless Emojis. ✨</p>
+            <div class="flex justify-center space-x-6">
+                <a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a>
+                <a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // Game constants - now separated into configurations
-        const BASE_GAME_WIDTH = 626; 
-        const BASE_GAME_HEIGHT = 1131;
-
-        let GAME_WIDTH = window.innerWidth;
-        let GAME_HEIGHT = window.innerHeight;
-
-        // --- Device-Specific Configurations ---
-        const laptopConfig = {
-            PLAYER_SIZE_BASE: 120, // Increased for desktop
-            PLAYER_GRAVITY_BASE: 0.18,
-            PLAYER_FLAP_STRENGTH_BASE: -4.5,
-            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 50,
-            MIN_GAP_HEIGHT_BASE: 120, // Decreased for tighter gaps
-            MIN_GAP_HEIGHT_MULTIPLIER: 1.8, // Decreased for tighter gaps relative to player
-            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.15, // Reduced for more consistent and tighter gaps
-            CANDLE_WIDTH_BASE: 150,
-            INITIAL_OBSTACLE_SPEED_BASE: 2.5, // Reverted to original speed for laptop
-            OBSTACLE_INTERVAL_MIN: 1500, 
-            OBSTACLE_INTERVAL_MAX: 2250, 
-            MAX_VERTICAL_GAP_SHIFT: 0.25, // Max vertical shift between consecutive gaps (fraction of screen height)
-            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 20000, // How often speed increases based on MC
-            PLAYER_HITBOX_SHRINK_X: 0.45, // Default shrinkage for laptop
-            PLAYER_HITBOX_SHRINK_Y: 0.45  // Default shrinkage for laptop
-        };
-
-        // Configuration for larger mobile phones (e.g., iPhone 12 Pro Max)
-        const largeMobileConfig = {
-            PLAYER_SIZE_BASE: 110, 
-            PLAYER_GRAVITY_BASE: 0.25, 
-            PLAYER_FLAP_STRENGTH_BASE: -5.5, 
-            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 80, 
-            MIN_GAP_HEIGHT_BASE: 200, 
-            MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
-            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, 
-            CANDLE_WIDTH_BASE: 200, 
-            INITIAL_OBSTACLE_SPEED_BASE: 3.2, // User's requested speed
-            OBSTACLE_INTERVAL_MIN: 2600, 
-            OBSTACLE_INTERVAL_MAX: 3600, 
-            MAX_VERTICAL_GAP_SHIFT: 0.15, 
-            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 20000,
-            PLAYER_HITBOX_SHRINK_X: 0.45, 
-            PLAYER_HITBOX_SHRINK_Y: 0.45
-        };
-
-        // Configuration for smaller mobile phones (e.g., iPhone 7)
-        const smallMobileConfig = {
-            PLAYER_SIZE_BASE: 80, // Further reduced player size for better performance and agile feel
-            PLAYER_GRAVITY_BASE: 0.25, 
-            PLAYER_FLAP_STRENGTH_BASE: -5.5, 
-            MIN_CANDLE_SECTION_HEIGHT_PX_BASE: 75, // Slightly adjusted for more vertical play
-            MIN_GAP_HEIGHT_BASE: 160, // Further reduced gap height for more challenge (was 170)
-            MIN_GAP_HEIGHT_MULTIPLIER: 1.8, 
-            AVAILABLE_SPACE_GAP_RANDOM_FACTOR: 0.20, 
-            CANDLE_WIDTH_BASE: 200, 
-            INITIAL_OBSTACLE_SPEED_BASE: 4.8, // Increased initial speed for a faster start (was 4.5)
-            OBSTACLE_INTERVAL_MIN: 3500, // Kept for performance
-            OBSTACLE_INTERVAL_MAX: 5000, // Kept for performance
-            MAX_VERTICAL_GAP_SHIFT: 0.35, // Increased for more dynamic vertical movement (was 0.15)
-            SPEED_INCREASE_MILESTONE_MC_INCREMENT: 12000, // Kept for frequent speed up
-            PLAYER_HITBOX_SHRINK_X: 0.25, // Reduced shrinkage for larger effective hitbox (was 0.35)
-            PLAYER_HITBOX_SHRINK_Y: 0.25  // Reduced shrinkage for larger effective hitbox (was 0.35)
-        };
-
-        let currentConfig = laptopConfig; // Default, will be set by device detection or local storage
-
-        // Variables that will take values from currentConfig
-        let PLAYER_GRAVITY; 
-        let PLAYER_FLAP_STRENGTH; 
-        let PLAYER_SIZE; // Player size will be calculated from PLAYER_SIZE_BASE
-        let MIN_CANDLE_SECTION_HEIGHT_PX;
-        let MIN_GAP_HEIGHT;
-        let CANDLE_WIDTH;
-        let INITIAL_OBSTACLE_SPEED;
-        let OBSTACLE_INTERVAL_MIN;
-        let OBSTACLE_INTERVAL_MAX;
-        let MAX_VERTICAL_GAP_SHIFT;
-        let PLAYER_HITBOX_SHRINK_X;
-        let PLAYER_HITBOX_SHRINK_Y;
-
-
-        // Derived variables (calculated in calculateGameDimensions)
-        let currentScaledCandleWidth;
-        let currentScaledMinGapHeight;
-        let currentScaledMinCandleSectionHeight;
-
-        const MAX_ROTATION_DEGREES = 35;
-        const DESIRED_GAP_HEIGHT_RATIO = 0.25; 
-        
-        const FLAP_SOUND_COOLDOWN = 150; 
-
-        const POTION_SPAWN_CHANCE_RATE = 0.10; 
-
-        const SHIELD_DURATION = 5000;
-        const INITIAL_MARKET_CAP = 100000;
-        const MARKET_CAP_PER_BASE_CANDLE_WIDTH = 1000; 
-
-        const PLAYER_SPRITE_SHEET_URL = "https://i.imgur.com/N3fsA36.png"; 
-        const PLAYER_SPRITE_FRAME_COUNT = 4; 
-        let PLAYER_SPRITE_WIDTH; 
-        let PLAYER_SPRITE_HEIGHT; 
-
-        const BACKGROUND_IMAGE_URL = "https://i.imgur.com/ESwrOre.png"; 
-        const RED_CANDLE_IMAGE_URL = "https://i.imgur.com/yCs6SVg.png";
-        const GREEN_CANDLE_IMAGE_URL = "https://i.imgur.com/uUbXFff.png"; 
-        const POTION_IMAGE_URL = "https://i.imgur.com/cL2ndoI.png";
-        const FLAPPY_COIN_IMAGE_URL = "https://i.imgur.com/JZRXMxr.png";
-
-        const SPRITE_ANIMATION_SPEED = 250; // Increased for less frequent updates, better performance 
-
-        // DOM element references
-        const gameContainer = document.getElementById('gameContainer');
-        const player = document.getElementById('player');
-        const flappyScoreCounter = document.getElementById('flappyScoreCounter'); 
-        const playerIcon = document.getElementById('playerIcon');
-        const marketCapDisplay = document.getElementById('marketCap');
-        const powerupStatusDisplay = document.getElementById('powerupStatus');
-        const speedUpText = document.getElementById('speedUpText'); // New element reference
-
-        const deviceSelectionModal = document.getElementById('deviceSelectionModal'); 
-        const playOnLaptopButton = document.getElementById('playOnLaptopButton');     
-        const playOnLargeMobileButton = document.getElementById('playOnLargeMobileButton'); // New
-        const playOnSmallMobileButton = document.getElementById('playOnSmallMobileButton'); // New   
-
-        const messageBox = document.getElementById('messageBox');
-        const messageTitle = document.getElementById('messageTitle');
-        const messageText = document.getElementById('messageText');
-        const emailInput = document.getElementById('emailInput'); 
-        const xAccountNameInput = document.getElementById('xAccountNameInput'); 
-        const authButtonsDiv = document.getElementById('authButtons'); 
-
-        // Main screen buttons
-        const signInEmailLinkButton = document.getElementById('signInEmailLinkButton'); 
-        const registerButton = document.getElementById('registerButton');
-        const startButton = document.getElementById('startButton'); 
-        const leaderboardButton = document.getElementById('leaderboardButton');
-        const backToWelcomeButton = document.getElementById('backToWelcomeButton'); 
-
-        // User info area buttons
-        const userInfoDisplay = document.getElementById('userInfo');
-        const userNameDisplay = document.getElementById('userNameDisplay');
-        const profileButton = document.getElementById('profileButton'); 
-        const deviceButton = document.getElementById('deviceButton'); // New
-        const logoutButton = document.getElementById('logoutButton');
-
-        // Modals and their elements
-        const leaderboardModal = document.getElementById('leaderboardModal');
-        const leaderboardTableBody = document.querySelector('#leaderboardTable tbody'); 
-        const leaderboardCloseButton = document.getElementById('leaderboardCloseButton');
-
-        const profileModal = document.getElementById('profileModal'); 
-        const profileEmailDisplay = document.getElementById('profileEmailDisplay'); 
-        const profileXAccountDisplay = document.getElementById('profileXAccountDisplay'); 
-        const profileRankDisplay = document.getElementById('profileRankDisplay'); 
-        const profileXAccountNameInput = document.getElementById('profileXAccountNameInput'); 
-        const profileSetXAccountNameButton = document.getElementById('profileXAccountNameButton'); 
-        const profileLogoutButton = document.getElementById('profileLogoutButton'); 
-        const profileCloseButton = document.getElementById('profileCloseButton'); 
-
-        const loadingOverlay = document.getElementById('loadingOverlay');
-
-        // Canvas related elements
-        const particleCanvas = document.getElementById('particleCanvas');
-        const particleCtx = particleCanvas.getContext('2d');
-        let particles = [];
-        let particleAnimationFrameId = null;
-
-        // Game state variables
-        window.playerY = GAME_HEIGHT / 2;
-        window.playerVelocity = 0;
-        window.obstacles = []; 
-        window.items = []; 
-        window.score = 0;
-        window.marketCap = INITIAL_MARKET_CAP;
-        window.gameStarted = false;
-        window.gameOver = false;
-        window.lastObstacleTime = 0;
-        window.animationFrameId;
-
-        window.shieldActive = false;
-        window.shieldTimer = null;
-        window.currentObstacleSpeed = 0; 
-        window.lastMarketCapSpeedMilestone = INITIAL_MARKET_CAP; // New variable for speed increase
-        window.lastGapY = GAME_HEIGHT / 2; // Initialize for vertical consistency
-
-        window.currentSpriteFrameIndex = 0;
-        window.spriteAnimationInterval = null;
-
-        // Tone.js specific variables
-        let flapSynth = null; 
-
-        window.isStartingGame = false; 
-        window.lastFlapSoundTime = 0;  
-
-        // Supabase related variables
-        let currentUser = null;
-        let currentProfile = null;
-        let isLoggedIn = false;
-
-        /**
-         * Calculates the actual rendered dimensions of the game area and adjusts all dynamic elements.
-         * This ensures everything scales proportionally to the current screen size.
-         */
-        function calculateGameDimensions() {
-            GAME_WIDTH = window.innerWidth;
-            GAME_HEIGHT = window.innerHeight;
-
-            // IMPORTANT: Add a guard to prevent calculations with zero dimensions
-            if (GAME_WIDTH === 0 || GAME_HEIGHT === 0) {
-                console.warn("calculateGameDimensions called with zero window dimensions. Skipping calculations for now.");
-                return; // Exit if dimensions are invalid
-            }
-
-            // Apply current configuration parameters
-            PLAYER_GRAVITY = currentConfig.PLAYER_GRAVITY_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
-            PLAYER_FLAP_STRENGTH = currentConfig.PLAYER_FLAP_STRENGTH_BASE * (GAME_HEIGHT / BASE_GAME_HEIGHT);
-            // currentObstacleSpeed is now handled dynamically in gameLoop, but needs initial value
-            if (window.currentObstacleSpeed === 0 || !window.gameStarted) { // Only set initial speed if not already in game
-                window.currentObstacleSpeed = currentConfig.INITIAL_OBSTACLE_SPEED_BASE * (GAME_WIDTH / BASE_GAME_WIDTH); 
-            }
-            OBSTACLE_INTERVAL_MIN = currentConfig.OBSTACLE_INTERVAL_MIN;
-            OBSTACLE_INTERVAL_MAX = currentConfig.OBSTACLE_INTERVAL_MAX;
-            MAX_VERTICAL_GAP_SHIFT = currentConfig.MAX_VERTICAL_GAP_SHIFT; // Get from config
-            PLAYER_HITBOX_SHRINK_X = currentConfig.PLAYER_HITBOX_SHRINK_X; // New: Get from config
-            PLAYER_HITBOX_SHRINK_Y = currentConfig.PLAYER_HITBOX_SHRINK_Y; // New: Get from config
-
-
-            // Player dimensions scale with GAME_HEIGHT, with a higher minimum
-            PLAYER_SPRITE_HEIGHT = Math.max(70, GAME_HEIGHT * (currentConfig.PLAYER_SIZE_BASE / BASE_GAME_HEIGHT)); 
-            PLAYER_SPRITE_WIDTH = PLAYER_SPRITE_HEIGHT; // Keep player square
-            player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
-            player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
-
-            // Adjust player initial position based on new GAME_HEIGHT
-            // Only set player initial position if game is not started or game over
-            // If game is running, player's position is managed by gameLoop
-            if (!window.gameStarted || window.gameOver) {
-                window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2); // Use player.offsetHeight after setting width/height
-                player.style.top = `${window.playerY}px`; 
-                player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
-                player.style.transform = `rotateZ(0deg)`; 
-            }
-            
-
-            // Calculate current scaled candle width, min gap, and min candle section height
-            currentScaledCandleWidth = Math.max(70, GAME_WIDTH * (currentConfig.CANDLE_WIDTH_BASE / BASE_GAME_WIDTH)); 
-            const scaleFactorForHeight = GAME_HEIGHT / BASE_GAME_HEIGHT;
-            currentScaledMinGapHeight = currentConfig.MIN_GAP_HEIGHT_BASE * scaleFactorForHeight;
-            currentScaledMinCandleSectionHeight = Math.max(70, currentConfig.MIN_CANDLE_SECTION_HEIGHT_PX_BASE * scaleFactorForHeight); 
-
-            // Adjust UI element sizes and positions based on a common scale factor
-            const scaleFactor = Math.min(GAME_WIDTH / BASE_GAME_WIDTH, GAME_HEIGHT / BASE_GAME_HEIGHT);
-            
-            // Top Bar
-            const topBarPadding = 1 * scaleFactor; 
-            document.querySelector('.top-bar').style.padding = `${topBarPadding}rem`;
-            document.querySelector('.score').style.fontSize = `${2.2 * scaleFactor}rem`;
-            document.querySelector('.score .player-icon').style.width = `${40 * scaleFactor}px`;
-            document.querySelector('.score .player-icon').style.height = `${40 * scaleFactor}px`;
-            document.querySelector('.market-cap').style.fontSize = `${2.2 * scaleFactor}rem`;
-
-            // User Info (Profile/Device/Logout)
-            document.querySelector('.user-info').style.top = `${1 * scaleFactor}rem`;
-            document.querySelector('.user-info').style.right = `${1 * scaleFactor}rem`;
-            document.querySelector('.user-info').style.fontSize = `${1.2 * scaleFactor}rem`;
-            document.querySelector('.user-info').style.padding = `${0.5 * scaleFactor}rem ${1 * scaleFactor}rem`;
-            document.querySelector('.user-info').style.borderRadius = `${0.5 * scaleFactor}rem`;
-            
-            // Re-apply button styles as they are globally affected
-            document.querySelectorAll('.user-info button').forEach(btn => {
-                btn.style.padding = `${0.2 * scaleFactor}rem ${0.6 * scaleFactor}rem`;
-                btn.style.fontSize = `${0.9 * scaleFactor}rem`;
-                btn.style.borderRadius = `${0.3 * scaleFactor}rem`;
-            });
-
-
-            // Powerup Status
-            powerupStatusDisplay.style.top = `${(70 * scaleFactor)}px`; 
-            powerupStatusDisplay.style.right = `${1 * scaleFactor}rem`;
-            powerupStatusDisplay.style.fontSize = `${1.8 * scaleFactor}rem`;
-            powerupStatusDisplay.style.padding = `${0.5 * scaleFactor}rem ${1 * scaleFactor}rem`;
-            powerupStatusDisplay.style.borderRadius = `${0.5 * scaleFactor}rem`;
-
-            // Speed Up Text - Adjusted top position
-            speedUpText.style.fontSize = `${3.5 * scaleFactor}rem`;
-            speedUpText.style.top = `${GAME_HEIGHT * 0.20}px`; // 20% from the top
-
-
-            // Message Box & Device Selection Modal
-            document.querySelectorAll('.message-box, .device-selection-modal').forEach(modal => {
-                modal.style.padding = `${1 * scaleFactor}rem ${1.5 * scaleFactor}rem`;
-                modal.style.borderRadius = `${1.5 * scaleFactor}rem`;
-                modal.style.borderWidth = `${3 * scaleFactor}px`;
-            });
-            document.querySelectorAll('.message-box h2, .device-selection-modal h2').forEach(h2 => {
-                h2.style.fontSize = `${2 * scaleFactor}rem`;
-                h2.style.marginBottom = `${0.6 * scaleFactor}rem`;
-            });
-            document.querySelectorAll('.message-box p, .device-selection-modal p').forEach(p => {
-                p.style.fontSize = `${1 * scaleFactor}rem`;
-                p.style.marginBottom = `${0.8 * scaleFactor}rem`;
-            });
-            
-            // Buttons
-            const buttonFontSize = 20 * scaleFactor;
-            const buttonPaddingY = 14 * scaleFactor;
-            const buttonPaddingX = 30 * scaleFactor;
-            const buttonBorder = 4 * scaleFactor;
-            const buttonRadius = 18 * scaleFactor;
-            const buttonMargin = 6 * scaleFactor;
-
-            document.querySelectorAll('.flappy-button').forEach(btn => {
-                btn.style.fontSize = `${buttonFontSize}px`;
-                btn.style.padding = `${buttonPaddingY}px ${buttonPaddingX}px`;
-                btn.style.borderWidth = `${buttonBorder}px`;
-                btn.style.borderRadius = `${buttonRadius}px`;
-                btn.style.margin = `${buttonMargin}px`;
-            });
-            // Specific close button adjustments
-            document.querySelectorAll('.close-button').forEach(btn => {
-                btn.style.padding = `${0.8 * scaleFactor}rem ${1.5 * scaleFactor}rem`;
-                btn.style.fontSize = `${1.2 * scaleFactor}rem`;
-                btn.style.borderRadius = `${0.75 * scaleFactor}rem`;
-                btn.style.marginTop = `${1.5 * scaleFactor}rem`;
-            });
-            
-            // Input fields
-            document.querySelectorAll('.message-box input, .profile-content input').forEach(input => {
-                input.style.padding = `${0.75 * scaleFactor}rem ${1 * scaleFactor}rem`;
-                input.style.marginBottom = `${1 * scaleFactor}rem`;
-                input.style.borderRadius = `${0.5 * scaleFactor}rem`;
-                input.style.fontSize = `${1 * scaleFactor}rem`;
-                input.style.marginTop = `${1 * scaleFactor}rem`;
-            });
-
-            // Modals
-            document.querySelectorAll('.leaderboard-content, .profile-content').forEach(modal => {
-                modal.style.padding = `${2 * scaleFactor}rem`;
-                modal.style.borderRadius = `${1.5 * scaleFactor}rem`;
-                modal.style.borderWidth = `${3 * scaleFactor}px`;
-            });
-            document.querySelectorAll('.leaderboard-content h3, .profile-content h3').forEach(h3 => {
-                h3.style.fontSize = `${2.8 * scaleFactor}rem`;
-                h3.style.marginBottom = `${1.5 * scaleFactor}rem`;
-            });
-             // Adjust table headers/cells based on scale
-            document.querySelectorAll('.leaderboard-table th, .leaderboard-table td').forEach(cell => {
-                cell.style.padding = `${0.6 * scaleFactor}rem`;
-                cell.style.fontSize = `${0.9 * scaleFactor}rem`;
-            });
-
-
-            document.querySelectorAll('.profile-content p').forEach(p => {
-                p.style.fontSize = `${1.2 * scaleFactor}rem`;
-                p.style.marginBottom = `${1 * scaleFactor}rem`;
-            });
-
-            // Canvas for particles
-            particleCanvas.width = GAME_WIDTH;
-            particleCanvas.height = GAME_HEIGHT;
-            createParticles(); 
-
-            // --- DEBUG LOGGING ---
-            console.log("--- calculateGameDimensions Debug ---");
-            console.log(`GAME_WIDTH: ${GAME_WIDTH}, GAME_HEIGHT: ${GAME_HEIGHT}`);
-            console.log(`PLAYER_SPRITE_WIDTH: ${PLAYER_SPRITE_WIDTH}, PLAYER_SPRITE_HEIGHT: ${PLAYER_SPRITE_HEIGHT}`);
-            console.log(`currentScaledCandleWidth: ${currentScaledCandleWidth}`);
-            console.log(`currentScaledMinGapHeight: ${currentScaledMinGapHeight}`);
-            console.log(`currentScaledMinCandleSectionHeight: ${currentScaledMinCandleSectionHeight}`);
-            console.log(`OBSTACLE_INTERVAL_MIN: ${OBSTACLE_INTERVAL_MIN}, OBSTACLE_INTERVAL_MAX: ${OBSTACLE_INTERVAL_MAX}`);
-            console.log(`MAX_VERTICAL_GAP_SHIFT: ${MAX_VERTICAL_GAP_SHIFT}`);
-            console.log(`PLAYER_HITBOX_SHRINK_X: ${PLAYER_HITBOX_SHRINK_X}, PLAYER_HITBOX_SHRINK_Y: ${PLAYER_HITBOX_SHRINK_Y}`);
-            console.log("-------------------------------------");
-        }
-
-        /**
-         * Shows the loading overlay.
-         * @param {string} message - The message to display on the loading screen.
-         */
-        function showLoading(message = "Loading...") {
-            loadingOverlay.querySelector('img').style.display = 'block'; // Show spinner
-            loadingOverlay.innerHTML = `<img src="https://i.imgur.com/N3fsA36.png" alt="Loading Coin"> ${message}`;
-            loadingOverlay.style.display = 'flex';
-        }
-
-        /**
-         * Hides the loading overlay.
-         */
-        function hideLoading() {
-            loadingOverlay.style.display = 'none';
-        }
-
-        /**
-         * Formats a number as currency with commas.
-         * @param {number} num - The number to format.
-         * @returns {string} The formatted currency string.
-         */
-        function formatCurrency(num) {
-            return num.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
-        }
-        
-        /**
-         * Initializes Tone.js audio context and synths.
-         * This must be called after a user gesture to avoid browser autoplay policies.
-         * Synths are disposed and recreated to ensure a clean state between games.
-         */
-        async function initAudio() {
-            console.log("initAudio called. Tone.context.state:", Tone.context.state);
-            if (flapSynth) { 
-                flapSynth.dispose();
-                flapSynth = null;
-            }
-
-            if (Tone.context.state === 'suspended') {
-                try {
-                    await Tone.start();
-                    console.log('Audio context resumed after user gesture.');
-                } catch (e) {
-                    console.error('Failed to resume audio context:', e);
-                }
-            } else {
-                console.log('Audio context state:', Tone.context.state);
-            }
-
-            flapSynth = new Tone.MembraneSynth({ 
-                pitchDecay: 0.05, octaves: 8,
-                envelope: { attack: 0.001, decay: 0.4, sustain: 0.01, release: 0.4, attackCurve: "exponential" },
-                volume: -10
-            }).toDestination();
-            console.log('Flap synth created.');
-        }
-
-        /**
-         * Updates the player's size based on sprite dimensions.
-         */
-        const updatePlayerSize = () => {
-            player.style.left = `${(GAME_WIDTH - player.offsetWidth) / 2}px`; 
-        };
-
-        /**
-         * Updates the player's vertical position based on gravity and velocity,
-         * handles boundary checks, and applies rotation based on vertical movement.
-         */
-        function updatePlayer() {
-            if (!window.gameStarted || window.gameOver) return;
-
-            window.playerVelocity += PLAYER_GRAVITY; 
-            window.playerY += window.playerVelocity; 
-
-            const rotationFactor = 0.5;
-            const normalizedVelocity = Math.max(-1, Math.min(1, window.playerVelocity * rotationFactor)); 
-            const rotationAngle = normalizedVelocity * MAX_ROTATION_DEGREES;
-
-            if (window.playerY < 0) { 
-                window.playerY = 0; 
-                window.playerVelocity = 0; 
-            }
-            if (window.playerY > GAME_HEIGHT - player.offsetHeight) { 
-                window.playerY = GAME_HEIGHT - player.offsetHeight; 
-                window.playerVelocity = 0; 
-                endGame(); 
-                return; 
-            }
-            player.style.top = `${window.playerY}px`; 
-            player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
-            player.style.transform = `rotateZ(${rotationAngle}deg)`; 
-            // DEBUG: Log player position and velocity
-            // console.log(`[UpdatePlayer] Y: ${window.playerY.toFixed(2)}, Velocity: ${window.playerVelocity.toFixed(2)}, Gravity: ${PLAYER_GRAVITY.toFixed(2)}`);
-        }
-
-        /**
-         * Creates a new collectible item (potion or flappy coin).
-         * @param {number} xPos - The x-position for the item.
-         * @param {number} gapY - The y-position of the gap for placement.
-         * @param {number} gapHeight - The height of the gap.
-         */
-        function createCollectible(xPos, gapY, gapHeight) {
-            const itemElement = document.createElement('div');
-            const roll = Math.random();
-            let itemType;
-            if (roll < POTION_SPAWN_CHANCE_RATE) { 
-                itemType = 'potion';
-            } else { 
-                itemType = 'flappy-coin';
-            }
-            itemElement.classList.add('collectible-item', itemType);
-            
-            const itemWidth = PLAYER_SPRITE_WIDTH * 0.9; 
-            const itemHeight = PLAYER_SPRITE_HEIGHT * 0.9; 
-
-            const itemY = gapY + (gapHeight / 2) - (itemHeight / 2);
-            
-            itemElement.style.width = `${itemWidth}px`;
-            itemElement.style.height = `${itemHeight}px`;
-            itemElement.style.left = `${xPos - (itemWidth / 2)}px`; 
-            itemElement.style.top = `${itemY}px`;
-
-            gameContainer.appendChild(itemElement);
-            window.items.push({ 
-                element: itemElement,
-                x: xPos - (itemWidth / 2),
-                y: itemY,
-                width: itemWidth,
-                height: itemHeight,
-                type: itemType
-            });
-            // DEBUG: Log item creation
-            // console.log(`[CreateCollectible] Created ${itemType} at x:${itemElement.style.left}, y:${itemElement.style.top}`);
-        }
-        
-        /**
-         * Creates a new candle obstacle (pair of green and red) with a random gap.
-         * Green candles from top, Red candles from bottom.
-         */
-        function createCandleObstacle() {
-            // Determine the actual minimum gap, ensuring it's at least currentScaledMinGapHeight
-            const currentMinGap = Math.max(currentScaledMinGapHeight, player.offsetHeight * currentConfig.MIN_GAP_HEIGHT_MULTIPLIER); 
-            
-            // Randomly determine the gap height, now based on a smaller random factor of available space
-            // This makes the gaps more consistently tighter or wider depending on config
-            const gapHeight = currentMinGap + Math.random() * (GAME_HEIGHT * currentConfig.AVAILABLE_SPACE_GAP_RANDOM_FACTOR); 
-
-            // Define comfortable vertical bounds for the gap's top position
-            // Increased minGapYPosition to keep candles from being too high
-            const minGapYPosition = player.offsetHeight * 2.5; 
-            const maxGapYPosition = GAME_HEIGHT - player.offsetHeight * 1.5 - gapHeight; 
-
-            let actualGapY;
-            // Initialize targetY with a default sensible value within the allowed range
-            // This ensures targetY is always defined before being used in debug logs or calculations.
-            let targetY = (minGapYPosition + maxGapYPosition) / 2; 
-
-            if (minGapYPosition >= maxGapYPosition) { 
-                actualGapY = (GAME_HEIGHT - gapHeight) / 2; 
-                targetY = actualGapY; // Set targetY to the final value for logging consistency
-            } else {
-                // Generate a random shift around 0 (positive or negative)
-                const randomShift = (Math.random() - 0.5) * MAX_VERTICAL_GAP_SHIFT * GAME_HEIGHT;
-                // Calculate the target Y for the new gap, centered around the last gap's Y
-                targetY = window.lastGapY + randomShift; // Re-assign if in the 'else' branch
-                // Ensure targetY stays within the overall allowed vertical bounds
-                actualGapY = Math.max(minGapYPosition, Math.min(maxGapYPosition, targetY));
-            }
-            
-            // Update lastGapY for the next obstacle calculation
-            window.lastGapY = actualGapY;
-
-            const topCandleHeight = actualGapY; 
-            const bottomCandleHeight = GAME_HEIGHT - actualGapY - gapHeight;
-
-            // Ensure minimum candle section height
-            const finalTopCandleHeight = Math.max(currentScaledMinCandleSectionHeight, topCandleHeight);
-            const finalBottomCandleHeight = Math.max(currentScaledMinCandleSectionHeight, bottomCandleHeight);
-
-            // Re-adjust gap height if minimum candle heights force it
-            const newGapHeight = GAME_HEIGHT - finalTopCandleHeight - finalBottomCandleHeight;
-            const newGapY = finalTopCandleHeight;
-
-            // --- Create the Green (Top) Candle ---
-            const greenCandle = document.createElement('div');
-            greenCandle.classList.add('candle-obstacle', 'green-candle'); 
-            greenCandle.style.height = `${finalTopCandleHeight}px`; 
-            greenCandle.style.width = `${currentScaledCandleWidth}px`; 
-            greenCandle.style.left = `${GAME_WIDTH}px`; 
-            greenCandle.style.top = `0px`; 
-
-            // --- Create the Red (Bottom) Candle ---
-            const redCandle = document.createElement('div');
-            redCandle.classList.add('candle-obstacle', 'red-candle'); 
-            redCandle.style.height = `${finalBottomCandleHeight}px`; 
-            redCandle.style.width = `${currentScaledCandleWidth}px`; 
-            redCandle.style.left = `${GAME_WIDTH}px`; 
-            redCandle.style.top = `${newGapY + newGapHeight}px`; 
-
-            gameContainer.appendChild(greenCandle); // Append green first (top)
-            gameContainer.appendChild(redCandle); // Append red second (bottom)
-
-            window.obstacles.push({ 
-                redElement: redCandle,
-                greenElement: greenCandle,
-                x: GAME_WIDTH, 
-                gapY: newGapY,
-                gapHeight: newGapHeight,
-                width: currentScaledCandleWidth, 
-                topHeight: finalTopCandleHeight, // Store calculated height
-                bottomHeight: finalBottomCandleHeight // Store calculated height
-            });
-
-            // Always create a collectible here
-            createCollectible(redCandle.offsetLeft + currentScaledCandleWidth / 2, newGapY, newGapHeight);
-
-            // --- DEBUG LOGGING ---
-            console.log("--- createCandleObstacle Debug ---");
-            console.log(`Calculated gapHeight: ${gapHeight.toFixed(2)}`);
-            // Now targetY is always defined for logging
-            console.log(`Calculated actualGapY (before clamping): ${targetY.toFixed(2)}`); 
-            console.log(`Final actualGapY (clamped): ${actualGapY.toFixed(2)}`);
-            console.log(`Final newGapHeight: ${newGapHeight.toFixed(2)}`);
-            console.log(`Final topCandleHeight: ${finalTopCandleHeight.toFixed(2)}`);
-            console.log(`Final bottomCandleHeight: ${finalBottomCandleHeight.toFixed(2)}`);
-            console.log(`window.lastGapY (updated): ${window.lastGapY.toFixed(2)}`);
-            console.log("----------------------------------");
-        }
-
-        /**
-         * Updates the position of all active obstacles and items, handles removal,
-         * and updates score/market cap.
-         */
-        function updateObstaclesAndItems() {
-            if (!window.gameStarted || window.gameOver) return; 
-
-            for (let i = 0; i < window.obstacles.length; i++) { 
-                const obstacle = window.obstacles[i]; 
-                obstacle.x -= window.currentObstacleSpeed; 
-                obstacle.greenElement.style.left = `${obstacle.x}px`; 
-                obstacle.redElement.style.left = `${obstacle.x}px`; 
-                // DEBUG: Log obstacle position
-                // console.log(`[UpdateObstacles] Obstacle ${i} x: ${obstacle.x.toFixed(2)}`);
-
-
-                if (obstacle.x + obstacle.width < 0) {
-                    // DEBUG: Log obstacle removal
-                    // console.log(`Removing obstacle ${i} (off-screen)`);
-                    if (gameContainer.contains(obstacle.greenElement)) gameContainer.removeChild(obstacle.greenElement);
-                    if (gameContainer.contains(obstacle.redElement)) gameContainer.removeChild(obstacle.redElement);
-                    window.obstacles.splice(i, 1); 
-                    i--;
-                }
-            }
-
-            for (let i = 0; i < window.items.length; i++) { 
-                const item = window.items[i]; 
-                item.x -= window.currentObstacleSpeed; 
-                item.element.style.left = `${item.x}px`;
-                // DEBUG: Log item position
-                // console.log(`[UpdateItems] Item ${i} x: ${item.x.toFixed(2)}`);
-
-                if (item.x + item.width < 0) {
-                    // DEBUG: Log item removal
-                    // console.log(`Removing item ${i} (off-screen)`);
-                    if (gameContainer.contains(item.element)) gameContainer.removeChild(item.element);
-                    window.items.splice(i, 1); 
-                    i--;
-                }
-            }
-
-            const currentTime = Date.now();
-            const randomInterval = Math.random() * (OBSTACLE_INTERVAL_MAX - OBSTACLE_INTERVAL_MIN) + OBSTACLE_INTERVAL_MIN;
-            // DEBUG: Log interval
-            // console.log(`[Obstacle Creation] Time elapsed: ${currentTime - window.lastObstacleTime}ms, Random interval target: ${randomInterval.toFixed(0)}ms`);
-            if (currentTime - window.lastObstacleTime > randomInterval) { 
-                createCandleObstacle();
-                window.lastObstacleTime = currentTime; 
-                // console.log("New obstacle created!");
-            }
-        }
-
-        /**
-         * Checks for collisions between the player and candles or items.
-         */
-        function checkCollisions() {
-            if (!window.gameStarted || window.gameOver) return; 
-
-            // Get player's current position and dimensions.
-            // We use getBoundingClientRect() once here for the player's current rendered position.
-            const playerRect = player.getBoundingClientRect();
-            
-            // Define player's effective collision box, slightly smaller than visual for forgiveness
-            const playerHitboxShrinkAmountX = PLAYER_HITBOX_SHRINK_X * playerRect.width; 
-            const playerHitboxShrinkAmountY = PLAYER_HITBOX_SHRINK_Y * playerRect.height;
-
-            const playerCollision = {
-                x: playerRect.left + playerHitboxShrinkAmountX,
-                y: playerRect.top + playerHitboxShrinkAmountY,
-                width: playerRect.width - (2 * playerHitboxShrinkAmountX),
-                height: playerRect.height - (2 * playerHitboxShrinkAmountY)
-            };
-
-            for (let i = 0; i < window.obstacles.length; i++) { 
-                const obstacle = window.obstacles[i]; 
-                
-                // Calculate collision rectangles for top and bottom candles using stored numerical properties
-                const topCandleCollision = {
-                    x: obstacle.x,
-                    y: 0,
-                    width: obstacle.width,
-                    height: obstacle.topHeight 
-                };
-
-                const bottomCandleCollision = {
-                    x: obstacle.x,
-                    y: obstacle.gapY + obstacle.gapHeight, 
-                    width: obstacle.width,
-                    height: obstacle.bottomHeight 
-                };
-
-                // Collision with top candle
-                if (
-                    playerCollision.x < topCandleCollision.x + topCandleCollision.width &&
-                    playerCollision.x + playerCollision.width > topCandleCollision.x &&
-                    playerCollision.y < topCandleCollision.y + topCandleCollision.height &&
-                    playerCollision.y + playerCollision.height > topCandleCollision.y
-                ) {
-                    console.log("Collision detected with GREEN (TOP) candle!");
-                    if (!window.shieldActive) { 
-                        endGame(); 
-                        return; 
+        // Array of emojis to use for animations
+        const emojis = ['😂', '🤩', '🚀', '💖', '✨', '💰', '🌐', '📈', '🎨', '👍', '🥳', '🌟', '🎉', '💡', '🔥', '💎', '💯', '✅', '🔒', '🎯', '🫂', '🌈', '🎊', '💫', '😎', '🤯', '🤑', '🙌', '👑', '🌕', '🏆', '🌱', '🎁', '💬', '🖼️', '🦄', '🐶', '🐱', '🦊', '🐼', '🐻', '🐯', '🦁', '🐸', '🐢', '🐍', '🐲', '🐳', '🐬', '🐠', '🦀', '🐞', '🦋', '🌸', '🌼', '🌻', '🍎', '🍊', '🍋', '🍉', '🍇', '🍓', '🍕', '🍔', '🍟', '🌮', '🍣', '🍦', '🍩', '🍪', '🍫', '☕', '🥛', '🍺', '🍷', '🍸', '🍹', '🎈', '🎁', '🎉', '🎊', '🎀', '🎵', '🎶', '🎤', '🎧', '🥁', '🎸', '🎹', '🎺', '🎻', '🎲', '🧩', '🎮', '🕹️', '👾', '🤖', '👻', '👽', '🎃', '🎄', '🎅', '🤶', '👼', '🤴', '👸', '🤵', '👰', '🧙', '🧚', '🧛', '🧜', '🧝', '🧞', '🧟', '🧑‍🎄', '🦸', '🦹', '🧑‍🚀', '🧑‍✈️', '👮', '👷', '💂', '🕵️', '🧑‍⚕️', '🧑‍🌾', '🧑‍🍳', '🧑‍🎓', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️', '🧑‍✈️', '🧑‍🚀', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️'];
+        const cursorEmojis = ['✨', '🌟', '💖', '🚀', '💎', '🔥', '💯', '🥳', '💡', '🎨']; // Emojis for the cursor
+
+        // --- Custom Mouse Pointer ---
+        const customCursor = document.getElementById('custom-cursor');
+        let currentCursorEmojiIndex = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Change cursor emoji periodically
+        setInterval(() => {
+            currentCursorEmojiIndex = (currentCursorEmojiIndex + 1) % cursorEmojis.length;
+            customCursor.textContent = cursorEmojis[currentCursorEmojiIndex];
+        }, 1000); // Change emoji every second
+
+        // --- Scrolling Emojis ---
+        let lastScrollY = window.scrollY;
+        let scrollEmojiCounter = 0; // To control how many emojis are generated per scroll event
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            if (Math.abs(currentScrollY - lastScrollY) > 50) { // Only trigger if scrolled a significant amount
+                scrollEmojiCounter++;
+                if (scrollEmojiCounter % 2 === 0) { // Generate emojis every other significant scroll
+                    const numEmojis = Math.floor(Math.random() * 3) + 1; // 1 to 3 emojis
+                    for (let i = 0; i < numEmojis; i++) {
+                        createScrollingEmoji();
                     }
                 }
-                // Collision with bottom candle
-                if (
-                    playerCollision.x < bottomCandleCollision.x + bottomCandleCollision.width &&
-                    playerCollision.x + playerCollision.width > bottomCandleCollision.x &&
-                    playerCollision.y < bottomCandleCollision.y + bottomCandleCollision.height &&
-                    playerCollision.y + playerCollision.height > bottomCandleCollision.y
-                ) {
-                    console.log("Collision detected with RED (BOTTOM) candle!");
-                    if (!window.shieldActive) { 
-                        endGame(); 
-                        return; 
-                    }
+                lastScrollY = currentScrollY;
+            }
+        });
+
+        function createScrollingEmoji() {
+            const emoji = document.createElement('span');
+            emoji.classList.add('scrolling-emoji');
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = `${Math.random() * 100}vw`; // Random horizontal position
+            emoji.style.animationDuration = `${Math.random() * 3 + 3}s`; // 3-6 seconds animation
+            emoji.style.fontSize = `${Math.random() * 2 + 1.5}rem`; // 1.5rem to 3.5rem
+            document.body.appendChild(emoji);
+
+            // Remove emoji after animation ends
+            emoji.addEventListener('animationend', () => {
+                emoji.remove();
+            });
+        }
+
+        // --- Click Effect Emojis ---
+        document.addEventListener('click', (e) => {
+            const numEmojis = Math.floor(Math.random() * 5) + 3; // 3 to 7 emojis per click
+            for (let i = 0; i < numEmojis; i++) {
+                createClickEmoji(e.clientX, e.clientY);
+            }
+        });
+
+        function createClickEmoji(x, y) {
+            const emoji = document.createElement('span');
+            emoji.classList.add('click-emoji');
+            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = `${x}px`;
+            emoji.style.top = `${y}px`;
+            emoji.style.animationDuration = `${Math.random() * 0.5 + 0.7}s`; // 0.7-1.2 seconds animation
+            emoji.style.fontSize = `${Math.random() * 1.5 + 1.5}rem`; // 1.5rem to 3rem
+            document.body.appendChild(emoji);
+
+            // Remove emoji after animation ends
+            emoji.addEventListener('animationend', () => {
+                emoji.remove();
+            });
+        }
+
+        // --- Scroll-triggered animations for sections ---
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: stop observing once animated
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Optional: remove class when out of view to re-animate on scroll back up
+                    // entry.target.classList.remove('is-visible');
                 }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(section => {
+            observer.observe(section);
+        });
+
+        // --- Utility: Send Emoji Functionality ---
+        const sendEmojiBtn = document.getElementById('sendEmojiBtn');
+        const recipientAddressInput = document.getElementById('recipientAddress');
+        const emojiAmountInput = document.getElementById('emojiAmount');
+        const emojiToSendInput = document.getElementById('emojiToSend');
+        const transactionStatus = document.getElementById('transactionStatus');
+        const sendingAnimationContainer = document.getElementById('sendingAnimationContainer');
+
+        sendEmojiBtn.addEventListener('click', () => {
+            const recipient = recipientAddressInput.value.trim();
+            const amount = parseFloat(emojiAmountInput.value);
+            const emoji = emojiToSendInput.value.trim();
+
+            if (!recipient || isNaN(amount) || amount <= 0 || !emoji) {
+                transactionStatus.textContent = 'Please fill in all fields correctly! ⚠️';
+                transactionStatus.style.color = '#EF4444'; // Red color
+                return;
             }
 
-            for (let i = 0; i < window.items.length; i++) { 
-                const item = window.items[i]; 
-                
-                // Calculate collision rectangle for item using stored numerical properties
-                const itemCollision = {
-                    x: item.x,
-                    y: item.y,
-                    width: item.width,
-                    height: item.height
-                };
+            transactionStatus.textContent = `Sending ${amount} $EMOJI with ${emoji} to ${recipient}... 📤`;
+            transactionStatus.style.color = '#2563EB'; // Blue color
 
-                if (
-                    playerCollision.x < itemCollision.x + itemCollision.width &&
-                    playerCollision.x + playerCollision.width > itemCollision.x &&
-                    playerCollision.y < itemCollision.y + itemCollision.height &&
-                    playerCollision.y + playerCollision.height > itemCollision.y
-                ) {
-                    console.log("Collected item:", item.type);
-                    if (item.type === 'potion') {
-                        activateShield();
-                    } else if (item.type === 'flappy-coin') {
-                        window.score++; 
-                        updateScoreDisplay(); 
-                    }
-                    if (gameContainer.contains(item.element)) { 
-                        gameContainer.removeChild(item.element);
-                    }
-                    window.items.splice(i, 1); 
-                    i--;
-                }
-            }
-        }
+            // Create and animate the sending emoji
+            const sendingEmoji = document.createElement('span');
+            sendingEmoji.classList.add('sending-emoji');
+            sendingEmoji.textContent = emoji;
+            sendingEmoji.style.left = '0px'; // Start from left
+            sendingEmoji.style.top = '0px'; // Start from top
+            sendingAnimationContainer.appendChild(sendingEmoji);
 
-        /**
-         * Activates the shield power-up.
-         */
-        function activateShield() {
-            if (window.shieldTimer) clearTimeout(window.shieldTimer); 
-            window.shieldActive = true; 
-            player.classList.add('shielded');
-            powerupStatusDisplay.textContent = "SHIELD ACTIVE!";
-            powerupStatusDisplay.style.display = 'block';
-            window.shieldTimer = setTimeout(() => { deactivateShield(); }, SHIELD_DURATION); 
-        }
-
-        /**
-         * Deactivates the shield power-up.
-         */
-        function deactivateShield() {
-            window.shieldActive = false; 
-            player.classList.remove('shielded');
-            powerupStatusDisplay.style.display = 'none'; 
-            if (window.shieldTimer) clearTimeout(window.shieldTimer); 
-            window.shieldTimer = null; 
-        }
-
-        /**
-         * Starts the sprite animation for the player.
-         */
-        function startSpriteAnimation() {
-            if (window.spriteAnimationInterval) clearInterval(window.spriteAnimationInterval); 
-            window.spriteAnimationInterval = setInterval(() => { 
-                window.currentSpriteFrameIndex = (window.currentSpriteFrameIndex + 1) % PLAYER_SPRITE_FRAME_COUNT; 
-                player.style.backgroundPosition = `-${window.currentSpriteFrameIndex * PLAYER_SPRITE_WIDTH}px 0`; 
-            }, SPRITE_ANIMATION_SPEED);
-        }
-
-        /**
-         * Stops the sprite animation and resets to the first frame.
-         */
-        function stopSpriteAnimation() {
-            if (window.spriteAnimationInterval) clearInterval(window.spriteAnimationInterval); 
-            window.spriteAnimationInterval = null; 
-            player.style.backgroundPosition = `0 0`; 
-            player.style.transform = `rotateZ(0deg)`;
-        }
-
-        /**
-         * Calculates the final score based on Flappy score and Market Cap.
-         * @param {number} flappyScore
-         * @param {number} marketCap
-         * @returns {number} Combined final score.
-         */
-        function calculateCombinedFinalScore(flappyScore, marketCap) {
-            return flappyScore + (marketCap / 1000);
-        }
-        
-        // === Particle System for Welcome/Game Over Screens ===
-        function createParticles() {
-            particles = []; 
-            // Reduce particle count for small mobile if performance is still an issue
-            const numParticles = currentConfig === smallMobileConfig ? 40 : 100; // Further reduced for small mobile
-            for (let i = 0; i < numParticles; i++) {
-                particles.push({
-                    x: Math.random() * particleCanvas.width,
-                    y: Math.random() * particleCanvas.height,
-                    radius: Math.random() * 2 + 1, 
-                    color: `hsl(${Math.random() * 360}, 100%, 70%)`, 
-                    speedX: (Math.random() - 0.5) * 0.8, 
-                    speedY: (Math.random() - 0.5) * 0.8
-                });
-            }
-        }
-
-        function updateParticles() {
-            for (let p of particles) {
-                p.x += p.speedX;
-                p.y += p.speedY;
-                if (p.x < 0) p.x = particleCanvas.width;
-                if (p.x > particleCanvas.width) p.x = 0;
-                if (p.y < 0) p.y = particleCanvas.height;
-                if (p.y > particleCanvas.height) p.y = 0;
-            }
-        }
-
-        function drawParticles() {
-            particleCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height); 
-            for (let p of particles) {
-                particleCtx.beginPath();
-                particleCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                particleCtx.fillStyle = p.color;
-                particleCtx.fill();
-            }
-        }
-
-        function particleAnimationLoop() {
-            if (deviceSelectionModal.style.display !== 'none' || messageBox.style.display !== 'none' || leaderboardModal.style.display !== 'none' || profileModal.style.display !== 'none') { 
-                updateParticles();
-                drawParticles();
-                particleAnimationFrameId = requestAnimationFrame(particleAnimationLoop);
-            } else {
-                cancelAnimationFrame(particleAnimationFrameId);
-                particleAnimationFrameId = null;
-                particleCanvas.style.display = 'none'; 
-            }
-        }
-        // === End Particle System ===
-
-        /**
-         * Displays a temporary "FLAPPY SPEED UP!" message.
-         */
-        function showSpeedUpMessage() {
-            speedUpText.classList.add('show');
+            // Simulate transaction delay
             setTimeout(() => {
-                speedUpText.classList.remove('show');
-            }, 1000); // Display for 1 second
+                sendingEmoji.remove(); // Remove the animated emoji
+                transactionStatus.textContent = `Transaction successful! ${amount} $EMOJI sent to ${recipient} with a ${emoji} of approval! ✅`;
+                transactionStatus.style.color = '#10B981'; // Green color
+                // Clear inputs
+                recipientAddressInput.value = '';
+                emojiAmountInput.value = '';
+                emojiToSendInput.value = '';
+            }, 1500); // 1.5 seconds for animation and "transaction"
+        });
+
+        // --- Team Profile Picture Dynamic Emoji ---
+        const profileEmoji = document.getElementById('profile-emoji');
+        const teamEmojis = ['😎', '💡', '🚀', '🧠', '🌟', '👑', '👨‍💻'];
+        let currentTeamEmojiIndex = 0;
+
+        setInterval(() => {
+            currentTeamEmojiIndex = (currentTeamEmojiIndex + 1) % teamEmojis.length;
+            profileEmoji.textContent = teamEmojis[currentTeamEmojiIndex];
+        }, 2000); // Change emoji every 2 seconds
+
+        // --- Staking Pool Simulation ---
+        let stakedAmount = 0;
+        let estimatedEarnings = 0;
+        const stakingAPY = 0.0001; // 0.01% per second for simulation
+        let stakingInterval;
+
+        const stakedAmountDisplay = document.getElementById('stakedAmount');
+        const estimatedEarningsDisplay = document.getElementById('estimatedEarnings');
+        const stakeInput = document.getElementById('stakeInput');
+        const stakeBtn = document.getElementById('stakeBtn');
+        const claimBtn = document.getElementById('claimBtn');
+        const stakingStatus = document.getElementById('stakingStatus');
+
+        function updateStakingDisplay() {
+            stakedAmountDisplay.textContent = `${stakedAmount.toFixed(2)} $EMOJI`;
+            estimatedEarningsDisplay.textContent = `${estimatedEarnings.toFixed(2)} $EMOJI`;
         }
 
-        /**
-         * Updates the score display on the top bar.
-         */
-        function updateScoreDisplay() {
-            flappyScoreCounter.textContent = window.score;
-            playerIcon.style.backgroundImage = `url('${PLAYER_SPRITE_SHEET_URL}')`;
-            playerIcon.style.backgroundPosition = `0 0`; 
+        function startStakingEarnings() {
+            if (stakingInterval) clearInterval(stakingInterval); // Clear any existing interval
+            stakingInterval = setInterval(() => {
+                estimatedEarnings += stakedAmount * stakingAPY;
+                updateStakingDisplay();
+            }, 1000); // Update every second
         }
 
-        /**
-         * The main game loop.
-         */
-        function gameLoop() {
-            try {
-                if (window.gameOver) { 
-                    cancelAnimationFrame(window.animationFrameId); 
+        stakeBtn.addEventListener('click', () => {
+            const amountToStake = parseFloat(stakeInput.value);
+            if (isNaN(amountToStake) || amountToStake <= 0) {
+                stakingStatus.textContent = 'Please enter a valid amount to stake! ⚠️';
+                stakingStatus.style.color = '#EF4444';
+                return;
+            }
+            stakedAmount += amountToStake;
+            stakingStatus.textContent = `${amountToStake} $EMOJI staked successfully! 🎉`;
+            stakingStatus.style.color = '#10B981';
+            stakeInput.value = '';
+            updateStakingDisplay();
+            startStakingEarnings(); // Start/restart earnings calculation
+        });
+
+        claimBtn.addEventListener('click', () => {
+            if (estimatedEarnings <= 0) {
+                stakingStatus.textContent = 'No earnings to claim yet! ⏳';
+                stakingStatus.style.color = '#F59E0B';
+                return;
+            }
+            // In a real scenario, earnings would be transferred to wallet
+            stakedAmount += estimatedEarnings; // Add earnings to staked amount for simplicity
+            stakingStatus.textContent = `${estimatedEarnings.toFixed(2)} $EMOJI claimed successfully! 🎁`;
+            stakingStatus.style.color = '#10B981';
+            estimatedEarnings = 0; // Reset earnings
+            updateStakingDisplay();
+        });
+
+        updateStakingDisplay(); // Initial display
+
+        // --- Emoji Chat Simulation ---
+        let chatWalletBalance = 1000; // Simulated $EMOJI balance
+        const emojiMessageCost = 10; // Cost per emoji message
+        const chatWalletBalanceDisplay = document.getElementById('chatWalletBalance');
+        const chatBox = document.getElementById('chatBox');
+        const emojiChatInput = document.getElementById('emojiChatInput');
+        const sendChatEmojiBtn = document.getElementById('sendChatEmojiBtn');
+        const chatStatus = document.getElementById('chatStatus');
+
+        function updateChatWalletDisplay() {
+            chatWalletBalanceDisplay.textContent = `${chatWalletBalance} $EMOJI`;
+        }
+
+        sendChatEmojiBtn.addEventListener('click', () => {
+            const emoji = emojiChatInput.value.trim();
+            if (!emoji || emoji.length > 2) { // Max length 2 for a single emoji
+                chatStatus.textContent = 'Please enter a single emoji! 😅';
+                chatStatus.style.color = '#EF4444';
+                return;
+            }
+
+            if (chatWalletBalance < emojiMessageCost) {
+                chatStatus.textContent = 'Not enough $EMOJI to send! 💸';
+                chatStatus.style.color = '#EF4444';
+                return;
+            }
+
+            chatWalletBalance -= emojiMessageCost;
+            updateChatWalletDisplay();
+
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message', 'self');
+            messageDiv.textContent = emoji;
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+
+            chatStatus.textContent = `Emoji sent! Cost: ${emojiMessageCost} $EMOJI. 🎉`;
+            chatStatus.style.color = '#10B981';
+            emojiChatInput.value = '';
+
+            // Simulate a response from another user
+            setTimeout(() => {
+                const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                const responseDiv = document.createElement('div');
+                responseDiv.classList.add('chat-message');
+                responseDiv.textContent = randomEmoji;
+                chatBox.appendChild(responseDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+        });
+
+        updateChatWalletDisplay(); // Initial chat wallet display
+
+        // --- NFT Minting Simulation ---
+        const nftEmojiInput = document.getElementById('nftEmojiInput');
+        const mintNftBtn = document.getElementById('mintNftBtn');
+        const mintedNftDisplay = document.getElementById('mintedNftDisplay');
+        const nftMintStatus = document.getElementById('nftMintStatus');
+        const nftMintCost = 50; // Cost to mint an NFT
+
+        mintNftBtn.addEventListener('click', () => {
+            const emojiToMint = nftEmojiInput.value.trim();
+            if (!emojiToMint || emojiToMint.length > 2) {
+                nftMintStatus.textContent = 'Please enter a single emoji to mint! 🖼️';
+                nftMintStatus.style.color = '#EF4444';
+                return;
+            }
+
+            // For simplicity, using the same chatWalletBalance for NFT minting simulation
+            if (chatWalletBalance < nftMintCost) {
+                nftMintStatus.textContent = 'Not enough $EMOJI to mint this NFT! 💸';
+                nftMintStatus.style.color = '#EF4444';
+                return;
+            }
+
+            chatWalletBalance -= nftMintCost;
+            updateChatWalletDisplay();
+
+            mintedNftDisplay.textContent = emojiToMint; // Display the minted emoji
+            nftMintStatus.textContent = `Congratulations! Your ${emojiToMint} NFT has been minted! Cost: ${nftMintCost} $EMOJI. 🎉`;
+            nftMintStatus.style.color = '#10B981';
+            nftEmojiInput.value = '';
+        });
+
+        // --- Tipping Bot Live Test Simulation ---
+        const tippingEmojiInput = document.getElementById('tippingEmojiInput');
+        const sendTipBtn = document.getElementById('sendTipBtn');
+        const tippingBotChatBox = document.getElementById('tippingBotChatBox');
+        const tippingStatus = document.getElementById('tippingStatus');
+
+        sendTipBtn.addEventListener('click', () => {
+            const userEmojis = tippingEmojiInput.value.trim();
+            if (!userEmojis) {
+                tippingStatus.textContent = 'Please send some emojis to tip! 😅';
+                tippingStatus.style.color = '#EF4444';
+                return;
+            }
+
+            const emojiArray = Array.from(userEmojis); // Handles multi-byte emojis correctly
+            if (emojiArray.length > 5) {
+                tippingStatus.textContent = 'Maximum 5 emojis allowed per tip! 📏';
+                tippingStatus.style.color = '#EF4444';
+                return;
+            }
+
+            const tipAmount = emojiArray.length * 10; // 10 $EMOJI per emoji
+            const botResponseDelay = 1500; // 1.5 seconds
+
+            // User's message
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.classList.add('tipping-bot-message', 'user');
+            userMessageDiv.textContent = userEmojis;
+            tippingBotChatBox.appendChild(userMessageDiv);
+            tippingBotChatBox.scrollTop = tippingBotChatBox.scrollHeight;
+            tippingEmojiInput.value = ''; // Clear input
+
+            tippingStatus.textContent = `Sending your tip... ⏳`;
+            tippingStatus.style.color = '#2563EB';
+
+            // Simulate bot's response
+            setTimeout(() => {
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.classList.add('tipping-bot-message');
+                botMessageDiv.textContent = `🤖: Tip received! You sent ${emojiArray.length} emojis, which is ${tipAmount} $EMOJI! Transaction confirmed! ✅`;
+                tippingBotChatBox.appendChild(botMessageDiv);
+                tippingBotChatBox.scrollTop = tippingBotChatBox.scrollHeight;
+
+                tippingStatus.textContent = `Tip successful! ${tipAmount} $EMOJI tipped! 🎉`;
+                tippingStatus.style.color = '#10B981';
+            }, botResponseDelay);
+        });
+
+        // --- Emoji Video Creator Logic ---
+        const videoEmojisInput = document.getElementById('videoEmojisInput');
+        const emojiDurationInput = document.getElementById('emojiDurationInput');
+        const createVideoBtn = document.getElementById('createVideoBtn');
+        const playVideoBtn = document.getElementById('playVideoBtn');
+        const stopVideoBtn = document.getElementById('stopVideoBtn');
+        const emojiVideoCanvas = document.getElementById('emojiVideoCanvas');
+        const videoStatus = document.getElementById('videoStatus');
+        const ctx = emojiVideoCanvas.getContext('2d');
+
+        let videoEmojis = [];
+        let currentVideoEmojiIndex = 0;
+        let animationFrameId;
+        let lastFrameTime;
+        let timeElapsedSinceLastEmoji = 0;
+        let currentEmojiScale = 1;
+        let currentEmojiOpacity = 0;
+
+        // Function to set canvas size responsively
+        function resizeCanvas() {
+            const containerWidth = emojiVideoCanvas.parentElement.offsetWidth;
+            emojiVideoCanvas.width = containerWidth > 600 ? 600 : containerWidth;
+            emojiVideoCanvas.height = emojiVideoCanvas.width * (300 / 600); // Maintain aspect ratio
+            drawCurrentEmoji(); // Redraw if resized while playing
+        }
+
+        // Initial resize and on window resize
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+
+        function drawCurrentEmoji() {
+            ctx.clearRect(0, 0, emojiVideoCanvas.width, emojiVideoCanvas.height); // Clear canvas
+
+            if (videoEmojis.length === 0) {
+                ctx.fillStyle = '#333';
+                ctx.font = '3rem Inter';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Enter Emojis Above! 🎬', emojiVideoCanvas.width / 2, emojiVideoCanvas.height / 2);
+                return;
+            }
+
+            const emoji = videoEmojis[currentVideoEmojiIndex];
+            const fontSize = emojiVideoCanvas.width * 0.2; // Responsive font size
+            ctx.font = `${fontSize}px Inter`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Apply animation effects
+            ctx.save();
+            ctx.globalAlpha = currentEmojiOpacity;
+            ctx.translate(emojiVideoCanvas.width / 2, emojiVideoCanvas.height / 2);
+            ctx.scale(currentEmojiScale, currentEmojiScale);
+            ctx.fillText(emoji, 0, 0);
+            ctx.restore();
+        }
+
+        function animateVideo(timestamp) {
+            if (!lastFrameTime) lastFrameTime = timestamp;
+            const deltaTime = timestamp - lastFrameTime;
+            lastFrameTime = timestamp;
+            timeElapsedSinceLastEmoji += deltaTime;
+
+            const durationPerEmojiMs = parseFloat(emojiDurationInput.value) * 1000;
+
+            // Update animation properties for current emoji (fade in/out, scale)
+            const transitionProgress = timeElapsedSinceLastEmoji / durationPerEmojiMs;
+            if (transitionProgress < 0.5) { // Fade in and grow
+                currentEmojiOpacity = transitionProgress * 2;
+                currentEmojiScale = 0.8 + (transitionProgress * 0.4); // From 0.8 to 1.2
+            } else { // Fade out and shrink
+                currentEmojiOpacity = 1 - ((transitionProgress - 0.5) * 2);
+                currentEmojiScale = 1.2 - ((transitionProgress - 0.5) * 0.4); // From 1.2 to 1.0
+            }
+            currentEmojiOpacity = Math.max(0, Math.min(1, currentEmojiOpacity)); // Clamp between 0 and 1
+            currentEmojiScale = Math.max(0.5, Math.min(1.5, currentEmojiScale)); // Clamp scale
+
+            drawCurrentEmoji();
+
+            if (timeElapsedSinceLastEmoji >= durationPerEmojiMs) {
+                timeElapsedSinceLastEmoji = 0;
+                currentVideoEmojiIndex = (currentVideoEmojiIndex + 1) % videoEmojis.length;
+                if (currentVideoEmojiIndex === 0 && !playVideoBtn.dataset.looping) { // Stop if not looping and finished
+                    stopVideo();
+                    videoStatus.textContent = 'Video finished! 🎬';
                     return;
                 }
-
-                window.marketCap += (MARKET_CAP_PER_BASE_CANDLE_WIDTH / currentConfig.CANDLE_WIDTH_BASE) * window.currentObstacleSpeed; 
-                marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
-
-                // Check if market cap has increased enough to boost speed
-                if (window.marketCap >= window.lastMarketCapSpeedMilestone + currentConfig.SPEED_INCREASE_MILESTONE_MC_INCREMENT) { 
-                    window.currentObstacleSpeed += 0.3; 
-                    window.lastMarketCapSpeedMilestone += currentConfig.SPEED_INCREASE_MILESTONE_MC_INCREMENT; 
-                    console.log(`Speed increased to ${window.currentObstacleSpeed.toFixed(2)}. Next speed milestone at MC: ${formatCurrency(window.lastMarketCapSpeedMilestone + currentConfig.SPEED_INCREASE_MILESTONE_MC_INCREMENT)}`);
-                    showSpeedUpMessage(); // Show the speed up animation
-                }
-
-                updatePlayer();
-                updateObstaclesAndItems();
-                checkCollisions();
-
-                window.animationFrameId = requestAnimationFrame(gameLoop); 
-            } catch (error) {
-                console.error("Error in gameLoop:", error);
-                // Optionally end game or show an error message to the user
-                if (!window.gameOver) {
-                    alert("A game error occurred. Please check the console for details. Ending game.");
-                    endGame();
-                }
             }
+            animationFrameId = requestAnimationFrame(animateVideo);
         }
 
-        /**
-         * Initiates the 'flap' action. Includes audio cooldown.
-         */
-        function flap() {
-            if (flapSynth && Tone.context.state === 'running' && (Date.now() - window.lastFlapSoundTime >= FLAP_SOUND_COOLDOWN)) { 
-                flapSynth.triggerAttackRelease("C4", "8n"); 
-                window.lastFlapSoundTime = Date.now(); 
+        function playVideo() {
+            if (videoEmojis.length === 0) {
+                videoStatus.textContent = 'Please create a video first! 😅';
+                videoStatus.style.color = '#EF4444';
+                return;
             }
-            
-            // Only flap if the game has started
-            if (window.gameStarted && !window.gameOver) { 
-                window.playerVelocity = PLAYER_FLAP_STRENGTH; 
-            }
-            if (Tone.context.state === 'suspended') {
-                 Tone.start().then(() => {
-                 }).catch(e => console.error("Failed to resume Tone.context on flap:", e));
-            }
+            if (animationFrameId) cancelAnimationFrame(animationFrameId); // Stop any existing animation
+            currentVideoEmojiIndex = 0; // Start from the beginning
+            timeElapsedSinceLastEmoji = 0;
+            lastFrameTime = undefined; // Reset time for smooth start
+            currentEmojiScale = 0.8; // Start scale for fade-in
+            currentEmojiOpacity = 0; // Start opacity for fade-in
+
+            playVideoBtn.disabled = true;
+            stopVideoBtn.disabled = false;
+            createVideoBtn.disabled = true;
+            videoEmojisInput.disabled = true;
+            emojiDurationInput.disabled = true;
+
+            videoStatus.textContent = 'Playing your emoji video... ▶️';
+            videoStatus.style.color = '#10B981';
+            animationFrameId = requestAnimationFrame(animateVideo);
         }
 
-        /**
-         * Resets game state and starts the game.
-         */
-        function startGame() {
-            if (window.isStartingGame && window.gameStarted) { 
-                return; 
-            }
-
-            window.isStartingGame = true; 
-            window.gameStarted = true; 
-            window.gameOver = false; 
-            window.score = 0; 
-            updateScoreDisplay(); 
-            window.marketCap = INITIAL_MARKET_CAP; 
-            window.lastMarketCapSpeedMilestone = INITIAL_MARKET_CAP; // Reset milestone on new game
-            marketCapDisplay.textContent = `MC: ${formatCurrency(window.marketCap)}`; 
-            
-            calculateGameDimensions(); // Recalculate dimensions based on currentConfig
-
-            // Reset lastGapY when starting a new game for consistent initial obstacle placement
-            window.lastGapY = GAME_HEIGHT / 2; // Center of screen for first gap
-
-            window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
-            player.style.top = `${window.playerY}px`; 
-            player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
-
-            window.playerVelocity = 0; 
-
-            deactivateShield();
-            powerupStatusDisplay.style.display = 'none';
-
-            window.obstacles.forEach(o => { 
-                if (gameContainer.contains(o.greenElement)) gameContainer.removeChild(o.greenElement); 
-                if (gameContainer.contains(o.redElement)) gameContainer.removeChild(o.redElement); 
-            });
-            window.obstacles = []; 
-            window.items.forEach(item => { 
-                if (gameContainer.contains(item.element)) gameContainer.removeChild(item.element);
-            });
-            window.items = []; 
-
-            messageBox.style.display = 'none'; 
-            deviceSelectionModal.style.display = 'none'; // Hide device selection
-            leaderboardModal.style.display = 'none'; 
-            profileModal.style.display = 'none'; 
-            particleCanvas.style.display = 'none'; 
-            if (particleAnimationFrameId) cancelAnimationFrame(particleAnimationFrameId); 
-
-            // Hide PROFILE and LOGOUT buttons during game
-            userInfoDisplay.classList.add('in-game');
-            userInfoDisplay.classList.add('in-game-over'); 
-
-            window.lastObstacleTime = Date.now(); 
-            
-            initAudio().then(() => { 
-                gameLoop(); 
-                startSpriteAnimation();
-                window.isStartingGame = false; 
-            }).catch(e => {
-                console.error("Failed to ensure audio started on game start:", e);
-                window.isStartingGame = false; 
-            });
+        function stopVideo() {
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+            playVideoBtn.disabled = false;
+            stopVideoBtn.disabled = true;
+            createVideoBtn.disabled = false;
+            videoEmojisInput.disabled = false;
+            emojiDurationInput.disabled = false;
+            videoStatus.textContent = 'Video stopped. ⏹️';
+            videoStatus.style.color = '#F59E0B';
+            drawCurrentEmoji(); // Draw the last frame or initial state
         }
 
-        /**
-         * Ends the game and displays game over message.
-         */
-        async function endGame() {
-            if (window.gameOver) { 
-                return; 
+        createVideoBtn.addEventListener('click', () => {
+            const inputEmojis = videoEmojisInput.value.trim();
+            if (!inputEmojis) {
+                videoStatus.textContent = 'Please enter some emojis! 🎬';
+                videoStatus.style.color = '#EF4444';
+                return;
             }
-
-            window.gameOver = true; 
-            window.gameStarted = false; 
-            cancelAnimationFrame(window.animationFrameId); 
-            stopSpriteAnimation();
-            deactivateShield();
-
-            if (flapSynth) { 
-                flapSynth.dispose(); 
-                flapSynth = null; 
-            }
-
-            const finalCombinedScore = calculateCombinedFinalScore(window.score, window.marketCap); 
-            
-            messageTitle.textContent = "💀 𝗚�𝗠𝗘 𝗢𝗩𝗘𝗥!"; 
-            messageText.innerHTML = `
-                🪙 Your $FLAPPY: ${window.score}<br>
-                📊 Final Market Cap: ${formatCurrency(window.marketCap)}<br><br>
-                💥 Combined Score: <b>${finalCombinedScore.toFixed(0)}</b><br>
-            `;
-            
-            // Save high score to Supabase if logged in
-            if (isLoggedIn && currentUser && currentUser.id) {
-                showLoading("Saving high score...");
-                const roundedMarketCap = Math.round(window.marketCap); 
-                const formattedCombinedScore = finalCombinedScore.toFixed(0);
-
-                // 1. Fetch existing high score for the user
-                const { data: existingHighScore, error: fetchError } = await supabase
-                    .from('high_scores') // Query the new high_scores table
-                    .select('combined_score')
-                    .eq('user_id', currentUser.id)
-                    .single();
-
-                if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 means no row found
-                    console.error("Error fetching existing high score:", fetchError);
-                    messageText.innerHTML += `<br><span style="color:red;">Error checking high score: ${fetchError.message}</span>`;
-                } else {
-                    // 2. Compare and decide whether to upsert
-                    let shouldSaveNewScore = false;
-                    if (!existingHighScore) {
-                        shouldSaveNewScore = true; // No existing high score, so save this one
-                        console.log("No existing high score found, will save new one.");
-                    } else if (parseInt(formattedCombinedScore) > existingHighScore.combined_score) {
-                        shouldSaveNewScore = true; // New score is higher, so save it
-                        console.log(`New score ${formattedCombinedScore} is higher than existing ${existingHighScore.combined_score}, will update.`);
-                    } else {
-                        console.log(`New score ${formattedCombinedScore} is not higher than existing ${existingHighScore.combined_score}, will not save.`);
-                    }
-
-                    if (shouldSaveNewScore) {
-                        const { error: upsertError } = await supabase
-                            .from('high_scores') // Upsert into high_scores table
-                            .upsert([
-                                { 
-                                    user_id: currentUser.id, 
-                                    score: window.score, 
-                                    market_cap: roundedMarketCap, 
-                                    combined_score: formattedCombinedScore 
-                                }
-                            ], { onConflict: 'user_id' }); // Use user_id for conflict resolution
-
-                        if (upsertError) {
-                            console.error("Error saving high score:", upsertError);
-                            messageText.innerHTML += `<br><span style="color:red;">Error saving high score: ${upsertError.message}</span>`;
-                        } else {
-                            messageText.innerHTML += `<br><span style="color:lime;">High Score saved!</span>`;
-                            await displayLeaderboard(); // Refresh leaderboard after a successful save
-                        }
-                    } else {
-                         messageText.innerHTML += `<br><span style="color:orange;">Your score (${formattedCombinedScore}) was not a new high score.</span>`;
-                         await displayLeaderboard(); // Still refresh just in case
-                    }
-                }
-                hideLoading();
-            } else {
-                messageText.innerHTML += `<br>Sign in to save your score and appear on the leaderboard!`;
-            }
-
-            signInEmailLinkButton.textContent = "📧 SIGN IN"; 
-            startButton.textContent = "🕹️ PLAY AGAIN"; 
-            leaderboardButton.textContent = "🏆 LEADERBOARD"; 
-            backToWelcomeButton.textContent = "🔙 BACK TO WELCOME"; 
-
-            showWelcomeScreen(true); // Call updated function
-        }
-
-        /**
-         * Fetches user profile from Supabase.
-         * @param {string} userId - The ID of the user.
-         * @returns {Promise<object|null>} The user's profile data or null if not found/error.
-         */
-        async function fetchUserProfile(userId) {
-            showLoading("Fetching profile...");
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', userId)
-                .single();
-            hideLoading();
-            if (error && error.code !== 'PGRST116') { // PGRST116 means no row found, which is fine
-                console.error("Error fetching profile:", error);
-                return null;
-            }
-            return data;
-        }
-
-        /**
-         * Upserts user profile in Supabase.
-         * @param {object} profileData - Data to insert/update.
-         */
-        async function upsertUserProfile(profileData) {
-            showLoading("Updating profile...");
-            const { error } = await supabase
-                .from('profiles')
-                .upsert(profileData, { onConflict: 'id' });
-            hideLoading();
-            if (error) {
-                console.error("Error upserting profile:", error);
-                alert("Error updating profile: " + error.message);
-                return false;
-            }
-            return true;
-        }
-
-        /**
-         * Updates the user's X (Twitter) account name.
-         * @param {string} xAccountName - The new X account name.
-         */
-        async function updateXAccountName(xAccountName) {
-            if (!currentUser) {
-                alert("You must be logged in to update your X account name.");
+            videoEmojis = Array.from(inputEmojis); // Correctly handles multi-byte emojis
+            if (videoEmojis.length === 0) {
+                videoStatus.textContent = 'No valid emojis detected! 🧐';
+                videoStatus.style.color = '#EF4444';
                 return;
             }
 
-            showLoading("Updating X handle...");
-            // Supabase auth.updateUser can directly update 'user_metadata'
-            const { data: updatedUser, error: updateError } = await supabase.auth.updateUser({
-                data: { x_account_name: xAccountName }
-            });
-            hideLoading();
-
-            if (updateError) {
-                console.error("Error updating user metadata:", updateError);
-                alert("Error updating X handle: " + updateError.message);
-                return;
-            }
-
-            // Also update the public profiles table for leaderboard display
-            const success = await upsertUserProfile({ 
-                id: currentUser.id, 
-                email: currentUser.email, // Keep email updated in profiles table
-                x_account_name: xAccountName 
-            });
-
-            if (success) {
-                currentProfile = { ...currentProfile, x_account_name: xAccountName };
-                profileXAccountDisplay.textContent = `X Handle: ${xAccountName}`;
-                updateAuthUI(); // Refresh UI after update
-                alert("X (Twitter) handle updated successfully!");
-            }
-        }
-
-        /**
-         * Formats the player's name for display on the leaderboard.
-         * Prioritizes X handle, otherwise masks email.
-         * @param {object} profile - The user's profile object.
-         * @returns {string} Formatted player name.
-         */
-        function formatPlayerName(profile) {
-            if (profile && profile.x_account_name) {
-                return profile.x_account_name;
-            }
-            if (profile && profile.email) {
-                const parts = profile.email.split('@');
-                if (parts.length === 2) {
-                    const localPart = parts[0];
-                    const domainPart = parts[1];
-                    const maskedLocal = localPart.substring(0, Math.min(3, localPart.length)) + '***';
-                    return `${maskedLocal}@${domainPart}`;
-                }
-            }
-            return 'Unknown Player';
-        }
-
-        /**
-         * Fetches and displays the leaderboard.
-         */
-        async function displayLeaderboard() {
-            showLoading("Fetching leaderboard...");
-            const { data, error } = await supabase
-                .from('high_scores') // Query the high_scores table
-                .select(`
-                    combined_score,
-                    score,        
-                    market_cap,   
-                    profiles (
-                        x_account_name,
-                        email,
-                        id
-                    )
-                `)
-                .order('combined_score', { ascending: false })
-                .limit(10); // Still showing top 10, will highlight top 3 visually
-            hideLoading();
-
-            if (error) {
-                console.error("Error fetching leaderboard:", error);
-                leaderboardTableBody.innerHTML = `<tr><td colspan="5">Error loading leaderboard: ${error.message}</td></tr>`;
-                return;
-            }
-
-            leaderboardTableBody.innerHTML = ''; // Clear previous list
-
-            if (data.length === 0) {
-                leaderboardTableBody.innerHTML = '<tr><td colspan="5">No scores yet! Be the first to play.</td></tr>';
-                return;
-            }
-
-            data.forEach((entry, index) => {
-                const tr = document.createElement('tr');
-                const rank = index + 1;
-                const username = formatPlayerName(entry.profiles);
-                
-                tr.innerHTML = `
-                    <td>#${rank}</td>
-                    <td>${username}</td>
-                    <td>${entry.score}</td>
-                    <td>${formatCurrency(entry.market_cap)}</td>
-                    <td class="glowing-score">${entry.combined_score}</td>
-                `;
-                if (currentUser && entry.profiles && entry.profiles.id === currentUser.id) { 
-                    tr.classList.add('current-user');
-                }
-                if (rank <= 3) {
-                    tr.classList.add('top-3');
-                }
-                leaderboardTableBody.appendChild(tr);
-            });
-            leaderboardModal.style.display = 'flex';
-        }
-
-        /**
-         * Calculates and displays the current user's rank.
-         */
-        async function displayUserRank() {
-            if (!currentUser) {
-                profileRankDisplay.textContent = 'Rank: N/A (Sign in to see)';
-                return;
-            }
-
-            showLoading("Calculating rank...");
-            // Get the user's highest score
-            const { data: userScores, error: userScoresError } = await supabase
-                .from('high_scores') // Query high_scores for user's best
-                .select('combined_score')
-                .eq('user_id', currentUser.id)
-                .order('combined_score', { ascending: false })
-                .limit(1)
-                .single();
-            
-            if (userScoresError && userScoresError.code !== 'PGRST116') {
-                console.error("Error fetching user's highest score:", userScoresError);
-                profileRankDisplay.textContent = 'Rank: Error loading';
-                hideLoading();
-                return;
-            }
-
-            if (!userScores) {
-                profileRankDisplay.textContent = 'Rank: No scores yet';
-                hideLoading();
-                return;
-            }
-
-            const userHighestScore = userScores.combined_score;
-
-            // Count how many scores are greater than or equal to the user's score from high_scores
-            const { count, error: countError } = await supabase
-                .from('high_scores')
-                .select('id', { count: 'exact' })
-                .gte('combined_score', userHighestScore); 
-
-            hideLoading();
-
-            if (countError) {
-                console.error("Error counting scores for rank:", countError);
-                profileRankDisplay.textContent = 'Rank: Error loading';
-                return;
-            }
-
-            // The rank is the count of scores that are equal to or higher than the user's score
-            profileRankDisplay.textContent = `Rank: ${count}`;
-        }
-
-
-        /**
-         * Handles the sign-in with email magic link process.
-         */
-        async function handleSignInWithEmailLink() {
-            const email = emailInput.value.trim();
-            if (!email) {
-                alert("Please enter your email address.");
-                return;
-            }
-
-            showLoading("Sending magic link...");
-            const { error } = await supabase.auth.signInWithOtp({
-                email: email,
-                options: {
-                    emailRedirectTo: window.location.origin // Redirect back to this page
-                }
-            });
-            hideLoading();
-
-            if (error) {
-                console.error("Error sending magic link:", error);
-                alert("Error sending magic link: " + error.message);
-            } else {
-                alert("Magic link sent to your email! Check your inbox to sign in.");
-                messageText.textContent = `Magic link sent to ${email}. Check your inbox!`;
-                emailInput.value = ''; // Clear input
-                emailInput.classList.add('hidden');
-                xAccountNameInput.classList.add('hidden');
-                authButtonsDiv.classList.add('hidden');
-                startButton.classList.remove('hidden'); // Allow playing as guest
-                leaderboardButton.classList.remove('hidden');
-                startButton.textContent = "🕹️ START GAME (GUEST)";
-            }
-        }
-
-        /**
-         * Verifies the email magic link upon redirect.
-         * This function should be called explicitly on page load if the URL contains magic link parameters.
-         */
-        async function verifyEmailLink() {
-            showLoading("Verifying magic link...");
-            // supabase.auth.getSession() automatically parses the URL for magic link tokens
-            const { data, error } = await supabase.auth.getSession();
-            hideLoading();
-            if (error) {
-                console.error("Error verifying session from magic link:", error);
-                // Even on error, onAuthStateChange will eventually be called with a null session
-            } else if (data.session) {
-                console.log("Session established after magic link:", data.session);
-                // onAuthStateChange will handle updating UI and state
-            }
-        }
-
-        /**
-         * Handles user logout.
-         */
-        async function handleLogout() {
-            showLoading("Logging out...");
-            const { error } = await supabase.auth.signOut();
-            hideLoading();
-            if (error) {
-                console.error("Error logging out:", error);
-                alert("Error logging out: " + error.message);
-            } else {
-                currentUser = null;
-                isLoggedIn = false;
-                currentProfile = null;
-                updateAuthUI();
-                // After logout, always show the device selection if no preference is explicitly saved
-                const preferredDevice = localStorage.getItem('cryptoFlapDevice');
-                if (!preferredDevice) { // If no preference, show device selection
-                    showDeviceSelection(); 
-                } else { // If a preference exists, go to welcome with that preference
-                    showWelcomeScreen(false); 
-                }
-                alert("Logged out successfully!");
-            }
-        }
-
-        /**
-         * Updates the visibility and content of UI elements based on authentication state.
-         */
-        function updateAuthUI() {
-            if (isLoggedIn && currentUser) {
-                userNameDisplay.textContent = formatPlayerName(currentProfile);
-                userInfoDisplay.style.display = 'flex'; // Ensure user info is shown when logged in
-                profileButton.style.display = 'inline-block';
-                deviceButton.style.display = 'inline-block'; // Show device button
-                logoutButton.style.display = 'inline-block';
-                signInEmailLinkButton.classList.add('hidden'); 
-                registerButton.classList.add('hidden');
-                startButton.textContent = "🕹️ START GAME"; 
-                emailInput.classList.add('hidden');
-                xAccountNameInput.classList.add('hidden');
-                authButtonsDiv.classList.add('hidden');
-
-                profileEmailDisplay.textContent = `Email: ${currentUser.email}`;
-                profileXAccountDisplay.textContent = `X Handle: ${currentProfile ? (currentProfile.x_account_name || 'Not set') : 'Not set'}`;
-                profileXAccountNameInput.value = currentProfile && currentProfile.x_account_name ? currentProfile.x_account_name : '';
-                profileSignInEmailLinkButton.classList.add('hidden'); // Hide in profile if logged in
-                profileLogoutButton.classList.remove('hidden'); // Show in profile if logged in
-
-            } else {
-                userNameDisplay.textContent = 'Guest';
-                userInfoDisplay.style.display = 'none'; // Ensure user info is hidden when logged out unless on welcome screen
-                profileButton.style.display = 'none';
-                deviceButton.style.display = 'none'; // Hide device button
-                logoutButton.style.display = 'none';
-                signInEmailLinkButton.classList.remove('hidden'); 
-                registerButton.classList.add('hidden'); 
-                startButton.textContent = "🕹️ START GAME (GUEST)";
-                emailInput.classList.remove('hidden');
-                xAccountNameInput.classList.remove('hidden');
-                authButtonsDiv.classList.remove('hidden');
-
-                profileEmailDisplay.textContent = 'Email: Not logged in';
-                profileXAccountDisplay.textContent = 'X Handle: Not set';
-                profileXAccountNameInput.value = '';
-                profileSignInEmailLinkButton.classList.remove('hidden'); // Show in profile if logged out
-                profileLogoutButton.classList.add('hidden'); // Hide in profile if logged out
-                profileRankDisplay.textContent = 'Rank: Not available'; // Reset rank
-            }
-        }
-
-        /**
-         * Shows the main welcome/auth screen.
-         * @param {boolean} isGameOver - True if showing after game over.
-         */
-        function showWelcomeScreen(isGameOver = false) { 
-            deviceSelectionModal.style.display = 'none'; // Ensure device selection is hidden
-            messageBox.style.display = 'block'; 
-            particleCanvas.style.display = 'block'; 
-            if (!particleAnimationFrameId) { 
-                createParticles(); 
-                particleAnimationLoop(); 
-            }
-            
-            if (isGameOver) {
-                userInfoDisplay.classList.add('in-game-over'); 
-                userInfoDisplay.classList.remove('in-game'); 
-                backToWelcomeButton.classList.remove('hidden'); 
-            } else {
-                userInfoDisplay.classList.remove('in-game'); 
-                userInfoDisplay.classList.remove('in-game-over'); 
-                // Only show userInfoDisplay if user is logged in, otherwise it's handled by showAuthScreen/showDeviceSelection
-                if (isLoggedIn) {
-                    userInfoDisplay.style.display = 'flex'; 
-                } else {
-                    userInfoDisplay.style.display = 'none'; // Keep hidden on welcome for guests initially
-                }
-                backToWelcomeButton.classList.add('hidden'); 
-            }
-
-            startButton.classList.remove('hidden');
-            leaderboardButton.classList.remove('hidden');
-
-            xAccountNameInput.classList.add('hidden');
-
-            if (!isLoggedIn) {
-                emailInput.classList.remove('hidden');
-                authButtonsDiv.classList.remove('hidden');
-                signInEmailLinkButton.classList.remove('hidden');
-                registerButton.classList.add('hidden'); 
-            } else {
-                emailInput.classList.add('hidden');
-                authButtonsDiv.classList.add('hidden');
-                signInEmailLinkButton.classList.add('hidden');
-                registerButton.classList.add('hidden');
-            }
-
-            if (!isGameOver) {
-                messageTitle.textContent = "🚀 Welcome to 𝗖𝗥𝗬𝗣𝗧𝗢 𝗙𝗟𝗔𝗣!"; 
-                messageText.innerHTML = "⛏️ Flap through green candles, dodge the red ones.<br>💸 Stack up your $FLAPPY and fly to crypto glory!<br><br>Sign in to save your scores!"; 
-            } 
-        }
-
-        /**
-         * Shows the initial device selection modal.
-         */
-        function showDeviceSelection() {
-            deviceSelectionModal.style.display = 'flex';
-            messageBox.style.display = 'none';
-            leaderboardModal.style.display = 'none';
-            profileModal.style.display = 'none';
-            // Show userInfo if logged in and accessing via device button
-            if (isLoggedIn) { 
-                userInfoDisplay.style.display = 'flex'; 
-            } else {
-                userInfoDisplay.style.display = 'none'; 
-            }
-            
-            particleCanvas.style.display = 'block'; 
-            if (!particleAnimationFrameId) { 
-                createParticles(); 
-                particleAnimationLoop(); 
-            }
-        }
-
-        /**
-         * Sets the current game configuration based on the selected device.
-         * @param {string} deviceType - 'laptop', 'smallMobile', or 'largeMobile'.
-         */
-        function setDeviceConfig(deviceType) {
-            switch (deviceType) {
-                case 'laptop':
-                    currentConfig = laptopConfig;
-                    break;
-                case 'smallMobile':
-                    currentConfig = smallMobileConfig;
-                    break;
-                case 'largeMobile':
-                    currentConfig = largeMobileConfig;
-                    break;
-                default:
-                    console.warn("Unknown device type, defaulting to laptop config.");
-                    currentConfig = laptopConfig;
-            }
-            localStorage.setItem('cryptoFlapDevice', deviceType);
-            calculateGameDimensions(); // Apply the new configuration
-            console.log(`Device config set to ${deviceType} (via selection or auto-detect)`);
-        }
-
-
-        // --- Event Listeners ---
-
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space') {
-                e.preventDefault();
-                // Allow flap only if not in a modal and not already in game
-                // AND the message box is NOT visible (meaning game is active OR about to start from Start button)
-                if (window.gameStarted && !window.gameOver) { 
-                    flap(); 
-                }
-            }
+            stopVideo(); // Stop any current playback
+            videoStatus.textContent = `Video created with ${videoEmojis.length} emojis! Ready to play. 🎉`;
+            videoStatus.style.color = '#2563EB';
+            playVideoBtn.disabled = false;
+            drawCurrentEmoji(); // Show the first emoji
         });
 
-        gameContainer.addEventListener('click', async (e) => {
-            // Check if the click target is a button inside any modal or userInfo buttons.
-            const isAnyModalButton = e.target.closest('#messageBox button') || 
-                                     e.target.closest('.leaderboard-modal button') || 
-                                     e.target.closest('.profile-modal button') ||
-                                     e.target.closest('#deviceSelectionModal button'); 
-            const isUserInfoButton = e.target.closest('#userInfo button');
-            const isInput = e.target.closest('input'); 
+        playVideoBtn.addEventListener('click', playVideo);
+        stopVideoBtn.addEventListener('click', stopVideo);
 
-            // If an input field is clicked, do nothing to prevent unintended game starts or flaps.
-            if (isInput) {
-                return;
-            }
+        // Initial draw for the canvas
+        drawCurrentEmoji();
 
-            if (isAnyModalButton || isUserInfoButton) {
-                e.stopPropagation(); // Prevent this click from bubbling up to the gameContainer's general handler
-
-                if (e.target.closest('#playOnLaptopButton')) { 
-                    setDeviceConfig('laptop');
-                    showWelcomeScreen(false); 
-                } else if (e.target.closest('#playOnLargeMobileButton')) { 
-                    setDeviceConfig('largeMobile');
-                    showWelcomeScreen(false); 
-                } else if (e.target.closest('#playOnSmallMobileButton')) { 
-                    setDeviceConfig('smallMobile');
-                    showWelcomeScreen(false); 
-                } else if (e.target.closest('#signInEmailLinkButton')) {
-                    await handleSignInWithEmailLink();
-                } else if (e.target.closest('#startButton')) { 
-                    startGame();
-                } else if (e.target.closest('#leaderboardButton')) {
-                    await displayLeaderboard();
-                } else if (e.target.closest('#leaderboardCloseButton')) {
-                    leaderboardModal.style.display = 'none';
-                    if (window.gameOver) {
-                        showWelcomeScreen(true); 
-                    } else {
-                        showWelcomeScreen(false); 
-                    }
-                } else if (e.target.closest('#profileButton')) { 
-                    profileModal.style.display = 'flex';
-                    if (currentUser) {
-                        currentProfile = await fetchUserProfile(currentUser.id); 
-                        profileEmailDisplay.textContent = `Email: ${currentUser.email}`;
-                        profileXAccountDisplay.textContent = `X Handle: ${currentProfile ? (currentProfile.x_account_name || 'Not set') : 'Not set'}`;
-                        profileXAccountNameInput.value = currentProfile && currentProfile.x_account_name ? currentProfile.x_account_name : '';
-                        await displayUserRank(); // Fetch and display rank
-                    } else {
-                        profileEmailDisplay.textContent = 'Email: Not logged in';
-                        profileXAccountDisplay.textContent = 'X Handle: Not set';
-                        profileXAccountNameInput.value = '';
-                        profileRankDisplay.textContent = 'Rank: N/A (Sign in to see)';
-                    }
-                    updateAuthUI(); 
-                } else if (e.target.closest('#profileSetXAccountNameButton')) {
-                    const newXAccountName = profileXAccountNameInput.value.trim();
-                    await updateXAccountName(newXAccountName);
-                } else if (e.target.closest('#profileSignInEmailLinkButton')) { 
-                    alert("Please use the main screen's 'Sign In with Email Link' feature or refresh the page to sign in.");
-                } else if (e.target.closest('#profileLogoutButton')) { 
-                    await handleLogout();
-                }
-                else if (e.target.closest('#profileCloseButton')) { 
-                    profileModal.style.display = 'none';
-                    if (window.gameOver) {
-                        showWelcomeScreen(true); 
-                    } else {
-                        showWelcomeScreen(false); 
-                    }
-                } else if (e.target.closest('#backToWelcomeButton')) { 
-                    showWelcomeScreen(false); 
-                } else if (e.target.closest('#logoutButton')) { 
-                    await handleLogout();
-                } else if (e.target.closest('#deviceButton')) { // Handle new Device button
-                    showDeviceSelection();
-                }
-            } else { 
-                // This is a click on the game container itself, outside of specific buttons/modals
-                // Only flap if the game is currently running
-                if (window.gameStarted && !window.gameOver) { 
-                    flap();
-                }
-            }
-        }, { passive: false }); 
-
-        // Named function for window.onload
-        async function initializeGame() {
-            // 1. Determine initial device config
-            const preferredDevice = localStorage.getItem('cryptoFlapDevice');
-            if (preferredDevice) {
-                setDeviceConfig(preferredDevice); // Use saved preference
-            } else {
-                // Auto-detect and apply, but don't save. If mobile, will show selection.
-                const isMobileAuto = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight <= 1024);
-                if (isMobileAuto) {
-                    currentConfig = largeMobileConfig; // Default mobile to large, then offer choice
-                    console.log("Auto-detected MOBILE, defaulting to largeMobileConfig for initial setup.");
-                } else {
-                    currentConfig = laptopConfig;
-                    console.log("Auto-detected LAPTOP, applying laptopConfig.");
-                }
-                calculateGameDimensions(); // Apply this initial config
-            }
-            
-            // Initial player size setup (will be refined by calculateGameDimensions)
-            player.style.width = `${PLAYER_SPRITE_WIDTH}px`;
-            player.style.height = `${PLAYER_SPRITE_HEIGHT}px`;
-            updatePlayerSize();
-            // Player Y is calculated in calculateGameDimensions based on its dimensions, if valid.
-            // Only explicitly set here if calculateGameDimensions returned early due to zero dimensions.
-            if (window.innerWidth === 0 || window.innerHeight === 0) {
-                 window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
-                 player.style.top = `${window.playerY}px`; 
-                 player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
-            }
-            player.style.transform = `rotateZ(0deg)`;
-            marketCapDisplay.textContent = `MC: ${formatCurrency(INITIAL_MARKET_CAP)}`;
-            updateScoreDisplay();
-            
-            // This listener will fire immediately on page load with the current session status
-            // and whenever the auth state changes (login, logout, token refresh).
-            window.supabase.auth.onAuthStateChange(async (event, session) => {
-                console.log("Auth state changed:", event, session);
-                if (session) {
-                    currentUser = session.user;
-                    isLoggedIn = true;
-                    currentProfile = await fetchUserProfile(currentUser.id);
-                    if (!currentProfile) {
-                        // Create profile if it's not present
-                        await upsertUserProfile({ id: currentUser.id, email: currentUser.email, x_account_name: null });
-                        currentProfile = await fetchUserProfile(currentUser.id); 
-                    }
-                    updateAuthUI();
-                    // After login, show the welcome screen (or game over screen if applicable)
-                    showWelcomeScreen(window.gameOver); 
-                } else {
-                    currentUser = null;
-                    isLoggedIn = false;
-                    currentProfile = null;
-                    updateAuthUI();
-                    
-                    const savedDevice = localStorage.getItem('cryptoFlapDevice');
-                    const isMobileAuto = /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight <= 1024);
-
-                    if (!savedDevice && isMobileAuto) { 
-                        showDeviceSelection(); // Only show device selection if no saved device AND it's a mobile device
-                    } else {
-                        showWelcomeScreen(false); // Otherwise, go straight to welcome screen
-                    }
-                }
-            });
-
-            // Handle magic link redirect. This will cause onAuthStateChange to fire.
-            const params = new URLSearchParams(window.location.search);
-            if (params.has('type') && params.get('type') === 'magiclink') {
-                await verifyEmailLink(); // This will trigger onAuthStateChange to update the session
-            } else {
-                // For initial page loads not originating from a magic link,
-                // onAuthStateChange will still fire immediately with the existing session or null,
-                // determining the initial display. No extra logic needed here.
-            }
-        }
-
-        // Assign the named function to window.onload
-        window.onload = initializeGame;
-
-
-        document.addEventListener('touchstart', (e) => {
-            // Prevent default touch behavior only if not interacting with a button or input
-            if (e.target.closest('button') || e.target.closest('input')) {
-            } else {
-                e.preventDefault(); 
-                // Only flap if the game is currently running
-                if (window.gameStarted && !window.gameOver) { 
-                    flap(); 
-                }
-            }
-        }, { passive: false });
-
-        window.addEventListener('resize', () => {
-            calculateGameDimensions(); 
-
-            if (!window.gameStarted || window.gameOver) { 
-                window.playerY = (GAME_HEIGHT / 2) - (player.offsetHeight / 2);
-                player.style.top = `${window.playerY}px`; 
-                player.style.left = `${(GAME_WIDTH / 2) - (player.offsetWidth / 2)}px`;
-            }
-            // Ensure modals are centered on resize
-            document.querySelectorAll('.message-box, .device-selection-modal, .leaderboard-modal, .profile-modal').forEach(modal => {
-                modal.style.top = '50%';
-                modal.style.left = '50%';
-                modal.style.transform = 'translate(-50%, -50%)';
-            });
-        });
     </script>
 </body>
 </html>
+�
