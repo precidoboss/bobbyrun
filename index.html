@@ -3,2684 +3,789 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EmogiNation: The Universal Language of Wealth</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Bobby Run</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <style>
+        /* General body styling */
         body {
+            background-color: #0d0d1a;
             font-family: 'Inter', sans-serif;
-            background-color: #f0f4f8; /* Light blue-gray background */
-            color: #333;
-            cursor: none; /* Hide default cursor */
-            overflow-x: hidden; /* Prevent horizontal scroll from emoji animations */
-        }
-        .gradient-text {
-            background: linear-gradient(45deg, #FFD700, #FF69B4, #00BFFF); /* Gold, Hot Pink, Deep Sky Blue */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .emoji-bg {
-            background-image: url('https://placehold.co/1200x600/E0F2F7/2C3E50?text=%F0%9F%98%84%F0%9F%98%8A%F0%9F%98%8D%F0%9F%92%B0%F0%9F%92%A5%F0%9F%8C%88%F0%9F%A4%AF'); /* Placeholder with more emojis */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        .btn-primary {
-            background-color: #FFD700; /* Gold */
-            color: #333;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: pulse 2s infinite; /* Added pulse animation */
-        }
-        .btn-primary:hover {
-            background-color: #FFC107; /* Darker Gold */
-            transform: translateY(-2px) scale(1.02); /* Slight scale on hover */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-        .card {
-            background-color: white;
-            border-radius: 1.5rem; /* More rounded */
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out; /* Added transition for hover */
-        }
-        .card:hover {
-            transform: translateY(-5px); /* Lift card on hover */
-        }
-
-        /* Keyframes for animations */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes floatUpFade {
-            0% {
-                transform: translateY(0) scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-200px) scale(1.5);
-                opacity: 0;
-            }
-        }
-
-        /* Custom cursor style */
-        #custom-cursor {
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            font-size: 2.5rem; /* Larger emoji cursor */
-            line-height: 1;
-            transform: translate(-50%, -50%); /* Center the emoji */
-            transition: transform 0.05s ease-out; /* Smooth movement */
-        }
-
-        /* Scrolling emoji particles */
-        .scrolling-emoji {
-            position: fixed;
-            bottom: -50px; /* Start below viewport */
-            left: 0;
-            font-size: 2rem;
-            opacity: 0;
-            animation: floatUpFade 4s forwards ease-out;
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        /* Click effect emoji particles */
-        .click-emoji {
-            position: fixed;
-            font-size: 2rem;
-            opacity: 1;
-            animation: clickBurst 1s forwards ease-out;
-            pointer-events: none;
-            z-index: 10000;
-        }
-
-        @keyframes clickBurst {
-            0% {
-                transform: translate(-50%, -50%) scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(2);
-                opacity: 0;
-            }
-        }
-
-        /* Chart Simulation Styles */
-        .chart-container {
-            position: relative;
-            height: 200px;
-            background: linear-gradient(to top, #e0f2f7, #ffffff); /* Light gradient background */
-            border-radius: 1rem;
+            color: #d1d1e0;
             overflow: hidden;
         }
-        .chart-line {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to right, #00BFFF, #FF69B4, #FFD700); /* Blue, Pink, Gold gradient */
-            clip-path: polygon(
-                0% 100%,
-                10% 80%,
-                20% 90%,
-                30% 70%,
-                40% 85%,
-                50% 60%,
-                60% 75%,
-                70% 50%,
-                80% 65%,
-                90% 40%,
-                100% 55%,
-                100% 100%
-            );
-            animation: chartGrow 2s ease-out forwards;
+
+        /* Gangster-themed typography and effects */
+        .gangster-font {
+            font-family: 'Bangers', cursive;
+            text-shadow: 0 0 5px #ff007f, 0 0 10px #ff007f, 0 0 15px #ff007f, 0 0 20px #ff007f;
+            color: #fff;
         }
 
-        @keyframes chartGrow {
-            from { clip-path: polygon(0% 100%, 10% 100%, 20% 100%, 30% 100%, 40% 100%, 50% 100%, 60% 100%, 70% 100%, 80% 100%, 90% 100%, 100% 100%, 100% 100%); }
-            to { /* Uses the defined clip-path */ }
-        }
-
-        /* Presale Progress Bar */
-        .progress-bar-container {
-            background-color: #e0e0e0;
-            border-radius: 9999px; /* Full rounded corners */
-            height: 2.5rem; /* Height of the bar */
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .progress-bar-fill {
-            background: linear-gradient(to right, #00BFFF, #FF69B4); /* Blue to Pink gradient */
-            height: 100%;
-            border-radius: 9999px;
-            width: 50%; /* 50% filled */
-            transition: width 1s ease-out;
-            position: relative;
-            overflow: hidden;
-            animation: progressPulse 1.5s infinite alternate; /* Pulsing effect */
-        }
-        .progress-bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                -45deg,
-                rgba(255, 255, 255, 0.1) 0px,
-                rgba(255, 255, 255, 0.1) 10px,
-                transparent 10px,
-                transparent 20px
-            );
-            animation: stripes 2s linear infinite;
-        }
-
-        @keyframes progressPulse {
-            0% { transform: scaleX(1); }
-            100% { transform: scaleX(1.01); }
-        }
-        @keyframes stripes {
-            from { background-position: 0 0; }
-            to { background-position: 40px 0; }
-        }
-
-        /* Scroll-triggered animations */
-        .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .animate-on-scroll.slide-in-left {
-            transform: translateX(-50px);
-        }
-        .animate-on-scroll.slide-in-left.is-visible {
-            transform: translateX(0);
-        }
-        .animate-on-scroll.slide-in-right {
-            transform: translateX(50px);
-        }
-        .animate-on-scroll.slide-in-right.is-visible {
-            transform: translateX(0);
-        }
-
-        /* Existing animations */
-        @keyframes bounce-slow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .animate-bounce-slow { animation: bounce-slow 3s infinite ease-in-out; }
-        .animate-bounce-slow.delay-1 { animation-delay: 0.2s; }
-        .animate-bounce-slow.delay-2 { animation-delay: 0.4s; }
-        .animate-bounce-slow.delay-3 { animation-delay: 0.6s; }
-
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow { animation: spin-slow 10s linear infinite; }
-
-        @keyframes bounce-fast {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .animate-bounce-fast { animation: bounce-fast 1s infinite ease-in-out; }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
-        }
-        .animate-wiggle { animation: wiggle 0.8s infinite ease-in-out; }
-        .animate-wiggle-slow { animation: wiggle 2s infinite ease-in-out; }
-
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        .animate-float { animation: float 2.5s infinite ease-in-out; }
-
-        @keyframes pulse-slow {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
-        .animate-pulse-slow { animation: pulse-slow 3s infinite ease-in-out; }
-
-        @keyframes rotate-y {
-            0%, 100% { transform: perspective(1000px) rotateY(0deg); }
-            50% { transform: perspective(1000px) rotateY(180deg); }
-        }
-        .animate-rotate-y { animation: rotate-y 2s infinite ease-in-out; }
-
-        @keyframes fade-in {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .animate-fade-in { animation: fade-in 1.5s ease-out forwards; }
-
-        @keyframes bounce-in {
-            0% { transform: scale(0.5); opacity: 0; }
-            60% { transform: scale(1.1); opacity: 1; }
-            80% { transform: scale(0.9); }
-            100% { transform: scale(1); }
-        }
-        .animate-bounce-in { animation: bounce-in 1s ease-out forwards; }
-
-        @keyframes fade-in-up {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up { animation: fade-in-up 1s ease-out forwards; }
-
-        /* Emoji Send Animation */
-        @keyframes sendEmoji {
-            0% { transform: translateX(0) translateY(0) scale(1); opacity: 1; }
-            50% { transform: translateX(100px) translateY(-50px) scale(1.2); opacity: 0.8; }
-            100% { transform: translateX(200px) translateY(0) scale(0.5); opacity: 0; }
-        }
-        .sending-emoji {
-            position: absolute;
-            font-size: 3rem;
-            animation: sendEmoji 1.5s forwards ease-out;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        /* Pie Chart for Token Distribution */
-        .pie-chart-container {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            background: conic-gradient(
-                #FFD700 0% 30%, /* Presale */
-                #00BFFF 30% 60%, /* Liquidity */
-                #FF69B4 60% 75%, /* Marketing */
-                #8A2BE2 75% 85%, /* Team */
-                #32CD32 85% 90%, /* Airdrop */
-                #FF4500 90% 100% /* Community */
-            );
-            position: relative;
-            margin: 0 auto;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-        }
-        .pie-chart-container::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
-            background-color: white;
-            border-radius: 50%;
-            z-index: 1;
-        }
-        .pie-chart-container span {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #333;
-            z-index: 2;
-        }
-
-        /* Team Profile Picture Animation */
-        .profile-emoji {
-            font-size: 8rem; /* Large emoji */
-            transition: transform 0.5s ease-in-out;
-            display: inline-block;
-            animation: bounce-slow 3s infinite ease-in-out;
-        }
-        .profile-emoji:hover {
-            transform: scale(1.1) rotate(10deg);
-        }
-
-        /* Meme Section Styles */
-        .meme-container {
-            border: 4px solid #FFD700; /* Gold border */
-            border-radius: 1rem;
-            overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-        }
-        .meme-container:hover {
-            transform: translateY(-5px) scale(1.02);
-        }
-        .meme-text {
-            background-color: #FFD700;
-            color: #333;
-            font-weight: bold;
-            padding: 0.75rem;
-            text-align: center;
-            font-size: 1.25rem;
-        }
-
-        /* Chat Box Styles */
-        .chat-box {
-            height: 300px;
-            overflow-y: auto;
-            border: 2px solid #e0e0e0;
-            border-radius: 0.75rem;
-            padding: 1rem;
-            background-color: #fcfcfc;
+        /* Container for the entire game */
+        .game-container {
+            width: 100vw;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-        }
-        .chat-message {
-            background-color: #e6f7ff; /* Light blue bubble */
-            padding: 0.5rem 1rem;
-            border-radius: 1rem;
-            align-self: flex-start;
-            max-width: 80%;
-        }
-        .chat-message.self {
-            background-color: #fff0e6; /* Light orange bubble */
-            align-self: flex-end;
-        }
-
-        /* NFT Display */
-        .nft-display {
-            width: 200px;
-            height: 200px;
-            background-color: #f0f0f0;
-            border-radius: 1rem;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 8rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin: 0 auto;
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out;
+            align-items: center;
+            background-image: radial-gradient(circle, rgba(16, 16, 32, 0.9) 0%, rgba(10, 10, 20, 1) 100%);
+            position: relative;
         }
-        .nft-display:hover {
-            transform: scale(1.05);
+        
+        /* Main game canvas */
+        canvas {
+            display: block;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4), 0 0 40px rgba(0, 255, 255, 0.2);
+            background-color: #0b0b18;
+            max-width: 95%;
+            max-height: 80vh;
         }
 
-        /* Tipping Bot Test */
-        .tipping-bot-chat {
-            height: 150px;
-            overflow-y: auto;
-            border: 2px solid #e0e0e0;
-            border-radius: 0.75rem;
+        /* UI elements */
+        .game-ui {
+            background-color: rgba(25, 25, 45, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
             padding: 1rem;
-            background-color: #fcfcfc;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        .tipping-bot-message {
-            background-color: #e0f7fa; /* Light cyan */
-            padding: 0.5rem 1rem;
-            border-radius: 1rem;
-            align-self: flex-start;
-            max-width: 80%;
-        }
-        .tipping-bot-message.user {
-            background-color: #f3e5f5; /* Light purple */
-            align-self: flex-end;
+            margin: 1rem 0;
         }
 
-        /* Emoji Video Creator */
-        #emojiVideoCanvas {
-            background-color: #000;
-            border-radius: 1rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Countdown Timer */
-        .countdown-item {
-            background-color: #fff;
-            padding: 1.5rem 1rem;
-            border-radius: 1rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            min-width: 100px;
-            max-width: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        .countdown-value {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #00BFFF;
-        }
-        .countdown-label {
-            font-size: 1rem;
-            color: #555;
-            text-transform: uppercase;
-            margin-top: 0.5rem;
-        }
-
-        /* Social Feed Post */
-        .social-post {
-            background-color: #fff;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease-in-out;
-        }
-        .social-post:hover {
-            transform: translateY(-3px);
-        }
-
-        /* Audio Player */
-        .audio-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background-color: #fff;
-            padding: 1rem 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 2rem;
-        }
-        .audio-button {
-            background-color: #00BFFF;
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        .audio-button:hover {
-            background-color: #0099CC;
-        }
-        .volume-slider {
+        /* Pill animation for start screen */
+        .pill {
             width: 120px;
-            -webkit-appearance: none;
-            height: 8px;
-            background: #ddd;
-            border-radius: 5px;
-            outline: none;
-            opacity: 0.7;
-            transition: opacity .2s;
-        }
-        .volume-slider:hover {
-            opacity: 1;
-        }
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #FF69B4;
+            height: 60px;
+            border-radius: 60px;
             cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border: 4px solid white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            position: relative;
         }
-        .volume-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #FF69B4;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        
+        .pill::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 70px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            animation: pill-pulse 2s infinite ease-in-out;
         }
 
-        /* Leet/Jeet Board specific styles */
-        .leet-board-row, .jeet-board-row {
-            transition: all 0.3s ease-in-out;
+        #red-pill {
+            background-color: #ff007f;
+            border-color: #ff007f;
+            box-shadow: 0 0 20px #ff007f;
         }
-        .leet-board-row:hover, .jeet-board-row:hover {
-            background-color: #e6f7ff; /* Light blue on hover */
-            transform: scale(1.01);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-        .profit-text {
-            color: #10B981; /* Green */
-            font-weight: bold;
-        }
-        .loss-text {
-            color: #EF4444; /* Red */
-            font-weight: bold;
-        }
-        .animated-emoji {
-            display: inline-block;
-            animation: float 1.5s infinite ease-in-out;
-            margin-left: 0.5rem;
+        
+        #red-pill::before {
+            background: radial-gradient(circle, #ff007f 0%, rgba(255, 0, 127, 0) 70%);
         }
 
-        /* Disclaimer Modal */
-        .modal-overlay {
-            position: fixed;
+        #green-pill {
+            background-color: #00ffaa;
+            border-color: #00ffaa;
+            box-shadow: 0 0 20px #00ffaa;
+        }
+        
+        #green-pill::before {
+            background: radial-gradient(circle, #00ffaa 0%, rgba(0, 255, 170, 0) 70%);
+        }
+        
+        @keyframes pill-pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        .pill:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Swap animation modal */
+        .swap-modal {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .code-line {
+            color: #00ffaa;
+            font-family: monospace;
+            white-space: pre-wrap;
+            overflow: hidden;
+            border-right: .15em solid #00ffaa; /* The cursor */
+            animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
+            width: 0;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #00ffaa; }
+        }
+
+        /* Player jump animation */
+        @keyframes player-jump {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+        }
+
+        .player-jumping {
+            animation: player-jump 0.4s ease-out;
+        }
+
+        /* Lives and Header styling */
+        .game-header {
+            width: 100%;
+            max-width: 4xl;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .cat-icon {
+            font-size: 2.5rem;
+            margin-right: 0.5rem;
+            animation: cat-pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes cat-pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
+        
+        .header-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header-middle-row {
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 10000;
+            width: 100%;
+            margin-bottom: 1rem;
         }
-        .modal-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            position: relative;
+
+        .header-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
         }
-        .modal-close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #555;
+
+        .power-up-display {
+            background-color: rgba(0, 255, 170, 0.2);
+            border: 1px solid rgba(0, 255, 170, 0.5);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+            transition: opacity 0.5s;
         }
+
+        .x-logo {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <!-- Custom Emoji Cursor -->
-    <div id="custom-cursor">✨</div>
-
-    <!-- Background Audio -->
-    <audio id="backgroundAudio" loop>
-        <source src="https://github.com/precidoboss/my-game-sprites/blob/main/Vocaroo%2013XFquwczgWx.mp3?raw=true" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <!-- Audio Controls -->
-    <div class="fixed bottom-4 left-4 z-50">
-        <div class="audio-controls">
-            <button id="playPauseAudioBtn" class="audio-button">▶️ Play</button>
-            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5" class="volume-slider">
-            <span class="text-gray-700 text-sm">Volume</span>
+    <div class="game-container">
+        
+        <!-- Start screen for choosing pills -->
+        <div id="start-screen" class="flex flex-col items-center justify-center space-y-8 h-full w-full absolute top-0 left-0 bg-opacity-90">
+            <h1 class="gangster-font text-6xl md:text-8xl text-center">Choose Bobby's Path</h1>
+            <p class="text-xl md:text-2xl text-white mt-4">Which pill will you take?</p>
+            <div class="flex flex-col md:flex-row space-y-8 md:space-y-0 md:space-x-12 mt-8">
+                <div id="red-pill" class="pill flex items-center justify-center transform hover:scale-110"></div>
+                <div id="green-pill" class="pill flex items-center justify-center transform hover:scale-110"></div>
+            </div>
+            <p class="text-xs md:text-sm text-gray-400 mt-4">
+                Red Pill: it gets you high | Green Pill: nobody knows
+            </p>
         </div>
+
+        <!-- Game display area -->
+        <div id="game-ui-container" class="hidden flex flex-col items-center w-full h-full p-4">
+            
+            <div class="game-header w-full max-w-4xl">
+                <div class="header-top-row">
+                    <div class="flex items-center text-sm md:text-base text-gray-400">
+                         <svg class="x-logo mr-1" viewBox="0 0 24 24" aria-hidden="true"><g><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.21-.65-.67 2.05-1.92-2.31c-2.37.52-4.57-.15-5.96-1.57C.865 18.2 2.724 16.7 4.1 16.03c-.2-.04-.4-.08-.6-.15-.84-.27-1.63-.6-2.3-1.07-.48-.33-.92-.72-1.3-1.16-.36-.44-.66-.93-.9-1.47l-.14-.3c-1.3-3.15-.36-6.1 2.3-7.55 1.1-.64 2.3-1.06 3.6-1.27.5-.08 1-.13 1.5-.16.27-.02.54-.04.8-.04 2.87 0 5.4 1.22 7.2 3.1 1.1-.2 2.1-.5 3.1-.9-.3-1.04-1-1.9-1.8-2.6-.9-.7-1.9-1.2-3-1.5zM7.4 17.5c-1.5 1.2-3.3 2-5.1 2.2-.4.1-.7.2-1.1.2-1.3 0-2.6-.6-3.7-1.7-1.6-1.6-2.3-3.9-1.8-6.2 0-.2.03-.4.07-.6.1-.2.2-.4.3-.6.5-1.1 1.2-2.1 2-2.9.8-.8 1.8-1.5 2.8-2.1 1.2-.6 2.5-1 3.9-1.2.3-.04.6-.07.9-.1 2.3-.2 4.6 0 6.6.7-.4 1.1-1.1 2-2 2.4-3.5 3.8-7.2 3.8-11.2C22 4.4 20.3 3.1 18.5 2.5c-.3-.1-.6-.1-.9-.1-.2-.1-.5-.1-.7-.1-.9 0-1.7.2-2.6.5-1 .3-1.9.8-2.8 1.4-1.2.9-2.3 2-3.2 3.2-1.2 1.5-2.1 3.2-2.6 5.1-.3 1.1-.4 2.3-.4 3.5 0 .6.1 1.2.2 1.8-.4 0-.8-.1-1.2-.2-1.8-.5-3.5-1.5-4.9-2.9-1.2-1.2-2.1-2.7-2.6-4.5-.3-1.1-.4-2.3-.4-3.5 0-.5.1-1.1.2-1.6.4-1.9 1.1-3.7 2.1-5.3 1.1-1.7 2.4-3.2 4-4.5 1.6-1.3 3.4-2.2 5.5-2.8 1.3-.4 2.6-.6 4-.6.2 0 .4 0 .6.02.4.02.7.04 1.1.08.3.02.6.05.9.08.5.06 1 .15 1.5.25.4.1.8.2 1.2.4.3.1.6.3.9.4.2.1.4.2.6.3-.5.3-1 .6-1.5 1-.9.7-1.8 1.5-2.7 2.4-1.1 1.2-2.1 2.6-2.9 4.1-.7 1.4-1.1 2.9-1.2 4.4-.1.7-.1 1.5-.1 2.2 0 1.2.2 2.4.5 3.5.4 1.2 1 2.3 1.8 3.3.8 1 1.8 1.9 2.9 2.5z"></path></g></svg>
+                        <a href="https://x.com/BOBBYONXRPL" target="_blank" class="text-blue-400 hover:underline">@BOBBYONXRPL</a>
+                    </div>
+                    <div class="flex items-center text-sm md:text-base text-gray-400">
+                        Created by: <a href="https://x.com/favigal1" target="_blank" class="text-blue-400 hover:underline ml-1">@favigal1</a>
+                    </div>
+                </div>
+
+                <div class="header-middle-row">
+                    <h1 class="gangster-font text-4xl md:text-6xl text-cyan-300 text-center">BOBBY RUN</h1>
+                </div>
+
+                <div class="header-bottom-row">
+                    <div class="flex flex-col items-center text-xl md:text-2xl w-1/3">
+                        <span class="gangster-font text-3xl">XRP Points</span>
+                        <span id="score-display" class="gangster-font text-4xl text-yellow-300">0</span>
+                    </div>
+                    <div id="power-up-status" class="power-up-display opacity-0 w-1/3 text-center">
+                        <span id="power-up-text">SHIELD ACTIVE</span>
+                        <span id="power-up-timer" class="ml-2 font-bold">5s</span>
+                    </div>
+                    <div class="flex flex-col items-center w-1/3">
+                        <span class="gangster-font text-3xl">Lives</span>
+                        <div class="flex items-center">
+                            <span class="cat-icon" role="img" aria-label="Cat Icon">🐾</span>
+                            <span id="lives-display" class="gangster-font text-4xl text-yellow-300">9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <canvas id="gameCanvas" class="mt-4 flex-grow"></canvas>
+            
+            <div class="mt-4 text-center">
+                <button id="restart-button" class="hidden gangster-font text-2xl py-3 px-8 rounded-full bg-red-600 text-white shadow-xl hover:bg-red-700 transition-transform transform hover:scale-105">Restart Game</button>
+            </div>
+        </div>
+
+        <!-- The animated modal for swapping XRP -->
+        <div id="swap-modal" class="swap-modal">
+            <div class="flex flex-col items-center justify-center p-8 bg-black border-2 border-green-500 rounded-lg shadow-neon-green" style="max-width: 800px; width: 90%;">
+                <h2 class="gangster-font text-4xl md:text-6xl text-green-400 mb-6 neon-text-green">SWAPPING XRP</h2>
+                <div id="code-output" class="text-left w-full h-auto max-h-96 overflow-y-auto p-4 bg-gray-900 border-2 border-green-500 rounded-md">
+                    <p id="line1" class="code-line"></p>
+                    <p id="line2" class="code-line"></p>
+                    <p id="line3" class="code-line"></p>
+                    <p id="line4" class="code-line"></p>
+                    <p id="line5" class="code-line"></p>
+                    <p id="line6" class="code-line"></p>
+                    <p id="line7" class="code-line"></p>
+                    <p id="line8" class="code-line"></p>
+                </div>
+                <div class="flex items-center justify-center mt-8 w-full">
+                    <img id="xrp-icon" src="https://i.imgur.com/5INUoNN.png" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full mr-8" style="transform: scale(1); opacity: 1; transition: transform 1s, opacity 1s;">
+                    <span id="swap-arrow" class="gangster-font text-6xl text-green-500 mx-4 opacity-0" style="transition: opacity 1s;">-></span>
+                    <!-- SVG for the $BOBBY logo character will be here -->
+                    <div id="bobby-logo" class="w-24 h-24 sm:w-32 sm:h-32 hidden">
+                        <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="5" y="5" width="90" height="90" rx="15" fill="#facc15" stroke="#facc15" stroke-width="4"/>
+                            <text x="50" y="70" font-family="'Bangers', cursive" font-size="60" font-weight="bold" fill="#000" text-anchor="middle">$</text>
+                            <text x="50" y="40" font-family="'Bangers', cursive" font-size="25" font-weight="bold" fill="#000" text-anchor="middle">BOBBY</text>
+                        </svg>
+                    </div>
+                </div>
+                <button id="end-swap-button" class="hidden gangster-font text-2xl py-3 px-8 rounded-full bg-green-600 text-white shadow-xl hover:bg-green-700 transition-transform transform hover:scale-105 mt-8">Game Complete!</button>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Header/Navbar -->
-    <header class="bg-white shadow-md py-4 px-6 md:px-12 rounded-b-3xl z-20 relative">
-        <nav class="container mx-auto flex justify-between items-center">
-            <a href="#" class="text-3xl font-extrabold gradient-text">EmogiNation 🚀</a>
-            <div class="hidden md:flex space-x-8 text-sm">
-                <a href="#about" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">About</a>
-                <a href="#countdown" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Launch ⏳</a>
-                <a href="#token-info" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Tokenomics 📊</a>
-                <a href="#swap-interface" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Swap 🔄</a>
-                <a href="#staking-pool" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Staking 💰</a>
-                <a href="#nft-minting" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">NFT Minting 🖼️</a>
-                <a href="#emoji-video-creator" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Emoji Video 🎬</a>
-                <a href="#dao" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">DAO 🗳️</a>
-                <a href="#leaderboards" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Boards 🏆</a>
-                <a href="#collaborations" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Partnerships 🤝</a>
-                <a href="#merchandise" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Merch 👕</a>
-                <a href="#exchanges" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Exchanges 🏦</a>
-                <a href="#sponsors" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Sponsors ✨</a>
-                <a href="#team" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Team 🫂</a>
-                <a href="#faq" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">FAQ ❓</a>
-                <a href="#community-metrics" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Community 🌐</a>
-                <a href="#social-feed" class="text-gray-700 hover:text-blue-500 font-medium transition duration-300">Social Feed 🐦</a>
-            </div>
-            <button class="md:hidden text-gray-700 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="relative text-center py-20 md:py-32 emoji-bg rounded-b-3xl mx-4 my-8 overflow-hidden">
-        <div class="absolute inset-0 bg-black opacity-60 rounded-b-3xl"></div>
-        <div class="relative z-10 container mx-auto px-4">
-            <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6 animate-bounce-in">
-                Unleash the <span class="gradient-text">Power of Emojis</span> and Transform Your Wealth! 🤩✨
-            </h1>
-            <p class="text-xl md:text-2xl text-white mb-10 max-w-3xl mx-auto animate-fade-in">
-                EmogiNation isn't just a meme coin; it's a revolutionary movement uniting the world through the universal language of emotions and the boundless potential of decentralized finance. Get ready for a financial future that truly speaks to you!
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-                <a href="#how-to-get" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold inline-block">
-                    Join the Emoji Revolution Today! 🚀
-                </a>
-                <a href="#about" class="bg-white text-blue-600 py-3 px-8 rounded-full text-lg font-semibold inline-block hover:bg-gray-100 transition duration-300">
-                    Discover Our Vision 📚
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Countdown Timer Section -->
-    <section id="countdown" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Launch Countdown: The Future is Nigh! ⏳🚀</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Get ready for the official launch of EmogiNation! The countdown has begun for an exciting new era of emoji-powered finance.
-            </p>
-            <div class="flex justify-center flex-wrap gap-6" id="countdown-timer">
-                <div class="countdown-item">
-                    <div class="countdown-value" id="countdown-days">00</div>
-                    <div class="countdown-label">Days</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="countdown-hours">00</div>
-                    <div class="countdown-label">Hours</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="countdown-minutes">00</div>
-                    <div class="countdown-label">Minutes</div>
-                </div>
-                <div class="countdown-item">
-                    <div class="countdown-value" id="countdown-seconds">00</div>
-                    <div class="countdown-label">Seconds</div>
-                </div>
-            </div>
-            <p class="text-xl font-bold text-gray-800 mt-8" id="countdown-message">Stay tuned for more updates! 🎉</p>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">The Epic Saga of EmogiNation 📖</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-6">
-                In a digital realm often shrouded in complex jargon and intimidating financial barriers, a brilliant idea ignited: **What if true wealth could communicate in a language everyone instinctively understood?** This profound question birthed **EmogiNation**! Imagine a cryptocurrency powered by the very symbols that effortlessly transcend cultures, age, and geographical boundaries – **emojis!** 🌍🌐
-            </p>
-            <p class="text-lg text-gray-700 leading-relaxed mb-6">
-                Our incredible journey commenced with a solitary **😂 Laughing Emoji**, symbolizing pure joy, vibrant community, and infectious optimism. From this humble beginning, it rapidly evolved, embracing the **🤩 Star-Struck Emoji** for audacious ambition and groundbreaking innovation, the **🤝 Handshake Emoji** for unbreakable unity and collaborative spirit, and the **🚀 Rocket Emoji** for limitless potential and meteoric growth. Each emoji is far more than a mere picture; it's a pixelated pledge of a brighter, more expressive, and profoundly inclusive financial future.
-            </p>
-            <p class="text-lg text-gray-700 leading-relaxed">
-                EmogiNation is meticulously crafted on the core belief that finance should be exhilarating, universally accessible, and deeply connect people through shared emotions. We are meticulously transforming fleeting digital expressions into enduring digital assets, one resounding **👍 Thumbs Up** at a time. Join us as we brilliantly paint the blockchain with every magnificent shade of human feeling and aspiration! 🎨💖
-            </p>
-            <div class="flex justify-center mt-8 space-x-4">
-                <span class="text-6xl animate-bounce-slow">😂</span>
-                <span class="text-6xl animate-bounce-slow delay-1">🤩</span>
-                <span class="text-6xl animate-bounce-slow delay-2">🤝</span>
-                <span class="text-6xl animate-bounce-slow delay-3">🚀</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Token Info / Simulation Section -->
-    <section id="token-info" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Tokenomics: A Glimpse into the Future! 📊📈</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Witness the potential of EmogiNation with our simulated market data. This isn't just a chart; it's a visual representation of our community's growing strength and the coin's upward trajectory! 🚀
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="p-6 rounded-xl bg-blue-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">💰</span>
-                    <h3 class="text-2xl font-semibold mb-2">Current Market Cap</h3>
-                    <p class="text-4xl font-extrabold text-blue-700 animate-pulse-slow">$12,345,678 <span class="text-xl text-green-500">📈 (+15%)</span></p>
-                    <p class="text-gray-600 mt-2">The collective value of all EmogiNation tokens in circulation. Growing daily! 🌟</p>
-                </div>
-                <div class="p-6 rounded-xl bg-pink-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">💧</span>
-                    <h3 class="text-2xl font-semibold mb-2">Total Liquidity</h3>
-                    <p class="text-4xl font-extrabold text-pink-700 animate-pulse-slow">$8,765,432 <span class="text-xl text-green-500">✅ (Locked)</span></p>
-                    <p class="text-gray-600 mt-2">Ensuring smooth and stable trading for all our holders. Security first! 🔒</p>
-                </div>
-            </div>
-
-            <h3 class="text-3xl font-bold text-gray-800 mb-6">EmogiNation Price Chart Simulation 📈</h3>
-            <div class="chart-container mx-auto max-w-4xl">
-                <div class="chart-line"></div>
-            </div>
-            <p class="text-sm text-gray-500 mt-4 mb-12">
-                *This chart is a simulation for illustrative purposes and does not represent live market data.
-                However, it vividly depicts the vibrant growth we envision for EmogiNation! 🚀
-            </p>
-
-            <h3 class="text-3xl font-extrabold gradient-text mb-6">Token Distribution: Spreading the Emoji Love! 💖</h3>
-            <div class="flex flex-col md:flex-row items-center justify-center gap-8 mb-12">
-                <div class="pie-chart-container">
-                    <span>$EMOJI</span>
-                </div>
-                <div class="text-left">
-                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-yellow-400 mr-2"></span>Presale: 30% (300,000,000 $EMOJI)</p>
-                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-blue-400 mr-2"></span>Liquidity: 30% (300,000,000 $EMOJI)</p>
-                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-pink-400 mr-2"></span>Marketing: 15% (150,000,000 $EMOJI)</p>
-                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-purple-600 mr-2"></span>Team: 10% (100,000,000 $EMOJI)</p>
-                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-green-500 mr-2"></span>Airdrop: 5% (50,000,000 $EMOJI)</p>
-                    <p class="text-lg font-medium mb-2"><span class="inline-block w-4 h-4 rounded-full bg-red-500 mr-2"></span>Community & Ecosystem: 10% (100,000,000 $EMOJI)</p>
-                    <p class="text-xl font-bold mt-4">Total Supply: 1,000,000,000 $EMOJI 💯</p>
-                </div>
-            </div>
-
-            <h3 class="text-3xl font-extrabold gradient-text mb-6">Buy & Sell Tax: Fueling the EmogiNation! ⛽</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="p-6 rounded-xl bg-green-50 shadow-inner">
-                    <span class="text-5xl mb-4 block">🛒</span>
-                    <h4 class="text-2xl font-semibold mb-2">Buy Tax: 5%</h4>
-                    <ul class="list-disc list-inside text-gray-700 text-left mx-auto max-w-xs">
-                        <li>2% to Liquidity Pool 💧</li>
-                        <li>2% to Marketing Wallet 📢</li>
-                        <li>1% to Development Fund 🛠️</li>
-                    </ul>
-                </div>
-                <div class="p-6 rounded-xl bg-red-50 shadow-inner">
-                    <span class="text-5xl mb-4 block">💸</span>
-                    <h4 class="text-2xl font-semibold mb-2">Sell Tax: 7%</h4>
-                    <ul class="list-disc list-inside text-gray-700 text-left mx-auto max-w-xs">
-                        <li>3% to Liquidity Pool 💧</li>
-                        <li>3% to Marketing Wallet 📢</li>
-                        <li>1% to Development Fund 🛠️</li>
-                    </ul>
-                </div>
-            </div>
-
-            <h3 class="text-3xl font-extrabold gradient-text mb-6">Airdrop Leaderboard: Top Emoji Contributors! 🏆</h3>
-            <p class="text-lg text-gray-700 leading-relaxed mb-6">
-                A total of **10,000,000 $EMOJI** (1% of total supply) will be airdropped to our most dedicated early supporters! Here's a simulated look at our top contributors:
-            </p>
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white rounded-lg shadow-md">
-                    <thead>
-                        <tr class="bg-blue-100 text-blue-800 uppercase text-sm leading-normal">
-                            <th class="py-3 px-6 text-left">Rank</th>
-                            <th class="py-3 px-6 text-left">Name ✨</th>
-                            <th class="py-3 px-6 text-left">Portion ($EMOJI) 💰</th>
-                            <th class="py-3 px-6 text-left">Percentage (%) 📊</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-700 text-sm font-light">
-                        <tr class="border-b border-gray-200 hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left whitespace-nowrap">1</td>
-                            <td class="py-3 px-6 text-left">CryptoKing 👑</td>
-                            <td class="py-3 px-6 text-left">3,500,000</td>
-                            <td class="py-3 px-6 text-left">35%</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left">2</td>
-                            <td class="py-3 px-6 text-left">MoonLover 🌕</td>
-                            <td class="py-3 px-6 text-left">2,500,000</td>
-                            <td class="py-3 px-6 text-left">25%</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left">3</td>
-                            <td class="py-3 px-6 text-left">EmojiMaster 🎨</td>
-                            <td class="py-3 px-6 text-left">2,000,000</td>
-                            <td class="py-3 px-6 text-left">20%</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left">4</td>
-                            <td class="py-3 px-6 text-left">HODLQueen 💪</td>
-                            <td class="py-3 px-6 text-left">1,200,000</td>
-                            <td class="py-3 px-6 text-left">12%</td>
-                        </tr>
-                        <tr class="hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left">5</td>
-                            <td class="py-3 px-6 text-left">DiamondHands 💎</td>
-                            <td class="py-3 px-6 text-left">800,000</td>
-                            <td class="py-3 px-6 text-left">8%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
-
-    <!-- Portfolio Tracker Section -->
-    <section id="portfolio-tracker" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Dev Wallet & Tax Earnings Tracker (Simulated) 📈</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Transparency is key! Here's a simulated look at the EmogiNation development wallet's supply and the earnings generated from buy and sell taxes, fueling our growth and innovation.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="p-6 rounded-xl bg-purple-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">💼</span>
-                    <h3 class="text-2xl font-semibold mb-2">Dev Wallet Supply</h3>
-                    <p class="text-4xl font-extrabold text-purple-700 animate-pulse-slow" id="devWalletSupply">100,000,000 $EMOJI</p>
-                    <p class="text-gray-600 mt-2">Dedicated to project development and future innovations. 🛠️</p>
-                </div>
-                <div class="p-6 rounded-xl bg-orange-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">💸</span>
-                    <h3 class="text-2xl font-semibold mb-2">Total Tax Collected</h3>
-                    <p class="text-4xl font-extrabold text-orange-700 animate-pulse-slow" id="totalTaxCollected">$50,000</p>
-                    <p class="text-gray-600 mt-2">Accumulated from transaction taxes, powering marketing and liquidity. 📊</p>
-                </div>
-            </div>
-
-            <h3 class="text-3xl font-bold text-gray-800 mb-6">Recent Tax Earnings (Simulated) 🧾</h3>
-            <div class="overflow-x-auto mb-6">
-                <table class="min-w-full bg-white rounded-lg shadow-md">
-                    <thead>
-                        <tr class="bg-yellow-100 text-yellow-800 uppercase text-sm leading-normal">
-                            <th class="py-3 px-6 text-left">Date 🗓️</th>
-                            <th class="py-3 px-6 text-left">Type 🏷️</th>
-                            <th class="py-3 px-6 text-left">Amount ($) 💰</th>
-                            <th class="py-3 px-6 text-left">Source 🌐</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-700 text-sm font-light">
-                        <tr class="border-b border-gray-200 hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left whitespace-nowrap">2025-07-30</td>
-                            <td class="py-3 px-6 text-left">Buy Tax</td>
-                            <td class="py-3 px-6 text-left">$1,200</td>
-                            <td class="py-3 px-6 text-left">DEX Trades</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left">2025-07-29</td>
-                            <td class="py-3 px-6 text-left">Sell Tax</td>
-                            <td class="py-3 px-6 text-left">$850</td>
-                            <td class="py-3 px-6 text-left">DEX Trades</td>
-                        </tr>
-                        <tr class="border-b border-gray-200 hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left">2025-07-28</td>
-                            <td class="py-3 px-6 text-left">Buy Tax</td>
-                            <td class="py-3 px-6 text-left">$1,500</td>
-                            <td class="py-3 px-6 text-left">DEX Trades</td>
-                        </tr>
-                        <tr class="hover:bg-gray-100">
-                            <td class="py-3 px-6 text-left">2025-07-27</td>
-                            <td class="py-3 px-6 text-left">Sell Tax</td>
-                            <td class="py-3 px-6 text-left">$700</td>
-                            <td class="py-3 px-6 text-left">DEX Trades</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *All figures are simulated and for illustrative purposes only. Actual data would be available on-chain.
-            </p>
-        </div>
-    </section>
-
-    <!-- Revenue Section -->
-    <section id="revenue" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Revenue: Powering Growth & Buybacks! 💸</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                EmogiNation isn't just about fun; it's about sustainable growth! We generate revenue by offering a premium service: helping communities integrate **$EMOJI tipping bots** into their Telegram groups and other platforms. This service creates value and directly fuels our token's ecosystem.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <div class="p-6 rounded-xl bg-green-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">Earned:</span>
-                    <h3 class="text-2xl font-semibold mb-2">Total Revenue Generated</h3>
-                    <p class="text-4xl font-extrabold text-green-700 animate-pulse-slow" id="totalRevenueEarned">$75,000</p>
-                    <p class="text-gray-600 mt-2">From successful tipping bot setups and integrations. 🤖</p>
-                </div>
-                <div class="p-6 rounded-xl bg-red-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">Used for Buybacks:</span>
-                    <h3 class="text-2xl font-semibold mb-2">Revenue Used for Buybacks</h3>
-                    <p class="text-4xl font-extrabold text-red-700 animate-pulse-slow" id="revenueUsedForBuybacks">$30,000</p>
-                    <p class="text-gray-600 mt-2">Directly buying back $EMOJI from the market to support price and liquidity. 🔥</p>
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *Figures are simulated and demonstrate our commitment to a healthy token economy.
-            </p>
-        </div>
-    </section>
-
-    <!-- Swap Interface Section -->
-    <section id="swap-interface" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Swap Interface (Simulated) 🔄</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Experience seamless token swaps with our simulated interface. Convert your favorite cryptos to $EMOJI and back, with transparent details on routes, slippage, and price impact.
-            </p>
-
-            <div class="bg-blue-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
-                <h3 class="text-3xl font-bold text-blue-800 mb-6">Swap Your Tokens! 🚀</h3>
-                <div class="flex flex-col gap-4 mb-6">
-                    <div class="flex items-center gap-2">
-                        <input type="number" id="swapInputAmount" placeholder="Amount to Swap" class="flex-grow p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" min="0.001" step="0.001" />
-                        <select id="swapInputToken" class="p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
-                            <option value="ETH">ETH</option>
-                            <option value="BNB">BNB</option>
-                            <option value="EMOJI">$EMOJI</option>
-                        </select>
-                    </div>
-                    <div class="flex justify-center my-2">
-                        <button id="swapDirectionBtn" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 transition duration-300">
-                            <span class="text-2xl">⬇️⬆️</span>
-                        </button>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <input type="text" id="swapOutputAmount" placeholder="Receive Amount" class="flex-grow p-3 rounded-lg border-2 border-blue-300 bg-gray-100 text-gray-700 cursor-not-allowed" readonly />
-                        <select id="swapOutputToken" class="p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700">
-                            <option value="EMOJI">$EMOJI</option>
-                            <option value="ETH">ETH</option>
-                            <option value="BNB">BNB</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="text-left text-gray-700 text-sm mb-6 space-y-2">
-                    <p><strong>Route:</strong> <span id="swapRoute">ETH &gt; WETH &gt; $EMOJI</span></p>
-                    <p><strong>Slippage:</strong> <span id="swapSlippage">0.5%</span></p>
-                    <p><strong>Price Impact:</strong> <span id="swapPriceImpact">~0.01%</span></p>
-                    <p><strong>Min. Received:</strong> <span id="swapMinReceived">0 $EMOJI</span></p>
-                </div>
-
-                <button id="confirmSwapBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2 mx-auto">
-                    Confirm Swap! ✅
-                </button>
-                <p id="swapStatus" class="text-lg font-semibold mt-4"></p>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *This is a simulated swap interface for demonstration purposes. No actual transactions occur.
-            </p>
-        </div>
-    </section>
-
-    <!-- Staking Pool Section -->
-    <section id="staking-pool" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Staking Pool: Grow Your Emojis! 💰🚀</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Stake your $EMOJI tokens and watch your holdings grow! Our simulated staking pool offers a fun way to envision passive income with your favorite meme coin.
-            </p>
-
-            <div class="bg-green-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
-                <h3 class="text-3xl font-bold text-green-800 mb-6">Your Staking Dashboard (Simulation) 🌱</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div class="flex flex-col items-center">
-                        <span class="text-5xl mb-2"> staked:</span>
-                        <p class="text-4xl font-extrabold text-green-700" id="stakedAmount">0 $EMOJI</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <span class="text-5xl mb-2"> earnings:</span>
-                        <p class="text-4xl font-extrabold text-yellow-600" id="estimatedEarnings">0 $EMOJI</p>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row justify-center gap-4 mb-6">
-                    <input type="number" id="stakeInput" placeholder="Amount to Stake ($EMOJI)" class="flex-grow p-3 rounded-lg border-2 border-green-300 focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-700" min="1" />
-                    <button id="stakeBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
-                        Stake Emojis! ✅
-                    </button>
-                </div>
-                <button id="claimBtn" class="bg-purple-600 text-white py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2 mx-auto hover:bg-purple-700 transition duration-300">
-                    Claim Earnings 🎁
-                </button>
-                <p id="stakingStatus" class="text-lg font-semibold mt-4"></p>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *This is a simulated staking pool for demonstration purposes. Real staking involves smart contracts and network fees.
-            </p>
-        </div>
-    </section>
-
-    <!-- Emoji Chat Box Section -->
-    <section id="emoji-chat" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Emoji Chat: Express Yourself! 💬</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Welcome to the EmogiNation chat! Here, words are optional – let your emojis do the talking. Each message costs a small amount of $EMOJI, making every expression valuable!
-            </p>
-
-            <div class="bg-purple-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
-                <h3 class="text-3xl font-bold text-purple-800 mb-6">Your Emoji Wallet: <span id="chatWalletBalance">1000 $EMOJI</span> 💰</h3>
-                <div class="chat-box mb-6" id="chatBox">
-                    <div class="chat-message">Welcome to the EmogiNation Chat! 👋</div>
-                    <div class="chat-message self">Let's chat with emojis! 🎉</div>
-                </div>
-                <div class="flex gap-4">
-                    <input type="text" id="emojiChatInput" placeholder="Send an emoji! (e.g., 😂)" class="flex-grow p-3 rounded-lg border-2 border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-700" maxlength="2" />
-                    <button id="sendChatEmojiBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
-                        Send (10 $EMOJI) ➡️
-                    </button>
-                </div>
-                <p id="chatStatus" class="text-lg font-semibold mt-4"></p>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *This chat is simulated and does not store messages or connect to a real blockchain.
-            </p>
-        </div>
-    </section>
-
-    <!-- NFT Minting Section -->
-    <section id="nft-minting" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation NFT Minting: Your Emoji, Your Art! 🖼️✨</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Turn your favorite emojis into unique, digital collectibles! Input any emoji, and our system will simulate minting it as a one-of-a-kind EmogiNation NFT.
-            </p>
-
-            <div class="bg-yellow-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
-                <h3 class="text-3xl font-bold text-yellow-800 mb-6">Mint Your Emoji NFT (Simulation) 🎨</h3>
-                <div class="flex justify-center items-center gap-4 mb-6">
-                    <input type="text" id="nftEmojiInput" placeholder="Enter an emoji (e.g., 🦄)" class="p-3 rounded-lg border-2 border-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-500 text-gray-700" maxlength="2" />
-                    <button id="mintNftBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
-                        Mint NFT (50 $EMOJI) 💎
-                    </button>
-                </div>
-                <div class="nft-display mb-6" id="mintedNftDisplay">
-                    ❓
-                </div>
-                <p id="nftMintStatus" class="text-lg font-semibold mt-4"></p>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *This is a simulated NFT minting process. Real NFTs are minted on a blockchain and incur gas fees.
-            </p>
-        </div>
-    </section>
-
-    <!-- Emoji Video Creator Section -->
-    <section id="emoji-video-creator" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Emoji Video Creator: Your Story in Emojis! 🎬✨</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Unleash your inner emoji director! Create short, animated "videos" by inputting a sequence of your favorite emojis. Watch your story unfold, one expressive symbol at a time!
-            </p>
-
-            <div class="bg-indigo-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
-                <h3 class="text-3xl font-bold text-indigo-800 mb-6">Craft Your Emoji Masterpiece! 🎥</h3>
-                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
-                    <input type="text" id="videoEmojisInput" placeholder="Enter emojis (e.g., 🚀🌕😂)" class="flex-grow p-3 rounded-lg border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700" maxlength="20" />
-                    <input type="number" id="emojiDurationInput" placeholder="Duration per Emoji (seconds)" value="1" min="0.5" step="0.5" class="w-full md:w-auto p-3 rounded-lg border-2 border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700" />
-                </div>
-                <div class="flex justify-center gap-4 mb-8">
-                    <button id="createVideoBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
-                        Create Video! 🎬
-                    </button>
-                    <button id="playVideoBtn" class="bg-green-500 text-white py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-green-600 transition duration-300" disabled>
-                        Play ▶️
-                    </button>
-                    <button id="stopVideoBtn" class="bg-red-500 text-white py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-red-600 transition duration-300" disabled>
-                        Stop ⏹️
-                    </button>
-                </div>
-
-                <canvas id="emojiVideoCanvas" width="600" height="300" class="w-full max-w-full h-auto mx-auto"></canvas>
-                <p id="videoStatus" class="text-lg font-semibold mt-4"></p>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *This is a simulated video creator. The output is an animation on the canvas, not a downloadable video file.
-            </p>
-        </div>
-    </section>
-
-    <!-- EmogiNation DAO Section -->
-    <section id="dao" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation DAO: Empowering the Community! 🗳️🤝</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                The EmogiNation Decentralized Autonomous Organization (DAO) puts the power directly into the hands of our community! Holders of $EMOJI will be able to vote on key decisions, including which other promising meme coins to support and invest in.
-            </p>
-
-            <div class="bg-purple-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
-                <h3 class="text-3xl font-bold text-purple-800 mb-6">DAO Treasury & Supported Projects (Simulated) 💰</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                    <div class="flex flex-col items-center">
-                        <span class="text-5xl mb-2">Treasury:</span>
-                        <p class="text-4xl font-extrabold text-purple-700">$500,000</p>
-                        <p class="text-gray-600 mt-2">Funds for community initiatives & investments.</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <span class="text-5xl mb-2">Votes:</span>
-                        <p class="text-4xl font-extrabold text-indigo-700">12,345</p>
-                        <p class="text-gray-600 mt-2">Total community votes cast this month.</p>
-                    </div>
-                </div>
-
-                <h4 class="text-2xl font-semibold text-gray-800 mb-4">DAO-Approved Meme Coins to Support:</h4>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <span class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full flex items-center space-x-2">
-                        <span class="text-2xl">🐕</span> <span>DogeCoin</span>
-                    </span>
-                    <span class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full flex items-center space-x-2">
-                        <span class="text-2xl">🐱</span> <span>CatCoin</span>
-                    </span>
-                    <span class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full flex items-center space-x-2">
-                        <span class="text-2xl">🐸</span> <span>PepeCoin</span>
-                    </span>
-                    <span class="bg-gray-200 text-gray-800 px-4 py-2 rounded-full flex items-center space-x-2">
-                        <span class="text-2xl">🌕</span> <span>MoonCoin</span>
-                    </span>
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *This DAO functionality and supported projects are simulated. Real DAO decisions would be on-chain.
-            </p>
-        </div>
-    </section>
-
-    <!-- Presale Leaderboards Section -->
-    <section id="leaderboards" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Presale Boards: Diamond Hands vs. Paper Hands! 💎📉</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Celebrating our true believers and transparently tracking those who couldn't resist the urge to sell. See who's holding strong and who's taken profits (or losses) from the EmogiNation presale!
-            </p>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- LeetBoard (Diamond Handers) -->
-                <div>
-                    <h3 class="text-3xl font-bold text-green-700 mb-6">💎 LeetBoard: The Diamond Handers! 💎</h3>
-                    <p class="text-lg text-gray-700 mb-4">These are the OGs who bought in presale and are holding strong, or even bought more!</p>
-                    <div class="overflow-x-auto mb-6">
-                        <table class="min-w-full bg-white rounded-lg shadow-md">
-                            <thead>
-                                <tr class="bg-green-100 text-green-800 uppercase text-sm leading-normal">
-                                    <th class="py-3 px-4 text-left">Rank</th>
-                                    <th class="py-3 px-4 text-left">Wallet/Handle</th>
-                                    <th class="py-3 px-4 text-left">Bought (Presale)</th>
-                                    <th class="py-3 px-4 text-left">Current Holdings</th>
-                                    <th class="py-3 px-4 text-left">% Remaining</th>
-                                    <th class="py-3 px-4 text-left">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-700 text-sm font-light">
-                                <tr class="border-b border-gray-200 leet-board-row">
-                                    <td class="py-3 px-4 text-left">1</td>
-                                    <td class="py-3 px-4 text-left">0xABC...123 <span class="animated-emoji">✨</span></td>
-                                    <td class="py-3 px-4 text-left">1,000,000</td>
-                                    <td class="py-3 px-4 text-left">1,200,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="profit-text">120%</span></td>
-                                    <td class="py-3 px-4 text-left">HODLing Strong 💪</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 leet-board-row">
-                                    <td class="py-3 px-4 text-left">2</td>
-                                    <td class="py-3 px-4 text-left">0xDEF...456 <span class="animated-emoji">🚀</span></td>
-                                    <td class="py-3 px-4 text-left">800,000</td>
-                                    <td class="py-3 px-4 text-left">800,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td>
-                                    <td class="py-3 px-4 text-left">True Believer 🙏</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 leet-board-row">
-                                    <td class="py-3 px-4 text-left">3</td>
-                                    <td class="py-3 px-4 text-left">0xGHI...789 <span class="animated-emoji">🌟</span></td>
-                                    <td class="py-3 px-4 text-left">750,000</td>
-                                    <td class="py-3 px-4 text-left">700,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="profit-text">93.3%</span></td>
-                                    <td class="py-3 px-4 text-left">Solid Holder ✅</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 leet-board-row">
-                                    <td class="py-3 px-4 text-left">4</td>
-                                    <td class="py-3 px-4 text-left">0xJKL...012 <span class="animated-emoji">💖</span></td>
-                                    <td class="py-3 px-4 text-left">600,000</td>
-                                    <td class="py-3 px-4 text-left">600,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td>
-                                    <td class="py-3 px-4 text-left">Diamond Hands 💎</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 leet-board-row">
-                                    <td class="py-3 px-4 text-left">5</td>
-                                    <td class="py-3 px-4 text-left">0xMNO...345 <span class="animated-emoji">📈</span></td>
-                                    <td class="py-3 px-4 text-left">550,000</td>
-                                    <td class="py-3 px-4 text-left">580,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="profit-text">105.4%</span></td>
-                                    <td class="py-3 px-4 text-left">Accumulator 💰</td>
-                                </tr>
-                                <!-- Add 15 more simulated entries -->
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">6</td><td class="py-3 px-4 text-left">0xPQR...678</td><td class="py-3 px-4 text-left">500,000</td><td class="py-3 px-4 text-left">480,000</td><td class="py-3 px-4 text-left">96%</td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">7</td><td class="py-3 px-4 text-left">0xSTU...901</td><td class="py-3 px-4 text-left">450,000</td><td class="py-3 px-4 text-left">450,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">8</td><td class="py-3 px-4 text-left">0xVWX...234</td><td class="py-3 px-4 text-left">400,000</td><td class="py-3 px-4 text-left">420,000</td><td class="py-3 px-4 text-left"><span class="profit-text">105%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">9</td><td class="py-3 px-4 text-left">0xYZA...567</td><td class="py-3 px-4 text-left">380,000</td><td class="py-3 px-4 text-left">380,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">10</td><td class="py-3 px-4 text-left">0xBCD...890</td><td class="py-3 px-4 text-left">350,000</td><td class="py-3 px-4 text-left">340,000</td><td class="py-3 px-4 text-left">97.1%</td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">11</td><td class="py-3 px-4 text-left">0xEFG...123</td><td class="py-3 px-4 text-left">320,000</td><td class="py-3 px-4 text-left">320,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">12</td><td class="py-3 px-4 text-left">0xHIJ...456</td><td class="py-3 px-4 text-left">300,000</td><td class="py-3 px-4 text-left">310,000</td><td class="py-3 px-4 text-left"><span class="profit-text">103.3%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">13</td><td class="py-3 px-4 text-left">0xKLM...789</td><td class="py-3 px-4 text-left">280,000</td><td class="py-3 px-4 text-left">270,000</td><td class="py-3 px-4 text-left">96.4%</td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">14</td><td class="py-3 px-4 text-left">0xNOP...012</td><td class="py-3 px-4 text-left">250,000</td><td class="py-3 px-4 text-left">250,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">15</td><td class="py-3 px-4 text-left">0xQRS...345</td><td class="py-3 px-4 text-left">230,000</td><td class="py-3 px-4 text-left">240,000</td><td class="py-3 px-4 text-left"><span class="profit-text">104.3%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">16</td><td class="py-3 px-4 text-left">0xTUV...678</td><td class="py-3 px-4 text-left">200,000</td><td class="py-3 px-4 text-left">190,000</td><td class="py-3 px-4 text-left">95%</td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">17</td><td class="py-3 px-4 text-left">0xWXY...901</td><td class="py-3 px-4 text-left">180,000</td><td class="py-3 px-4 text-left">180,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">18</td><td class="py-3 px-4 text-left">0xZAB...234</td><td class="py-3 px-4 text-left">160,000</td><td class="py-3 px-4 text-left">170,000</td><td class="py-3 px-4 text-left"><span class="profit-text">106.3%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="border-b border-gray-200 leet-board-row"><td class="py-3 px-4 text-left">19</td><td class="py-3 px-4 text-left">0xCDE...567</td><td class="py-3 px-4 text-left">140,000</td><td class="py-3 px-4 text-left">130,000</td><td class="py-3 px-4 text-left">92.9%</td><td class="py-3 px-4 text-left">Holding</td></tr>
-                                <tr class="leet-board-row"><td class="py-3 px-4 text-left">20</td><td class="py-3 px-4 text-left">0xFGH...890</td><td class="py-3 px-4 text-left">120,000</td><td class="py-3 px-4 text-left">120,000</td><td class="py-3 px-4 text-left"><span class="profit-text">100%</span></td><td class="py-3 px-4 text-left">Holding</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- JeetBoard (Paper Handers) -->
-                <div>
-                    <h3 class="text-3xl font-bold text-red-700 mb-6">📉 JeetBoard: The Paper Handers! 📉</h3>
-                    <p class="text-lg text-gray-700 mb-4">These are the ones who sold their presale allocations. Some took profits, some took losses.</p>
-                    <div class="overflow-x-auto mb-6">
-                        <table class="min-w-full bg-white rounded-lg shadow-md">
-                            <thead>
-                                <tr class="bg-red-100 text-red-800 uppercase text-sm leading-normal">
-                                    <th class="py-3 px-4 text-left">Rank</th>
-                                    <th class="py-3 px-4 text-left">Wallet/Handle</th>
-                                    <th class="py-3 px-4 text-left">Bought (Presale)</th>
-                                    <th class="py-3 px-4 text-left">Amount Sold</th>
-                                    <th class="py-3 px-4 text-left">% P/L (from Sale)</th>
-                                    <th class="py-3 px-4 text-left">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-700 text-sm font-light">
-                                <tr class="border-b border-gray-200 jeet-board-row">
-                                    <td class="py-3 px-4 text-left">1</td>
-                                    <td class="py-3 px-4 text-left">0x123...ABC <span class="animated-emoji">💸</span></td>
-                                    <td class="py-3 px-4 text-left">500,000</td>
-                                    <td class="py-3 px-4 text-left">500,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="profit-text">+25%</span></td>
-                                    <td class="py-3 px-4 text-left">Early Profit 🤑</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 jeet-board-row">
-                                    <td class="py-3 px-4 text-left">2</td>
-                                    <td class="py-3 px-4 text-left">0x456...DEF <span class="animated-emoji">📉</span></td>
-                                    <td class="py-3 px-4 text-left">700,000</td>
-                                    <td class="py-3 px-4 text-left">700,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="loss-text">-10%</span></td>
-                                    <td class="py-3 px-4 text-left">Panic Sold 😥</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 jeet-board-row">
-                                    <td class="py-3 px-4 text-left">3</td>
-                                    <td class="py-3 px-4 text-left">0x789...GHI <span class="animated-emoji">💨</span></td>
-                                    <td class="py-3 px-4 text-left">400,000</td>
-                                    <td class="py-3 px-4 text-left">400,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="profit-text">+5%</span></td>
-                                    <td class="py-3 px-4 text-left">Small Gain ✅</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 jeet-board-row">
-                                    <td class="py-3 px-4 text-left">4</td>
-                                    <td class="py-3 px-4 text-left">0x012...JKL <span class="animated-emoji">😭</span></td>
-                                    <td class="py-3 px-4 text-left">600,000</td>
-                                    <td class="py-3 px-4 text-left">600,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="loss-text">-20%</span></td>
-                                    <td class="py-3 px-4 text-left">Regrets 💔</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 jeet-board-row">
-                                    <td class="py-3 px-4 text-left">5</td>
-                                    <td class="py-3 px-4 text-left">0x345...MNO <span class="animated-emoji">🤷‍♀️</span></td>
-                                    <td class="py-3 px-4 text-left">300,000</td>
-                                    <td class="py-3 px-4 text-left">300,000</td>
-                                    <td class="py-3 px-4 text-left"><span class="profit-text">+10%</span></td>
-                                    <td class="py-3 px-4 text-left">Good Enough 👍</td>
-                                </tr>
-                                <!-- Add 15 more simulated entries -->
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">6</td><td class="py-3 px-4 text-left">0x678...PQR</td><td class="py-3 px-4 text-left">250,000</td><td class="py-3 px-4 text-left">250,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-5%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">7</td><td class="py-3 px-4 text-left">0x901...STU</td><td class="py-3 px-4 text-left">200,000</td><td class="py-3 px-4 text-left">200,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+15%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">8</td><td class="py-3 px-4 text-left">0x234...VWX</td><td class="py-3 px-4 text-left">180,000</td><td class="py-3 px-4 text-left">180,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-12%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">9</td><td class="py-3 px-4 text-left">0x567...YZA</td><td class="py-3 px-4 text-left">150,000</td><td class="py-3 px-4 text-left">150,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+8%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">10</td><td class="py-3 px-4 text-left">0x890...BCD</td><td class="py-3 px-4 text-left">120,000</td><td class="py-3 px-4 text-left">120,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-7%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">11</td><td class="py-3 px-4 text-left">0x123...EFG</td><td class="py-3 px-4 text-left">100,000</td><td class="py-3 px-4 text-left">100,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+3%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">12</td><td class="py-3 px-4 text-left">0x456...HIJ</td><td class="py-3 px-4 text-left">90,000</td><td class="py-3 px-4 text-left">90,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-18%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">13</td><td class="py-3 px-4 text-left">0x789...KLM</td><td class="py-3 px-4 text-left">80,000</td><td class="py-3 px-4 text-left">80,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+20%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">14</td><td class="py-3 px-4 text-left">0x012...NOP</td><td class="py-3 px-4 text-left">70,000</td><td class="py-3 px-4 text-left">70,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-2%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">15</td><td class="py-3 px-4 text-left">0x345...QRS</td><td class="py-3 px-4 text-left">60,000</td><td class="py-3 px-4 text-left">60,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+12%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">16</td><td class="py-3 px-4 text-left">0x678...TUV</td><td class="py-3 px-4 text-left">55,000</td><td class="py-3 px-4 text-left">55,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-9%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">17</td><td class="py-3 px-4 text-left">0x901...WXY</td><td class="py-3 px-4 text-left">50,000</td><td class="py-3 px-4 text-left">50,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+7%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">18</td><td class="py-3 px-4 text-left">0x234...ZAB</td><td class="py-3 px-4 text-left">45,000</td><td class="py-3 px-4 text-left">45,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-15%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="border-b border-gray-200 jeet-board-row"><td class="py-3 px-4 text-left">19</td><td class="py-3 px-4 text-left">0x567...CDE</td><td class="py-3 px-4 text-left">40,000</td><td class="py-3 px-4 text-left">40,000</td><td class="py-3 px-4 text-left"><span class="profit-text">+1%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                                <tr class="jeet-board-row"><td class="py-3 px-4 text-left">20</td><td class="py-3 px-4 text-left">0x890...FGH</td><td class="py-3 px-4 text-left">35,000</td><td class="py-3 px-4 text-left">35,000</td><td class="py-3 px-4 text-left"><span class="loss-text">-10%</span></td><td class="py-3 px-4 text-left">Sold</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *These leaderboards are simulated and do not reflect real-time on-chain data. Profit/Loss is calculated based on a hypothetical launch price relative to the presale price.
-            </p>
-        </div>
-    </section>
-
-    <!-- Tipping Bot Live Test Utility Section -->
-    <section id="tipping-bot-test" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Live Test: EmogiNation Tipping Bot! 🤖💸</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Experience the magic of emoji tipping! Interact with our simulated bot by sending up to 5 emojis, and watch as it confirms your $EMOJI tip. It's seamless, fun, and powered by emotions!
-            </p>
-
-            <div class="bg-blue-100 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
-                <h3 class="text-3xl font-bold text-blue-800 mb-6">Chat with the EmogiNation Tipping Bot! 💬</h3>
-                <div class="tipping-bot-chat mb-6" id="tippingBotChatBox">
-                    <div class="tipping-bot-message">🤖: Hello! Send me some emojis to tip! Max 5 per message.</div>
-                </div>
-                <div class="flex gap-4">
-                    <input type="text" id="tippingEmojiInput" placeholder="Send emojis to tip! (e.g., 🚀💖😂)" class="flex-grow p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" maxlength="10" />
-                    <button id="sendTipBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
-                        Tip! ✨
-                    </button>
-                </div>
-                <p id="tippingStatus" class="text-lg font-semibold mt-4"></p>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *This is a simulated interaction. No real $EMOJI is transacted.
-            </p>
-        </div>
-    </section>
-
-    <!-- Utility Section: Send Emojis -->
-    <section id="utility" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Utility: Send $EMOJI with Emojis! 💡</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Imagine sending cryptocurrency as easily and expressively as sending an emoji! With EmogiNation, this dream becomes a reality. Our innovative utility allows you to send $EMOJI tokens to your friends using simple emoji commands. Experience the future of fun finance!
-            </p>
-
-            <div class="bg-blue-50 rounded-xl p-8 shadow-inner max-w-2xl mx-auto">
-                <h3 class="text-3xl font-bold text-blue-800 mb-6">Live Demo: Emoji-Powered Transactions! 🚀</h3>
-                <div class="flex flex-col md:flex-row items-center justify-center gap-4 mb-6">
-                    <input type="text" id="recipientAddress" placeholder="Recipient Address (e.g., @friend_wallet)" class="flex-grow p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" />
-                    <input type="number" id="emojiAmount" placeholder="Amount ($EMOJI)" class="w-full md:w-auto p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" min="1" />
-                </div>
-                <div class="flex items-center justify-center gap-4 mb-8">
-                    <input type="text" id="emojiToSend" placeholder="Your Emoji (e.g., 🎉)" class="w-full md:w-auto p-3 rounded-lg border-2 border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" maxlength="2" />
-                    <button id="sendEmojiBtn" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold flex items-center space-x-2">
-                        Send $EMOJI! <span class="text-2xl">➡️</span>
-                    </button>
-                </div>
-                <div id="transactionStatus" class="text-lg font-semibold text-green-600"></div>
-                <div id="sendingAnimationContainer" class="relative h-20 w-full mt-8 flex justify-center items-center">
-                    <!-- Sending emoji animation will appear here -->
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *This is a simulated demonstration. Actual transactions require a connected wallet and network fees.
-            </p>
-        </div>
-    </section>
-
-    <!-- Roadmap Section -->
-    <section id="roadmap" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Roadmap: Our Journey to the Stars! 🗺️🚀</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Our path is clear, guided by community and innovation. Here's a glimpse into the exciting milestones ahead for EmogiNation!
-            </p>
-
-            <div class="relative flex flex-col items-center">
-                <!-- Phase 1 -->
-                <div class="w-full max-w-2xl bg-blue-50 p-6 rounded-xl shadow-md mb-8 text-left animate-fade-in-up">
-                    <h3 class="text-2xl font-bold text-blue-700 mb-3">Phase 1: The Genesis 🌟 (Completed)</h3>
-                    <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Concept & Whitepaper Release ✅</li>
-                        <li>Website Launch (You're here! 😉) ✅</li>
-                        <li>Community Building & Social Media Presence 🫂</li>
-                        <li>Initial Marketing Campaigns 📢</li>
-                    </ul>
-                </div>
-                <div class="absolute h-16 w-1 bg-blue-300 rounded-full top-[180px] md:top-[160px] z-0"></div>
-
-                <!-- Phase 2 -->
-                <div class="w-full max-w-2xl bg-pink-50 p-6 rounded-xl shadow-md mb-8 text-left animate-fade-in-up delay-1">
-                    <h3 class="text-2xl font-bold text-pink-700 mb-3">Phase 2: Ignition 🚀 (Current)</h3>
-                    <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Presale Launch & Completion 🔥</li>
-                        <li>Smart Contract Audit 🔒</li>
-                        <li>PancakeSwap/Uniswap Listing 📈</li>
-                        <li>Initial Liquidity Provision 💧</li>
-                        <li>First Airdrop Distribution 🎁</li>
-                    </ul>
-                </div>
-                <div class="absolute h-16 w-1 bg-pink-300 rounded-full top-[420px] md:top-[400px] z-0"></div>
-
-                <!-- Phase 3 -->
-                <div class="w-full max-w-2xl bg-yellow-50 p-6 rounded-xl shadow-md mb-8 text-left animate-fade-in-up delay-2">
-                    <h3 class="text-2xl font-bold text-yellow-700 mb-3">Phase 3: Ascension 🌕 (Future)</h3>
-                    <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Major CEX Listings 🏦</li>
-                        <li>NFT Collection Launch 🖼️</li>
-                        <li>EmogiNation Merch Store 👕</li>
-                        <li>Partnerships & Collaborations 🤝</li>
-                        <li>Community Governance & DAO 🗳️</li>
-                    </ul>
-                </div>
-                <div class="absolute h-16 w-1 bg-yellow-300 rounded-full top-[660px] md:top-[640px] z-0"></div>
-
-                <!-- Phase 4 -->
-                <div class="w-full max-w-2xl bg-green-50 p-6 rounded-xl shadow-md text-left animate-fade-in-up delay-3">
-                    <h3 class="text-2xl font-bold text-green-700 mb-3">Phase 4: Universal Domination 🌍 (Long-term)</h3>
-                    <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Cross-Chain Integration 🔗</li>
-                        <li>EmogiNation Mobile App 📱</li>
-                        <li>Metaverse Integration & Gaming 🎮</li>
-                        <li>Global Adoption & Beyond! ✨</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Collaborations Section -->
-    <section id="collaborations" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Collaborations: Stronger Together! 🤝</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                We believe in building bridges, not walls! EmogiNation is actively forging strategic partnerships with innovative projects and influential figures across the crypto space to expand our reach and utility.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="p-6 rounded-xl bg-purple-50 shadow-inner flex flex-col items-center justify-center text-center">
-                    <span class="text-5xl mb-4">🔗</span>
-                    <h3 class="text-2xl font-semibold mb-2">Project Alpha</h3>
-                    <p class="text-gray-700">Integrating $EMOJI for their NFT marketplace. A match made in digital heaven! 🖼️</p>
-                </div>
-                <div class="p-6 rounded-xl bg-yellow-50 shadow-inner flex flex-col items-center justify-center text-center">
-                    <span class="text-5xl mb-4">🌟</span>
-                    <h3 class="text-2xl font-semibold mb-2">CryptoGuru X</h3>
-                    <p class="text-gray-700">Strategic partnership with a top crypto influencer for massive exposure. 📢</p>
-                </div>
-                <div class="p-6 rounded-xl bg-green-50 shadow-inner flex flex-col items-center justify-center text-center">
-                    <span class="text-5xl mb-4">🎮</span>
-                    <h3 class="text-2xl font-semibold mb-2">GameFi Studios</h3>
-                    <p class="text-gray-700">Exploring $EMOJI integration into their upcoming play-to-earn game. Get ready to game! 🕹️</p>
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-8">
-                *These are simulated collaborations for illustrative purposes. More real partnerships to be announced!
-            </p>
-        </div>
-    </section>
-
-    <!-- Merchandise Section -->
-    <section id="merchandise" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Merchandise: Wear Your Emotions! 👕🛍️</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Show your EmogiNation pride with our exclusive merchandise! Express yourself with our unique emoji-inspired designs.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="p-4 rounded-xl bg-gray-100 shadow-inner flex flex-col items-center text-center">
-                    <img src="https://placehold.co/300x300/FFD700/2C3E50?text=%F0%9F%91%95%0A%24EMOJI+T-Shirt" alt="Emoji T-Shirt" class="w-full h-auto rounded-lg mb-4">
-                    <h3 class="text-xl font-semibold mb-2">EmogiNation T-Shirt</h3>
-                    <p class="text-gray-700">Rock the original laughing emoji! 😂</p>
-                    <p class="text-lg font-bold mt-2">25 $EMOJI</p>
-                </div>
-                <div class="p-4 rounded-xl bg-gray-100 shadow-inner flex flex-col items-center text-center">
-                    <img src="https://placehold.co/300x300/00BFFF/FFFFFF?text=%F0%9F%A7%A2%0A%24EMOJI+Hoodie" alt="Emoji Hoodie" class="w-full h-auto rounded-lg mb-4">
-                    <h3 class="text-xl font-semibold mb-2">EmogiNation Hoodie</h3>
-                    <p class="text-gray-700">Stay cozy and star-struck! 🤩</p>
-                    <p class="text-lg font-bold mt-2">50 $EMOJI</p>
-                </div>
-                <div class="p-4 rounded-xl bg-gray-100 shadow-inner flex flex-col items-center text-center">
-                    <img src="https://placehold.co/300x300/FF69B4/FFFFFF?text=%F0%9F%8C%9F%0A%24EMOJI+Mug" alt="Emoji Mug" class="w-full h-auto rounded-lg mb-4">
-                    <h3 class="text-xl font-semibold mb-2">EmogiNation Mug</h3>
-                    <p class="text-gray-700">Sip your coffee with a rocket! 🚀</p>
-                    <p class="text-lg font-bold mt-2">15 $EMOJI</p>
-                </div>
-            </div>
-            <a href="#" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold inline-block mt-10">
-                Shop Now! (Coming Soon) 🛒
-            </a>
-        </div>
-    </section>
-
-    <!-- Big Exchange Listings Section -->
-    <section id="exchanges" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Major Exchange Listings: Expanding Our Reach! 🏦📈</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                EmogiNation is set for global recognition! We are actively pursuing listings on the world's leading cryptocurrency exchanges to ensure maximum accessibility and liquidity for our community.
-            </p>
-
-            <div class="flex flex-wrap justify-center items-center gap-10">
-                <div class="flex flex-col items-center text-center p-4 bg-gray-50 rounded-lg shadow-sm">
-                    <img src="https://placehold.co/100x100/FFF/000?text=Binance" alt="Binance Logo" class="h-20 mb-2">
-                    <p class="font-semibold text-lg">Binance</p>
-                    <span class="text-sm text-green-600">🚀 Targeted Q4 2025</span>
-                </div>
-                <div class="flex flex-col items-center text-center p-4 bg-gray-50 rounded-lg shadow-sm">
-                    <img src="https://placehold.co/100x100/FFF/000?text=Coinbase" alt="Coinbase Logo" class="h-20 mb-2">
-                    <p class="font-semibold text-lg">Coinbase</p>
-                    <span class="text-sm text-green-600">🌟 Targeted Q1 2026</span>
-                </div>
-                <div class="flex flex-col items-center text-center p-4 bg-gray-50 rounded-lg shadow-sm">
-                    <img src="https://placehold.co/100x100/FFF/000?text=Kraken" alt="Kraken Logo" class="h-20 mb-2">
-                    <p class="font-semibold text-lg">Kraken</p>
-                    <span class="text-sm text-green-600">🔥 Targeted Q4 2025</span>
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-8">
-                *These are target exchange listings and are subject to change based on market conditions and exchange requirements.
-            </p>
-        </div>
-    </section>
-
-    <!-- IRL Event Sponsors Section -->
-    <section id="sponsors" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-right">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">IRL Event Sponsors: Powering Our Community Gatherings! ✨🤝</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                EmogiNation is planning exciting real-world events to connect our community! We're proud to acknowledge our simulated sponsors who help make these gatherings possible.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="p-6 rounded-xl bg-gray-50 shadow-inner flex flex-col items-center justify-center">
-                    <img src="https://placehold.co/150x80/E0F2F7/2C3E50?text=CryptoCon+Global" alt="CryptoCon Global Logo" class="h-20 mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">CryptoCon Global</h3>
-                    <p class="text-gray-700 text-center">Leading blockchain conference organizer.</p>
-                </div>
-                <div class="p-6 rounded-xl bg-gray-50 shadow-inner flex flex-col items-center justify-center">
-                    <img src="https://placehold.co/150x80/FFD700/2C3E50?text=Decentralized+Ventures" alt="Decentralized Ventures Logo" class="h-20 mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">Decentralized Ventures</h3>
-                    <p class="text-gray-700 text-center">Early-stage crypto project investor.</p>
-                </div>
-                <div class="p-6 rounded-xl bg-gray-50 shadow-inner flex flex-col items-center justify-center">
-                    <img src="https://placehold.co/150x80/FF69B4/FFFFFF?text=NFT+Art+Gallery" alt="NFT Art Gallery Logo" class="h-20 mb-4">
-                    <h3 class="text-xl font-semibold text-gray-800">NFT Art Gallery</h3>
-                    <p class="text-gray-700 text-center">Promoting digital art and collectibles.</p>
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-8">
-                *These sponsors are simulated for illustrative purposes. Real sponsors will be announced closer to event dates.
-            </p>
-        </div>
-    </section>
-
-    <!-- Presale Section -->
-    <section id="presale" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll slide-in-left">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Presale: Your Chance to Join Early! 🔥</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                The EmogiNation presale is your golden ticket to becoming an early adopter of the most expressive meme coin on the blockchain! Don't miss out on this incredible opportunity to secure your share. 💎
-            </p>
-
-            <div class="bg-yellow-100 rounded-xl p-6 mb-10 shadow-md">
-                <h3 class="text-3xl font-bold text-yellow-800 mb-4">Presale Progress: Halfway to the Moon! 🌕</h3>
-                <div class="flex justify-between text-xl font-semibold text-gray-700 mb-2">
-                    <span>Current: <span class="text-blue-600">$25,000</span> 🎉</span>
-                    <span>Goal: <span class="text-green-600">$50,000</span> 🎯</span>
-                </div>
-                <div class="progress-bar-container">
-                    <div class="progress-bar-fill" style="width: 50%;"></div>
-                </div>
-                <p class="text-lg text-gray-700 mt-4 font-medium">
-                    We've raised **$25,000** towards our **$50,000** goal! The community is growing fast! Join the excitement! 🥳
-                </p>
-            </div>
-
-            <p class="text-xl text-gray-800 mb-8 font-semibold">
-                Contribute now and be a part of history! Every contribution fuels our journey to the stars! ⭐
-            </p>
-            <a href="#" class="btn-primary py-4 px-10 rounded-full text-xl font-bold inline-block animate-wiggle-slow">
-                Contribute to Presale Now! 🚀💸
-            </a>
-            <p class="text-sm text-gray-500 mt-4">
-                *Minimum contribution: 0.1 ETH. Details on official channels.
-            </p>
-        </div>
-    </section>
-
-    <!-- Team Section -->
-    <section id="team" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Meet the EmogiNation Visionary! 🫂</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Behind every great movement is a passionate leader. Meet the driving force behind EmogiNation!
-            </p>
-
-            <div class="flex flex-col items-center justify-center">
-                <div id="precidoboss-profile" class="relative w-48 h-48 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden mb-6 shadow-xl">
-                    <span id="profile-emoji" class="profile-emoji">😎</span>
-                </div>
-                <h3 class="text-3xl font-extrabold text-gray-800 mb-2">PRECIDOBOSS</h3>
-                <a href="https://twitter.com/PRECIDOBOS" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline text-xl font-semibold mb-4">@PRECIDOBOS 🐦</a>
-                <p class="text-lg text-gray-700 max-w-xl mx-auto">
-                    The mastermind behind EmogiNation, PRECIDOBOSS is a seasoned crypto enthusiast with a vision to make finance fun, accessible, and universally expressive through the power of emojis. Their dedication and innovative spirit are the rocket fuel for our journey! 🚀💡
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Meme Section -->
-    <section id="memes" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Meme Gallery: Laugh Your Way to the Moon! 😂</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Because what's a meme coin without some epic memes? Get ready for a dose of pure emoji-infused humor!
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="meme-container animate-fade-in-up">
-                    <img src="https://placehold.co/400x300/FFD700/2C3E50?text=Me+waiting+for+%24EMOJI+to+pump%0A%F0%9F%98%82%F0%9F%92%A5" alt="Meme 1" class="w-full h-auto rounded-t-lg">
-                    <div class="meme-text">When the chart looks like your mood! 📈😂</div>
-                </div>
-                <div class="meme-container animate-fade-in-up delay-1">
-                    <img src="https://placehold.co/400x300/00BFFF/FFFFFF?text=My+wallet+after+buying+%24EMOJI%0A%F0%9F%A4%AF%F0%9F%92%B0" alt="Meme 2" class="w-full h-auto rounded-t-lg">
-                    <div class="meme-text">Feeling rich with $EMOJI! 🤑</div>
-                </div>
-                <div class="meme-container animate-fade-in-up delay-2">
-                    <img src="https://placehold.co/400x300/FF69B4/FFFFFF?text=HODLing+%24EMOJI+like...%0A%F0%9F%92%8E%F0%9F%92%AA" alt="Meme 3" class="w-full h-auto rounded-t-lg">
-                    <div class="meme-text">Diamond Hands forever! 💎🙌</div>
-                </div>
-                <div class="meme-container animate-fade-in-up delay-3">
-                    <img src="https://placehold.co/400x300/32CD32/FFFFFF?text=When+you+send+money+with+an+emoji%0A%F0%9F%98%8E%F0%9F%91%8D" alt="Meme 4" class="w-full h-auto rounded-t-lg">
-                    <div class="meme-text">The power of emoji transactions! 😎</div>
-                </div>
-                <div class="meme-container animate-fade-in-up delay-4">
-                    <img src="https://placehold.co/400x300/8A2BE2/FFFFFF?text=Me+explaining+%24EMOJI+to+my+friends%0A%F0%9F%AA%A8%F0%9F%98%85" alt="Meme 5" class="w-full h-auto rounded-t-lg">
-                    <div class="meme-text">It's simple, really! 🤯</div>
-                </div>
-                <div class="meme-container animate-fade-in-up delay-5">
-                    <img src="https://placehold.co/400x300/FF4500/FFFFFF?text=EmogiNation+community+vibes%0A%F0%9F%A5%B3%F0%9F%8E%89" alt="Meme 6" class="w-full h-auto rounded-t-lg">
-                    <div class="meme-text">Best community ever! 🎉</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Frequently Asked Questions (FAQ) ❓</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Got questions about EmogiNation? We've got answers! Dive into our most common inquiries.
-            </p>
-
-            <div class="text-left max-w-3xl mx-auto space-y-6">
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">What is EmogiNation ($EMOJI)? 🤔</h3>
-                    <p class="text-gray-700">EmogiNation ($EMOJI) is a revolutionary meme coin that aims to combine the universal language of emojis with decentralized finance. It's about making crypto fun, expressive, and accessible to everyone!</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">How can I buy $EMOJI? 🛒</h3>
-                    <p class="text-700">You can acquire $EMOJI during our presale event (check the Presale section!) or after launch on decentralized exchanges like PancakeSwap/Uniswap. We'll also be targeting major CEX listings!</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">What are the utilities of $EMOJI? 💡</h3>
-                    <p class="text-gray-700">$EMOJI offers unique utilities like emoji-powered transactions (sending crypto with emojis), NFT minting based on emojis, staking for passive income, and powering our Telegram tipping bots. More utilities are on the roadmap!</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Is EmogiNation secure? 🔒</h3>
-                    <p class="text-gray-700">Yes! We prioritize security. Our smart contract will undergo rigorous audits, and liquidity will be locked to ensure investor confidence. Always do your own research (DYOR) as well!</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-lg shadow-sm">
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">How can I get involved in the community? 🫂</h3>
-                    <p class="text-gray-700">Join our vibrant community on Telegram, Twitter, and Discord! Participate in discussions, share your emoji memes, and help us shape the future of EmogiNation. Links are in the Community section!</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Community Metrics Section -->
-    <section id="community-metrics" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Community Metrics: Growing Strong! 🌐📈</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                Our community is the heart of EmogiNation! See how we're growing and engaging across our platforms.
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-                <div class="p-6 rounded-xl bg-blue-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">👥</span>
-                    <h3 class="text-2xl font-semibold mb-2">Telegram Members</h3>
-                    <p class="text-4xl font-extrabold text-blue-700">15,000+</p>
-                    <p class="text-gray-600 mt-2">Active and passionate emoji enthusiasts!</p>
-                </div>
-                <div class="p-6 rounded-xl bg-pink-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">🐦</span>
-                    <h3 class="text-2xl font-semibold mb-2">Twitter Followers</h3>
-                    <p class="text-4xl font-extrabold text-pink-700">25,000+</p>
-                    <p class="text-gray-600 mt-2">Spreading the emoji revolution far and wide!</p>
-                </div>
-                <div class="p-6 rounded-xl bg-yellow-50 shadow-inner flex flex-col items-center justify-center">
-                    <span class="text-5xl mb-4">💬</span>
-                    <h3 class="text-2xl font-semibold mb-2">Daily Engagements</h3>
-                    <p class="text-4xl font-extrabold text-yellow-700">5,000+</p>
-                    <p class="text-gray-600 mt-2">Vibrant discussions and emoji interactions!</p>
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-4">
-                *All metrics are simulated for demonstration purposes.
-            </p>
-        </div>
-    </section>
-
-    <!-- Yappers on X Leaderboard & Social Feed Section -->
-    <section id="social-feed" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">EmogiNation Social Hub: Yappers & Vibes! 🐦✨</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                See who's making waves on X (Twitter) and check out the latest buzz from the EmogiNation community!
-            </p>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Yappers Leaderboard -->
-                <div>
-                    <h3 class="text-3xl font-bold text-gray-800 mb-6">Top 10 Yappers on X (7-Day Mindshare) 🏆</h3>
-                    <div class="overflow-x-auto mb-6">
-                        <table class="min-w-full bg-white rounded-lg shadow-md">
-                            <thead>
-                                <tr class="bg-indigo-100 text-indigo-800 uppercase text-sm leading-normal">
-                                    <th class="py-3 px-6 text-left">Rank</th>
-                                    <th class="py-3 px-6 text-left">X Handle 🐦</th>
-                                    <th class="py-3 px-6 text-left">Mindshare (%) 🧠</th>
-                                    <th class="py-3 px-6 text-left">Weekly Earnings ($EMOJI) 💰</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-gray-700 text-sm font-light">
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">1</td>
-                                    <td class="py-3 px-6 text-left">@CryptoWhale_ETH</td>
-                                    <td class="py-3 px-6 text-left">18.5%</td>
-                                    <td class="py-3 px-6 text-left">15,000</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">2</td>
-                                    <td class="py-3 px-6 text-left">@EmojiQueen_NFT</td>
-                                    <td class="py-3 px-6 text-left">14.2%</td>
-                                    <td class="py-3 px-6 text-left">12,000</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">3</td>
-                                    <td class="py-3 px-6 text-left">@Moonshot_Maniac</td>
-                                    <td class="py-3 px-6 text-left">11.8%</td>
-                                    <td class="py-3 px-6 text-left">10,000</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">4</td>
-                                    <td class="py-3 px-6 text-left">@DeFi_Degen</td>
-                                    <td class="py-3 px-6 text-left">9.1%</td>
-                                    <td class="py-3 px-6 text-left">8,000</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">5</td>
-                                    <td class="py-3 px-6 text-left">@EmogiNationFan</td>
-                                    <td class="py-3 px-6 text-left">7.5%</td>
-                                    <td class="py-3 px-6 text-left">6,500</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">6</td>
-                                    <td class="py-3 px-6 text-left">@HODL_Hero</td>
-                                    <td class="py-3 px-6 text-left">6.3%</td>
-                                    <td class="py-3 px-6 text-left">5,000</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">7</td>
-                                    <td class="py-3 px-6 text-left">@NFT_Collector</td>
-                                    <td class="py-3 px-6 text-left">5.9%</td>
-                                    <td class="py-3 px-6 text-left">4,500</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">8</td>
-                                    <td class="py-3 px-6 text-left">@BlockchainBabe</td>
-                                    <td class="py-3 px-6 text-left">4.8%</td>
-                                    <td class="py-3 px-6 text-left">3,500</td>
-                                </tr>
-                                <tr class="border-b border-gray-200 hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">9</td>
-                                    <td class="py-3 px-6 text-left">@MemeLord_X</td>
-                                    <td class="py-3 px-6 text-left">3.7%</td>
-                                    <td class="py-3 px-6 text-left">2,500</td>
-                                </tr>
-                                <tr class="hover:bg-gray-100">
-                                    <td class="py-3 px-6 text-left">10</td>
-                                    <td class="py-3 px-6 text-left">@Token_Talker</td>
-                                    <td class="py-3 px-6 text-left">2.9%</td>
-                                    <td class="py-3 px-6 text-left">1,500</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <p class="text-sm text-gray-500 mt-4">
-                        *This leaderboard is simulated and does not reflect real-time X (Twitter) data.
-                    </p>
-                </div>
-
-                <!-- Social Feed -->
-                <div>
-                    <h3 class="text-3xl font-bold text-gray-800 mb-6">Latest EmogiNation Buzz! 📢</h3>
-                    <div class="space-y-6">
-                        <div class="social-post animate-fade-in-up">
-                            <div class="flex items-center mb-2">
-                                <img src="https://placehold.co/40x40/FFD700/FFF?text=🐦" alt="Profile Pic" class="rounded-full mr-3">
-                                <div>
-                                    <p class="font-semibold text-gray-900">EmogiNation Official <span class="text-blue-500">@EmogiNation_</span></p>
-                                    <p class="text-gray-500 text-sm">2 hours ago</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-800">🚀 Our launch countdown is LIVE! Get ready for the most expressive crypto revolution! Check it out on our website! #EmogiNation #Crypto #Launch</p>
-                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
-                                <span>❤️ 1.2K</span>
-                                <span>🔁 350</span>
-                                <span>💬 120</span>
-                            </div>
-                        </div>
-                        <div class="social-post animate-fade-in-up delay-1">
-                            <div class="flex items-center mb-2">
-                                <img src="https://placehold.co/40x40/00BFFF/FFF?text=👑" alt="Profile Pic" class="rounded-full mr-3">
-                                <div>
-                                    <p class="font-semibold text-gray-900">CryptoKing 👑 <span class="text-blue-500">@CryptoWhale_ETH</span></p>
-                                    <p class="text-gray-500 text-sm">5 hours ago</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-800">$EMOJI staking pool is looking juicy! Passive income with emojis? Sign me up! 🌱💰 #DeFi #EmogiNation</p>
-                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
-                                <span>❤️ 800</span>
-                                <span>🔁 210</span>
-                                <span>💬 75</span>
-                            </div>
-                        </div>
-                        <div class="social-post animate-fade-in-up delay-2">
-                            <div class="flex items-center mb-2">
-                                <img src="https://placehold.co/40x40/FF69B4/FFF?text=🎨" alt="Profile Pic" class="rounded-full mr-3">
-                                <div>
-                                    <p class="font-semibold text-gray-900">NFT Artist Jane <span class="text-blue-500">@EmojiQueen_NFT</span></p>
-                                    <p class="text-gray-500 text-sm">1 day ago</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-800">Just minted my first emoji NFT on EmogiNation! This is truly innovative. My 🦄 is now an official collectible! 🖼️✨ #NFTs #EmogiNation</p>
-                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
-                                <span>❤️ 650</span>
-                                <span>🔁 180</span>
-                                <span>💬 60</span>
-                            </div>
-                        </div>
-                        <div class="social-post animate-fade-in-up delay-3">
-                            <div class="flex items-center mb-2">
-                                <img src="https://placehold.co/40x40/8A2BE2/FFF?text=🤝" alt="Profile Pic" class="rounded-full mr-3">
-                                <div>
-                                    <p class="font-semibold text-gray-900">DeFi Degen <span class="text-blue-500">@DeFi_Degen</span></p>
-                                    <p class="text-gray-500 text-sm">2 days ago</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-800">The EmogiNation team is building some solid partnerships. This project has serious long-term potential! 📈 #EmogiNation #Partnerships</p>
-                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
-                                <span>❤️ 500</span>
-                                <span>🔁 150</span>
-                                <span>💬 40</span>
-                            </div>
-                        </div>
-                        <div class="social-post animate-fade-in-up delay-4">
-                            <div class="flex items-center mb-2">
-                                <img src="https://placehold.co/40x40/32CD32/FFF?text=🤖" alt="Profile Pic" class="rounded-full mr-3">
-                                <div>
-                                    <p class="font-semibold text-gray-900">Bot Master <span class="text-blue-500">@Bot_Builder</span></p>
-                                    <p class="text-gray-500 text-sm">3 days ago</p>
-                                </div>
-                            </div>
-                            <p class="text-gray-800">Tested the EmogiNation tipping bot. It's so smooth! Easy way to send appreciation with $EMOJI. Great utility! 👍💸 #TippingBot #EmogiNation</p>
-                            <div class="flex items-center space-x-4 text-gray-500 text-sm mt-3">
-                                <span>❤️ 400</span>
-                                <span>🔁 100</span>
-                                <span>💬 30</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <p class="text-sm text-gray-500 mt-8">
-                *The social feed content is simulated and does not reflect real-time posts from X (Twitter).
-            </p>
-        </div>
-    </section>
-
-    <!-- How To Get Section -->
-    <section id="how-to-get" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">How to Get Your Emojis! Your Path to EmogiNation Wealth! 💰</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-8 max-w-2xl mx-auto">
-                Embarking on your EmogiNation journey is as delightfully simple as sending your favorite smiley face! Follow these straightforward steps to seamlessly become an integral part of our thriving and expressive community. 👇
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="p-6 rounded-xl bg-green-50 shadow-inner flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
-                    <span class="text-5xl mb-4 animate-float">1️⃣</span>
-                    <h3 class="text-2xl font-semibold mb-3">Secure Your Wallet</h3>
-                    <p class="text-gray-700">Download and set up MetaMask or your preferred, trusted crypto wallet. This will be your secure and personalized portal to the exciting emojiverse! 🦊🔒</p>
-                </div>
-                <div class="p-6 rounded-xl bg-purple-50 shadow-inner flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
-                    <span class="text-5xl mb-4 animate-pulse-slow">2️⃣</span>
-                    <h3 class="text-2xl font-semibold mb-3">Fuel Your Wallet</h3>
-                    <p class="text-gray-700">Acquire some ETH or BNB and transfer it to your wallet. These foundational cryptocurrencies are essential for swapping into your coveted EmogiNation tokens. 💸💎</p>
-                </div>
-                <div class="p-6 rounded-xl bg-orange-50 shadow-inner flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
-                    <span class="text-5xl mb-4 animate-rotate-y">3️⃣</span>
-                    <h3 class="text-2xl font-semibold mb-3">Swap for EmogiNation!</h3>
-                    <p class="text-gray-700">Visit our highly anticipated official swap link (launching soon!) and effortlessly exchange your crypto for EmogiNation tokens. Prepare to truly express yourself financially! 🔄🎉</p>
-                </div>
-            </div>
-            <a href="#" class="btn-primary py-3 px-8 rounded-full text-lg font-semibold inline-block mt-12 animate-wiggle-slow">
-                Official Swap Link (Launching Soon!) 🔗✨
-            </a>
-        </div>
-    </section>
-
-    <!-- Community Section -->
-    <section id="community" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center">
-            <h2 class="text-4xl font-extrabold gradient-text mb-8">Join the Thriving EmogiNation Community! 🫂</h2>
-            <p class="text-lg text-gray-700 leading-relaxed mb-10 max-w-3xl mx-auto">
-                The unparalleled strength of EmogiNation resides within its incredibly vibrant and passionate community. Connect instantly with fellow emoji enthusiasts, passionately share groundbreaking ideas, and actively help us collectively sculpt the magnificent future of EmogiNation!
-            </p>
-            <div class="flex flex-wrap justify-center gap-6">
-                <a href="#" class="bg-blue-600 text-white py-3 px-6 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-blue-700 transition duration-300 transform hover:scale-105">
-                    <span class="text-2xl">💬</span> <span>Telegram</span>
-                </a>
-                <a href="#" class="bg-gray-800 text-white py-3 px-6 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-gray-900 transition duration-300 transform hover:scale-105">
-                    <span class="text-2xl">🐦</span> <span>Twitter</span>
-                </a>
-                <a href="#" class="bg-purple-700 text-white py-3 px-6 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-purple-800 transition duration-300 transform hover:scale-105">
-                    <span class="text-2xl">👾</span> <span>Discord</span>
-                </a>
-                <a href="#" class="bg-red-600 text-white py-3 px-6 rounded-full text-lg font-semibold flex items-center space-x-2 hover:bg-red-700 transition duration-300 transform hover:scale-105">
-                    <span class="text-2xl">📹</span> <span>YouTube</span>
-                </a>
-            </div>
-            <p class="text-xl text-gray-800 mt-10 font-extrabold animate-fade-in-up">
-                Together, let's forge a world where every emotion is profoundly valued, and every emoji represents a triumphant leap towards ultimate financial freedom! 💖🚀
-            </p>
-        </div>
-    </section>
-
-    <!-- Disclaimer Section -->
-    <section id="disclaimer" class="container mx-auto py-16 px-4 md:px-12 animate-on-scroll">
-        <div class="card p-8 md:p-12 text-center bg-red-50 border border-red-200">
-            <h2 class="text-3xl font-extrabold text-red-700 mb-6">Important Disclaimer ⚠️</h2>
-            <p class="text-lg text-gray-700 leading-relaxed">
-                Cryptocurrency investments are subject to high market risk, including the possibility of losing the entire amount invested. Please conduct your own thorough research and seek independent financial advice before making any investment decisions. EmogiNation is a meme coin and its value is highly speculative and volatile. This website's content is for informational and entertainment purposes only and does not constitute financial advice.
-            </p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-12 rounded-t-3xl">
-        <div class="container mx-auto text-center px-4">
-            <p class="mb-4">&copy; 2025 EmogiNation. All rights reserved. Crafted with immense ❤️ and countless Emojis. ✨</p>
-            <div class="flex justify-center space-x-6">
-                <a href="#" class="text-gray-400 hover:text-white transition duration-300">Privacy Policy</a>
-                <a href="#" class="text-gray-400 hover:text-white transition duration-300">Terms of Service</a>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // Array of emojis to use for animations
-        const emojis = ['😂', '🤩', '🚀', '💖', '✨', '💰', '🌐', '📈', '🎨', '👍', '🥳', '🌟', '🎉', '💡', '🔥', '💎', '💯', '✅', '🔒', '🎯', '🫂', '🌈', '🎊', '💫', '😎', '🤯', '🤑', '🙌', '👑', '🌕', '🏆', '🌱', '🎁', '💬', '🖼️', '🦄', '🐶', '🐱', '🦊', '🐼', '🐻', '🐯', '🦁', '🐸', '🐢', '🐍', '🐲', '🐳', '🐬', '🐠', '🦀', '🐞', '🦋', '🌸', '🌼', '🌻', '🍎', '🍊', '🍋', '🍉', '🍇', '🍓', '🍕', '🍔', '🍟', '🌮', '🍣', '🍦', '🍩', '🍪', '🍫', '☕', '🥛', '🍺', '🍷', '🍸', '🍹', '🎈', '🎁', '🎉', '🎊', '🎀', '🎵', '🎶', '🎤', '🎧', '🥁', '🎸', '🎹', '🎺', '🎻', '🎲', '🧩', '🎮', '🕹️', '👾', '🤖', '👻', '👽', '🎃', '🎄', '🎅', '🤶', '👼', '🤴', '👸', '🤵', '👰', '🧙', '🧚', '🧛', '🧜', '🧝', '🧞', '🧟', '🧑‍🎄', '🦸', '🦹', '🧑‍🚀', '🧑‍✈️', '👮', '👷', '💂', '🕵️', '🧑‍⚕️', '🧑‍🌾', '🧑‍🍳', '🧑‍🎓', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️', '🧑‍✈️', '🧑‍🚀', '🧑‍🎤', '🧑‍🎨', '🧑‍🏫', '🧑‍🏭', '🧑‍💻', '🧑‍💼', '🧑‍🔧', '🧑‍🔬', '🧑‍🚒', '🧑‍⚖️'];
-        const cursorEmojis = ['✨', '🌟', '💖', '🚀', '💎', '🔥', '💯', '🥳', '💡', '🎨']; // Emojis for the cursor
-
-        // --- Custom Mouse Pointer ---
-        const customCursor = document.getElementById('custom-cursor');
-        let currentCursorEmojiIndex = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            customCursor.style.left = `${e.clientX}px`;
-            customCursor.style.top = `${e.clientY}px`;
-        });
-
-        // Change cursor emoji periodically
-        setInterval(() => {
-            currentCursorEmojiIndex = (currentCursorEmojiIndex + 1) % cursorEmojis.length;
-            customCursor.textContent = cursorEmojis[currentCursorEmojiIndex];
-        }, 1000); // Change emoji every second
-
-        // --- Scrolling Emojis ---
-        let lastScrollY = window.scrollY;
-        let scrollEmojiCounter = 0; // To control how many emojis are generated per scroll event
-
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-            if (Math.abs(currentScrollY - lastScrollY) > 50) { // Only trigger if scrolled a significant amount
-                scrollEmojiCounter++;
-                if (scrollEmojiCounter % 2 === 0) { // Generate emojis every other significant scroll
-                    const numEmojis = Math.floor(Math.random() * 3) + 1; // 1 to 3 emojis
-                    for (let i = 0; i < numEmojis; i++) {
-                        createScrollingEmoji();
-                    }
-                }
-                lastScrollY = currentScrollY;
-            }
-        });
-
-        function createScrollingEmoji() {
-            const emoji = document.createElement('span');
-            emoji.classList.add('scrolling-emoji');
-            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            emoji.style.left = `${Math.random() * 100}vw`; // Random horizontal position
-            emoji.style.animationDuration = `${Math.random() * 3 + 3}s`; // 3-6 seconds animation
-            emoji.style.fontSize = `${Math.random() * 2 + 1.5}rem`; // 1.5rem to 3.5rem
-            document.body.appendChild(emoji);
-
-            // Remove emoji after animation ends
-            emoji.addEventListener('animationend', () => {
-                emoji.remove();
-            });
-        }
-
-        // --- Click Effect Emojis ---
-        document.addEventListener('click', (e) => {
-            const numEmojis = Math.floor(Math.random() * 5) + 3; // 3 to 7 emojis per click
-            for (let i = 0; i < numEmojis; i++) {
-                createClickEmoji(e.clientX, e.clientY);
-            }
-        });
-
-        function createClickEmoji(x, y) {
-            const emoji = document.createElement('span');
-            emoji.classList.add('click-emoji');
-            emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            emoji.style.left = `${x}px`;
-            emoji.style.top = `${y}px`;
-            emoji.style.animationDuration = `${Math.random() * 0.5 + 0.7}s`; // 0.7-1.2 seconds animation
-            emoji.style.fontSize = `${Math.random() * 1.5 + 1.5}rem`; // 1.5rem to 3rem
-            document.body.appendChild(emoji);
-
-            // Remove emoji after animation ends
-            emoji.addEventListener('animationend', () => {
-                emoji.remove();
-            });
-        }
-
-        // --- Scroll-triggered animations for sections ---
-        const observerOptions = {
-            root: null, // viewport
-            rootMargin: '0px',
-            threshold: 0.2 // Trigger when 20% of the element is visible
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    // Optional: stop observing once animated
-                    // observer.unobserve(entry.target);
-                } else {
-                    // Optional: remove class when out of view to re-animate on scroll back up
-                    // entry.target.classList.remove('is-visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.animate-on-scroll').forEach(section => {
-            observer.observe(section);
-        });
-
-        // --- Utility: Send Emoji Functionality ---
-        const sendEmojiBtn = document.getElementById('sendEmojiBtn');
-        const recipientAddressInput = document.getElementById('recipientAddress');
-        const emojiAmountInput = document.getElementById('emojiAmount');
-        const emojiToSendInput = document.getElementById('emojiToSend');
-        const transactionStatus = document.getElementById('transactionStatus');
-        const sendingAnimationContainer = document.getElementById('sendingAnimationContainer');
-
-        sendEmojiBtn.addEventListener('click', () => {
-            const recipient = recipientAddressInput.value.trim();
-            const amount = parseFloat(emojiAmountInput.value);
-            const emoji = emojiToSendInput.value.trim();
-
-            if (!recipient || isNaN(amount) || amount <= 0 || !emoji) {
-                transactionStatus.textContent = 'Please fill in all fields correctly! ⚠️';
-                transactionStatus.style.color = '#EF4444'; // Red color
-                return;
-            }
-
-            transactionStatus.textContent = `Sending ${amount} $EMOJI with ${emoji} to ${recipient}... 📤`;
-            transactionStatus.style.color = '#2563EB'; // Blue color
-
-            // Create and animate the sending emoji
-            const sendingEmoji = document.createElement('span');
-            sendingEmoji.classList.add('sending-emoji');
-            sendingEmoji.textContent = emoji;
-            sendingEmoji.style.left = '0px'; // Start from left
-            sendingEmoji.style.top = '0px'; // Start from top
-            sendingAnimationContainer.appendChild(sendingEmoji);
-
-            // Simulate transaction delay
-            setTimeout(() => {
-                sendingEmoji.remove(); // Remove the animated emoji
-                transactionStatus.textContent = `Transaction successful! ${amount} $EMOJI sent to ${recipient} with a ${emoji} of approval! ✅`;
-                transactionStatus.style.color = '#10B981'; // Green color
-                // Clear inputs
-                recipientAddressInput.value = '';
-                emojiAmountInput.value = '';
-                emojiToSendInput.value = '';
-            }, 1500); // 1.5 seconds for animation and "transaction"
-        });
-
-        // --- Team Profile Picture Dynamic Emoji ---
-        const profileEmoji = document.getElementById('profile-emoji');
-        const teamEmojis = ['😎', '💡', '🚀', '🧠', '🌟', '👑', '👨‍💻'];
-        let currentTeamEmojiIndex = 0;
-
-        setInterval(() => {
-            currentTeamEmojiIndex = (currentTeamEmojiIndex + 1) % teamEmojis.length;
-            profileEmoji.textContent = teamEmojis[currentTeamEmojiIndex];
-        }, 2000); // Change emoji every 2 seconds
-
-        // --- Staking Pool Simulation ---
-        let stakedAmount = 0;
-        let estimatedEarnings = 0;
-        const stakingAPY = 0.0001; // 0.01% per second for simulation
-        let stakingInterval;
-
-        const stakedAmountDisplay = document.getElementById('stakedAmount');
-        const estimatedEarningsDisplay = document.getElementById('estimatedEarnings');
-        const stakeInput = document.getElementById('stakeInput');
-        const stakeBtn = document.getElementById('stakeBtn');
-        const claimBtn = document.getElementById('claimBtn');
-        const stakingStatus = document.getElementById('stakingStatus');
-
-        function updateStakingDisplay() {
-            stakedAmountDisplay.textContent = `${stakedAmount.toFixed(2)} $EMOJI`;
-            estimatedEarningsDisplay.textContent = `${estimatedEarnings.toFixed(2)} $EMOJI`;
-        }
-
-        function startStakingEarnings() {
-            if (stakingInterval) clearInterval(stakingInterval); // Clear any existing interval
-            stakingInterval = setInterval(() => {
-                estimatedEarnings += stakedAmount * stakingAPY;
-                updateStakingDisplay();
-            }, 1000); // Update every second
-        }
-
-        stakeBtn.addEventListener('click', () => {
-            const amountToStake = parseFloat(stakeInput.value);
-            if (isNaN(amountToStake) || amountToStake <= 0) {
-                stakingStatus.textContent = 'Please enter a valid amount to stake! ⚠️';
-                stakingStatus.style.color = '#EF4444';
-                return;
-            }
-            stakedAmount += amountToStake;
-            stakingStatus.textContent = `${amountToStake} $EMOJI staked successfully! 🎉`;
-            stakingStatus.style.color = '#10B981';
-            stakeInput.value = '';
-            updateStakingDisplay();
-            startStakingEarnings(); // Start/restart earnings calculation
-        });
-
-        claimBtn.addEventListener('click', () => {
-            if (estimatedEarnings <= 0) {
-                stakingStatus.textContent = 'No earnings to claim yet! ⏳';
-                stakingStatus.style.color = '#F59E0B';
-                return;
-            }
-            // In a real scenario, earnings would be transferred to wallet
-            stakedAmount += estimatedEarnings; // Add earnings to staked amount for simplicity
-            stakingStatus.textContent = `${estimatedEarnings.toFixed(2)} $EMOJI claimed successfully! 🎁`;
-            stakingStatus.style.color = '#10B981';
-            estimatedEarnings = 0; // Reset earnings
-            updateStakingDisplay();
-        });
-
-        updateStakingDisplay(); // Initial display
-
-        // --- Emoji Chat Simulation ---
-        let chatWalletBalance = 1000; // Simulated $EMOJI balance
-        const emojiMessageCost = 10; // Cost per emoji message
-        const chatWalletBalanceDisplay = document.getElementById('chatWalletBalance');
-        const chatBox = document.getElementById('chatBox');
-        const emojiChatInput = document.getElementById('emojiChatInput');
-        const sendChatEmojiBtn = document.getElementById('sendChatEmojiBtn');
-        const chatStatus = document.getElementById('chatStatus');
-
-        function updateChatWalletDisplay() {
-            chatWalletBalanceDisplay.textContent = `${chatWalletBalance} $EMOJI`;
-        }
-
-        sendChatEmojiBtn.addEventListener('click', () => {
-            const emoji = emojiChatInput.value.trim();
-            if (!emoji || emoji.length > 2) { // Max length 2 for a single emoji
-                chatStatus.textContent = 'Please enter a single emoji! 😅';
-                chatStatus.style.color = '#EF4444';
-                return;
-            }
-
-            if (chatWalletBalance < emojiMessageCost) {
-                chatStatus.textContent = 'Not enough $EMOJI to send! 💸';
-                chatStatus.style.color = '#EF4444';
-                return;
-            }
-
-            chatWalletBalance -= emojiMessageCost;
-            updateChatWalletDisplay();
-
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('chat-message', 'self');
-            messageDiv.textContent = emoji;
-            chatBox.appendChild(messageDiv);
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
-
-            chatStatus.textContent = `Emoji sent! Cost: ${emojiMessageCost} $EMOJI. 🎉`;
-            chatStatus.style.color = '#10B981';
-            emojiChatInput.value = '';
-
-            // Simulate a response from another user
-            setTimeout(() => {
-                const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-                const responseDiv = document.createElement('div');
-                responseDiv.classList.add('chat-message');
-                responseDiv.textContent = randomEmoji;
-                chatBox.appendChild(responseDiv);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 1000);
-        });
-
-        updateChatWalletDisplay(); // Initial chat wallet display
-
-        // --- NFT Minting Simulation ---
-        const nftEmojiInput = document.getElementById('nftEmojiInput');
-        const mintNftBtn = document.getElementById('mintNftBtn');
-        const mintedNftDisplay = document.getElementById('mintedNftDisplay');
-        const nftMintStatus = document.getElementById('nftMintStatus');
-        const nftMintCost = 50; // Cost to mint an NFT
-
-        mintNftBtn.addEventListener('click', () => {
-            const emojiToMint = nftEmojiInput.value.trim();
-            if (!emojiToMint || emojiToMint.length > 2) {
-                nftMintStatus.textContent = 'Please enter a single emoji to mint! 🖼️';
-                nftMintStatus.style.color = '#EF4444';
-                return;
-            }
-
-            // For simplicity, using the same chatWalletBalance for NFT minting simulation
-            if (chatWalletBalance < nftMintCost) {
-                nftMintStatus.textContent = 'Not enough $EMOJI to mint this NFT! 💸';
-                nftMintStatus.style.color = '#EF4444';
-                return;
-            }
-
-            chatWalletBalance -= nftMintCost;
-            updateChatWalletDisplay();
-
-            mintedNftDisplay.textContent = emojiToMint; // Display the minted emoji
-            nftMintStatus.textContent = `Congratulations! Your ${emojiToMint} NFT has been minted! Cost: ${nftMintCost} $EMOJI. 🎉`;
-            nftMintStatus.style.color = '#10B981';
-            nftEmojiInput.value = '';
-        });
-
-        // --- Tipping Bot Live Test Simulation ---
-        const tippingEmojiInput = document.getElementById('tippingEmojiInput');
-        const sendTipBtn = document.getElementById('sendTipBtn');
-        const tippingBotChatBox = document.getElementById('tippingBotChatBox');
-        const tippingStatus = document.getElementById('tippingStatus');
-
-        sendTipBtn.addEventListener('click', () => {
-            const userEmojis = tippingEmojiInput.value.trim();
-            if (!userEmojis) {
-                tippingStatus.textContent = 'Please send some emojis to tip! 😅';
-                tippingStatus.style.color = '#EF4444';
-                return;
-            }
-
-            const emojiArray = Array.from(userEmojis); // Handles multi-byte emojis correctly
-            if (emojiArray.length > 5) {
-                tippingStatus.textContent = 'Maximum 5 emojis allowed per tip! 📏';
-                tippingStatus.style.color = '#EF4444';
-                return;
-            }
-
-            const tipAmount = emojiArray.length * 10; // 10 $EMOJI per emoji
-            const botResponseDelay = 1500; // 1.5 seconds
-
-            // User's message
-            const userMessageDiv = document.createElement('div');
-            userMessageDiv.classList.add('tipping-bot-message', 'user');
-            userMessageDiv.textContent = userEmojis;
-            tippingBotChatBox.appendChild(userMessageDiv);
-            tippingBotChatBox.scrollTop = tippingBotChatBox.scrollHeight;
-            tippingEmojiInput.value = ''; // Clear input
-
-            tippingStatus.textContent = `Sending your tip... ⏳`;
-            tippingStatus.style.color = '#2563EB';
-
-            // Simulate bot's response
-            setTimeout(() => {
-                const botMessageDiv = document.createElement('div');
-                botMessageDiv.classList.add('tipping-bot-message');
-                botMessageDiv.textContent = `🤖: Tip received! You sent ${emojiArray.length} emojis, which is ${tipAmount} $EMOJI! Transaction confirmed! ✅`;
-                tippingBotChatBox.appendChild(botMessageDiv);
-                tippingBotChatBox.scrollTop = tippingBotChatBox.scrollHeight;
-
-                tippingStatus.textContent = `Tip successful! ${tipAmount} $EMOJI tipped! 🎉`;
-                tippingStatus.style.color = '#10B981';
-            }, botResponseDelay);
-        });
-
-        // --- Emoji Video Creator Logic ---
-        const videoEmojisInput = document.getElementById('videoEmojisInput');
-        const emojiDurationInput = document.getElementById('emojiDurationInput');
-        const createVideoBtn = document.getElementById('createVideoBtn');
-        const playVideoBtn = document.getElementById('playVideoBtn');
-        const stopVideoBtn = document.getElementById('stopVideoBtn');
-        const emojiVideoCanvas = document.getElementById('emojiVideoCanvas');
-        const videoStatus = document.getElementById('videoStatus');
-        const ctx = emojiVideoCanvas.getContext('2d');
-
-        let videoEmojis = [];
-        let currentVideoEmojiIndex = 0;
-        let animationFrameId;
-        let lastFrameTime;
-        let timeElapsedSinceLastEmoji = 0;
-        let currentEmojiScale = 1;
-        let currentEmojiOpacity = 0;
-
-        // Function to set canvas size responsively
-        function resizeCanvas() {
-            const containerWidth = emojiVideoCanvas.parentElement.offsetWidth;
-            emojiVideoCanvas.width = containerWidth > 600 ? 600 : containerWidth;
-            emojiVideoCanvas.height = emojiVideoCanvas.width * (300 / 600); // Maintain aspect ratio
-            drawCurrentEmoji(); // Redraw if resized while playing
-        }
-
-        // Initial resize and on window resize
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-
-        function drawCurrentEmoji() {
-            ctx.clearRect(0, 0, emojiVideoCanvas.width, emojiVideoCanvas.height); // Clear canvas
-
-            if (videoEmojis.length === 0) {
-                ctx.fillStyle = '#333';
-                ctx.font = '3rem Inter';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('Enter Emojis Above! 🎬', emojiVideoCanvas.width / 2, emojiVideoCanvas.height / 2);
-                return;
-            }
-
-            const emoji = videoEmojis[currentVideoEmojiIndex];
-            const fontSize = emojiVideoCanvas.width * 0.2; // Responsive font size
-            ctx.font = `${fontSize}px Inter`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            // Apply animation effects
-            ctx.save();
-            ctx.globalAlpha = currentEmojiOpacity;
-            ctx.translate(emojiVideoCanvas.width / 2, emojiVideoCanvas.height / 2);
-            ctx.scale(currentEmojiScale, currentEmojiScale);
-            ctx.fillText(emoji, 0, 0);
-            ctx.restore();
-        }
-
-        function animateVideo(timestamp) {
-            if (!lastFrameTime) lastFrameTime = timestamp;
-            const deltaTime = timestamp - lastFrameTime;
-            lastFrameTime = timestamp;
-            timeElapsedSinceLastEmoji += deltaTime;
-
-            const durationPerEmojiMs = parseFloat(emojiDurationInput.value) * 1000;
-
-            // Update animation properties for current emoji (fade in/out, scale)
-            const transitionProgress = timeElapsedSinceLastEmoji / durationPerEmojiMs;
-            if (transitionProgress < 0.5) { // Fade in and grow
-                currentEmojiOpacity = transitionProgress * 2;
-                currentEmojiScale = 0.8 + (transitionProgress * 0.4); // From 0.8 to 1.2
-            } else { // Fade out and shrink
-                currentEmojiOpacity = 1 - ((transitionProgress - 0.5) * 2);
-                currentEmojiScale = 1.2 - ((transitionProgress - 0.5) * 0.4); // From 1.2 to 1.0
-            }
-            currentEmojiOpacity = Math.max(0, Math.min(1, currentEmojiOpacity)); // Clamp between 0 and 1
-            currentEmojiScale = Math.max(0.5, Math.min(1.5, currentEmojiScale)); // Clamp scale
-
-            drawCurrentEmoji();
-
-            if (timeElapsedSinceLastEmoji >= durationPerEmojiMs) {
-                timeElapsedSinceLastEmoji = 0;
-                currentVideoEmojiIndex = (currentVideoEmojiIndex + 1) % videoEmojis.length;
-                if (currentVideoEmojiIndex === 0 && !playVideoBtn.dataset.looping) { // Stop if not looping and finished
-                    stopVideo();
-                    videoStatus.textContent = 'Video finished! 🎬';
-                    return;
-                }
-            }
-            animationFrameId = requestAnimationFrame(animateVideo);
-        }
-
-        function playVideo() {
-            if (videoEmojis.length === 0) {
-                videoStatus.textContent = 'Please create a video first! 😅';
-                videoStatus.style.color = '#EF4444';
-                return;
-            }
-            if (animationFrameId) cancelAnimationFrame(animationFrameId); // Stop any existing animation
-            currentVideoEmojiIndex = 0; // Start from the beginning
-            timeElapsedSinceLastEmoji = 0;
-            lastFrameTime = undefined; // Reset time for smooth start
-            currentEmojiScale = 0.8; // Start scale for fade-in
-            currentEmojiOpacity = 0; // Start opacity for fade-in
-
-            playVideoBtn.disabled = true;
-            stopVideoBtn.disabled = false;
-            createVideoBtn.disabled = true;
-            videoEmojisInput.disabled = true;
-            emojiDurationInput.disabled = true;
-
-            videoStatus.textContent = 'Playing your emoji video... ▶️';
-            videoStatus.style.color = '#10B981';
-            animationFrameId = requestAnimationFrame(animateVideo);
-        }
-
-        function stopVideo() {
-            if (animationFrameId) cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-            playVideoBtn.disabled = false;
-            stopVideoBtn.disabled = true;
-            createVideoBtn.disabled = false;
-            videoEmojisInput.disabled = false;
-            emojiDurationInput.disabled = false;
-            videoStatus.textContent = 'Video stopped. ⏹️';
-            videoStatus.style.color = '#F59E0B';
-            drawCurrentEmoji(); // Draw the last frame or initial state
-        }
-
-        createVideoBtn.addEventListener('click', () => {
-            const inputEmojis = videoEmojisInput.value.trim();
-            if (!inputEmojis) {
-                videoStatus.textContent = 'Please enter some emojis! 🎬';
-                videoStatus.style.color = '#EF4444';
-                return;
-            }
-            videoEmojis = Array.from(inputEmojis); // Correctly handles multi-byte emojis
-            if (videoEmojis.length === 0) {
-                videoStatus.textContent = 'No valid emojis detected! 🧐';
-                videoStatus.style.color = '#EF4444';
-                return;
-            }
-
-            stopVideo(); // Stop any current playback
-            videoStatus.textContent = `Video created with ${videoEmojis.length} emojis! Ready to play. 🎉`;
-            videoStatus.style.color = '#2563EB';
-            playVideoBtn.disabled = false;
-            drawCurrentEmoji(); // Show the first emoji
-        });
-
-        playVideoBtn.addEventListener('click', playVideo);
-        stopVideoBtn.addEventListener('click', stopVideo);
-
-        // Initial draw for the canvas
-        drawCurrentEmoji();
-
-        // --- Countdown Timer Logic ---
-        const launchDate = new Date();
-        launchDate.setDate(launchDate.getDate() + 30); // Set launch 30 days from now
-
-        const countdownDays = document.getElementById('countdown-days');
-        const countdownHours = document.getElementById('countdown-hours');
-        const countdownMinutes = document.getElementById('countdown-minutes');
-        const countdownSeconds = document.getElementById('countdown-seconds');
-        const countdownMessage = document.getElementById('countdown-message');
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = launchDate.getTime() - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            countdownDays.textContent = String(days).padStart(2, '0');
-            countdownHours.textContent = String(hours).padStart(2, '0');
-            countdownMinutes.textContent = String(minutes).padStart(2, '0');
-            countdownSeconds.textContent = String(seconds).padStart(2, '0');
-
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                countdownMessage.textContent = "EmogiNation has launched! Let's go! 🚀";
-                countdownMessage.style.color = '#10B981';
-                countdownDays.textContent = '00';
-                countdownHours.textContent = '00';
-                countdownMinutes.textContent = '00';
-                countdownSeconds.textContent = '00';
-            }
-        }
-
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        updateCountdown(); // Initial call to display immediately
-
-        // --- Swap Interface Logic ---
-        const swapInputAmount = document.getElementById('swapInputAmount');
-        const swapInputToken = document.getElementById('swapInputToken');
-        const swapOutputAmount = document.getElementById('swapOutputAmount');
-        const swapOutputToken = document.getElementById('swapOutputToken');
-        const swapDirectionBtn = document.getElementById('swapDirectionBtn');
-        const swapRoute = document.getElementById('swapRoute');
-        const swapSlippage = document.getElementById('swapSlippage');
-        const swapPriceImpact = document.getElementById('swapPriceImpact');
-        const swapMinReceived = document.getElementById('swapMinReceived');
-        const confirmSwapBtn = document.getElementById('confirmSwapBtn');
-        const swapStatus = document.getElementById('swapStatus');
-
-        const exchangeRates = {
-            'ETH_EMOJI': 500000, // 1 ETH = 500,000 $EMOJI
-            'BNB_EMOJI': 150000, // 1 BNB = 150,000 $EMOJI
-            'EMOJI_ETH': 1 / 500000,
-            'EMOJI_BNB': 1 / 150000
-        };
-        const fixedSlippage = 0.5; // 0.5%
-        const fixedPriceImpact = 0.01; // 0.01%
-
-        function calculateSwapOutput() {
-            const inputAmount = parseFloat(swapInputAmount.value);
-            const inputToken = swapInputToken.value;
-            const outputToken = swapOutputToken.value;
-
-            if (isNaN(inputAmount) || inputAmount <= 0) {
-                swapOutputAmount.value = '';
-                swapMinReceived.textContent = '0 $EMOJI'; // Reset if input is invalid
-                return;
-            }
-
-            let rateKey;
-            if (inputToken === 'ETH' && outputToken === '$EMOJI') rateKey = 'ETH_EMOJI';
-            else if (inputToken === 'BNB' && outputToken === '$EMOJI') rateKey = 'BNB_EMOJI';
-            else if (inputToken === '$EMOJI' && outputToken === 'ETH') rateKey = 'EMOJI_ETH';
-            else if (inputToken === '$EMOJI' && outputToken === 'BNB') rateKey = 'EMOJI_BNB';
-            else { // Swap between ETH and BNB (via $EMOJI as intermediary)
-                if (inputToken === 'ETH' && outputToken === 'BNB') {
-                    const intermediateEmoji = inputAmount * exchangeRates['ETH_EMOJI'];
-                    const finalOutput = intermediateEmoji * exchangeRates['EMOJI_BNB'];
-                    swapOutputAmount.value = finalOutput.toFixed(6);
-                    swapRoute.textContent = 'ETH > $EMOJI > BNB';
-                } else if (inputToken === 'BNB' && outputToken === 'ETH') {
-                    const intermediateEmoji = inputAmount * exchangeRates['BNB_EMOJI'];
-                    const finalOutput = intermediateEmoji * exchangeRates['EMOJI_ETH'];
-                    swapOutputAmount.value = finalOutput.toFixed(6);
-                    swapRoute.textContent = 'BNB > $EMOJI > ETH';
-                }
-                const outputValue = parseFloat(swapOutputAmount.value);
-                const minReceived = outputValue * (1 - fixedSlippage / 100);
-                swapMinReceived.textContent = `${minReceived.toFixed(6)} ${outputToken}`;
-                return;
-            }
-
-            const outputValue = inputAmount * exchangeRates[rateKey];
-            const minReceived = outputValue * (1 - fixedSlippage / 100);
-
-            swapOutputAmount.value = outputValue.toFixed(6);
-            swapMinReceived.textContent = `${minReceived.toFixed(6)} ${outputToken}`;
-
-            // Update route based on selected tokens
-            if (inputToken === '$EMOJI' || outputToken === '$EMOJI') {
-                swapRoute.textContent = `${inputToken} > ${outputToken}`;
-            } else {
-                swapRoute.textContent = `${inputToken} > $EMOJI > ${outputToken}`;
-            }
-            swapSlippage.textContent = `${fixedSlippage}%`;
-            swapPriceImpact.textContent = `~${fixedPriceImpact}%`;
-        }
-
-        swapInputAmount.addEventListener('input', calculateSwapOutput);
-        swapInputToken.addEventListener('change', calculateSwapOutput);
-        swapOutputToken.addEventListener('change', calculateSwapOutput);
-
-        swapDirectionBtn.addEventListener('click', () => {
-            const tempInput = swapInputToken.value;
-            const tempOutput = swapOutputToken.value;
-            swapInputToken.value = tempOutput;
-            swapOutputToken.value = tempInput;
-            calculateSwapOutput(); // Recalculate after swapping
-        });
-
-        confirmSwapBtn.addEventListener('click', () => {
-            const inputAmount = parseFloat(swapInputAmount.value);
-            const outputAmount = parseFloat(swapOutputAmount.value);
-            const inputToken = swapInputToken.value;
-            const outputToken = swapOutputToken.value;
-
-            if (isNaN(inputAmount) || inputAmount <= 0) {
-                swapStatus.textContent = 'Please enter a valid amount to swap! ⚠️';
-                swapStatus.style.color = '#EF4444';
-                return;
-            }
-            if (isNaN(outputAmount) || outputAmount <= 0) {
-                swapStatus.textContent = 'Invalid swap calculation. Please check inputs. ⚠️';
-                swapStatus.style.color = '#EF4444';
-                return;
-            }
-
-            swapStatus.textContent = `Confirming swap of ${inputAmount} ${inputToken} for ${outputAmount.toFixed(6)} ${outputToken}... ⏳`;
-            swapStatus.style.color = '#2563EB';
-
-            setTimeout(() => {
-                swapStatus.textContent = `Swap successful! You received ${outputAmount.toFixed(6)} ${outputToken}! ✅`;
-                swapStatus.style.color = '#10B981';
-                swapInputAmount.value = '';
-                swapOutputAmount.value = '';
-                swapMinReceived.textContent = `0 ${outputToken}`;
-            }, 2000);
-        });
-
-        calculateSwapOutput(); // Initial calculation for swap interface
-
-        // --- Background Audio Controls ---
-        const backgroundAudio = document.getElementById('backgroundAudio');
-        const playPauseAudioBtn = document.getElementById('playPauseAudioBtn');
-        const volumeSlider = document.getElementById('volumeSlider');
-
-        // Set initial volume
-        backgroundAudio.volume = volumeSlider.value;
-
-        playPauseAudioBtn.addEventListener('click', () => {
-            if (backgroundAudio.paused) {
-                backgroundAudio.play().catch(e => console.error("Audio play failed:", e));
-                playPauseAudioBtn.textContent = '⏸️ Pause';
-            } else {
-                backgroundAudio.pause();
-                playPauseAudioBtn.textContent = '▶️ Play';
-            }
-        });
-
-        volumeSlider.addEventListener('input', () => {
-            backgroundAudio.volume = volumeSlider.value;
-        });
-
-        // Autoplay on user interaction (common browser restriction workaround)
-        document.addEventListener('DOMContentLoaded', () => {
-            const tryPlayAudio = () => {
-                if (backgroundAudio.paused) {
-                    backgroundAudio.play().then(() => {
-                        playPauseAudioBtn.textContent = '⏸️ Pause';
-                    }).catch(e => {
-                        console.log("Autoplay blocked, user interaction needed:", e);
-                        playPauseAudioBtn.textContent = '▶️ Play'; // Ensure button shows play if blocked
-                    });
-                }
-                // Remove listener once played to prevent multiple attempts
-                document.removeEventListener('click', tryPlayAudio);
-                document.removeEventListener('touchstart', tryPlayAudio);
+        window.onload = function() {
+            // --- Game Setup ---
+            const canvas = document.getElementById('gameCanvas');
+            const ctx = canvas.getContext('2d');
+            let animationFrameId = null;
+
+            const startScreen = document.getElementById('start-screen');
+            const gameUiContainer = document.getElementById('game-ui-container');
+            const redPill = document.getElementById('red-pill');
+            const greenPill = document.getElementById('green-pill');
+            const scoreDisplay = document.getElementById('score-display');
+            const highScoreDisplay = document.getElementById('high-score-display');
+            const livesDisplay = document.getElementById('lives-display');
+            const restartButton = document.getElementById('restart-button');
+            const powerUpStatus = document.getElementById('power-up-status');
+            const powerUpTimerDisplay = document.getElementById('power-up-timer');
+            
+            const swapModal = document.getElementById('swap-modal');
+            const endSwapButton = document.getElementById('end-swap-button');
+            const xrpIcon = document.getElementById('xrp-icon');
+            const swapArrow = document.getElementById('swap-arrow');
+            const bobbyLogo = document.getElementById('bobby-logo');
+            
+            let gameStarted = false;
+            let score = 0;
+            let lives = 9;
+            let highScore = localStorage.getItem('gangster_high_score') || 0;
+            let obstacleType = '';
+            let wordObstacles = [];
+            let xrpItems = [];
+            let powerUps = [];
+            let isPlayerInvincible = false;
+            let powerUpTimer = null;
+
+            // --- Game Objects ---
+            const playerImg = new Image();
+            playerImg.src = 'https://i.imgur.com/MZB348N.png';
+            const xrpImg = new Image();
+            xrpImg.src = 'https://i.imgur.com/5INUoNN.png';
+
+            const player = {
+                x: 0,
+                y: 0,
+                width: 80,
+                height: 80,
+                dx: 0,
+                dy: 0,
+                gravity: 0.5,
+                jumpPower: -12,
+                isJumping: false,
+                isGrounded: false,
             };
 
-            // Try to play audio on first user interaction
-            document.addEventListener('click', tryPlayAudio);
-            document.addEventListener('touchstart', tryPlayAudio);
-        });
+            // --- Sound Effects with Tone.js ---
+            const synth = new Tone.Synth().toDestination();
+            const polySynth = new Tone.PolySynth(Tone.Synth).toDestination();
 
+            const playCollectSound = () => {
+                polySynth.triggerAttackRelease(["C4", "E4", "G4"], "8n");
+            };
+            const playPowerUpSound = () => {
+                polySynth.triggerAttackRelease(["C5", "E5", "G5"], "8n");
+            };
+            const playGameOverSound = () => {
+                synth.triggerAttackRelease("C3", "4n");
+                synth.triggerAttackRelease("B2", "4n", "+0.2");
+                synth.triggerAttackRelease("A2", "4n", "+0.4");
+            };
+            const playHitSound = () => {
+                synth.triggerAttackRelease("C2", "8n");
+            }
+
+            // --- Game Loop and Functions ---
+            function resetGame() {
+                score = 0;
+                lives = 9;
+                isPlayerInvincible = false;
+                player.x = canvas.width / 2 - player.width / 2;
+                player.y = canvas.height - player.height - 10;
+                player.dx = 0;
+                player.dy = 0;
+                wordObstacles = [];
+                xrpItems = [];
+                powerUps = [];
+                gameStarted = true;
+                restartButton.classList.add('hidden');
+                updateHighScore(0);
+                updateLivesDisplay();
+                powerUpStatus.style.opacity = '0';
+                if (powerUpTimer) clearInterval(powerUpTimer);
+            }
+            
+            function updateLivesDisplay() {
+                livesDisplay.textContent = lives;
+            }
+
+            function updateHighScore(newScore) {
+                if (newScore > highScore) {
+                    highScore = newScore;
+                    localStorage.setItem('gangster_high_score', highScore);
+                    highScoreDisplay.textContent = highScore;
+                }
+            }
+
+            function drawPlayer() {
+                if (playerImg.complete) {
+                    ctx.save();
+                    if (isPlayerInvincible) {
+                        ctx.globalAlpha = 0.5 + Math.sin(Date.now() / 100) * 0.2; // Blinking effect
+                    }
+                    ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+                    ctx.restore();
+                }
+            }
+
+            function drawXrp(item) {
+                if (xrpImg.complete) {
+                    ctx.drawImage(xrpImg, item.x, item.y, item.width, item.height);
+                }
+            }
+            
+            function drawObstacle(obstacle) {
+                ctx.save();
+                ctx.fillStyle = obstacle.color;
+                ctx.shadowColor = obstacle.color;
+                ctx.shadowBlur = 10;
+                ctx.font = `${obstacle.size}px 'Bangers', cursive`;
+                ctx.textAlign = 'center';
+                ctx.fillText(obstacle.text, obstacle.x, obstacle.y);
+                ctx.restore();
+            }
+
+            function drawPowerUp(powerUp) {
+                ctx.save();
+                ctx.fillStyle = powerUp.color;
+                ctx.shadowColor = powerUp.color;
+                ctx.shadowBlur = 15;
+                ctx.font = `${powerUp.size}px 'Bangers', cursive`;
+                ctx.textAlign = 'center';
+                ctx.fillText(powerUp.text, powerUp.x, powerUp.y);
+                ctx.restore();
+            }
+
+            function update() {
+                if (!gameStarted) return;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Player physics
+                player.x += player.dx;
+                player.y += player.dy;
+                player.dy += player.gravity;
+
+                // Ground collision
+                if (player.y + player.height > canvas.height) {
+                    player.y = canvas.height - player.height;
+                    player.dy = 0;
+                    player.isGrounded = true;
+                    player.isJumping = false;
+                } else {
+                    player.isGrounded = false;
+                }
+
+                // Wall collision
+                if (player.x < 0) player.x = 0;
+                if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+                
+                drawPlayer();
+
+                // Generate and update XRP
+                if (Math.random() < 0.01) {
+                    const size = 30 + Math.random() * 20;
+                    xrpItems.push({
+                        x: Math.random() * (canvas.width - size),
+                        y: -size,
+                        width: size,
+                        height: size,
+                        dy: 2 + Math.random(),
+                        collected: false
+                    });
+                }
+
+                // Generate and update Obstacles
+                if (Math.random() < 0.02) {
+                    const redPillWords = ['HUSTLE', 'DEGEN', 'FOMO', 'LFG', 'ALPHA', 'PUMP'];
+                    const greenPillWords = ['SCAM', 'RUGPULL', 'FUD', 'HONEYPOT', 'AIRDROP SCAM', 'PAPERHAND'];
+                    const obstacleWords = obstacleType === 'red' ? redPillWords : greenPillWords;
+                    const word = obstacleWords[Math.floor(Math.random() * obstacleWords.length)];
+                    const size = 20 + Math.random() * 15;
+                    wordObstacles.push({
+                        x: Math.random() * canvas.width,
+                        y: -size,
+                        size: size,
+                        text: word,
+                        color: obstacleType === 'red' ? '#ff007f' : '#00ffaa',
+                        dx: (player.x - (Math.random() * canvas.width)) / 500, // Chasing effect
+                        dy: 1 + Math.random()
+                    });
+                }
+
+                // Generate and update Power-ups
+                if (Math.random() < 0.002) {
+                    const size = 40;
+                    powerUps.push({
+                        x: Math.random() * (canvas.width - size),
+                        y: -size,
+                        width: size,
+                        height: size,
+                        text: 'SHIELD',
+                        color: '#ffff00',
+                        dy: 1.5,
+                        active: false
+                    });
+                }
+                
+                // --- Collision and Rendering ---
+                // XRP
+                xrpItems.forEach((item, index) => {
+                    item.y += item.dy;
+                    if (item.y > canvas.height) {
+                        xrpItems.splice(index, 1);
+                        return;
+                    }
+                    drawXrp(item);
+
+                    if (
+                        player.x < item.x + item.width &&
+                        player.x + player.width > item.x &&
+                        player.y < item.y + item.height &&
+                        player.y + player.height > item.y
+                    ) {
+                        score += 1;
+                        scoreDisplay.textContent = score;
+                        playCollectSound();
+                        xrpItems.splice(index, 1);
+                        if (score >= 10) {
+                            endGame(true);
+                        }
+                    }
+                });
+
+                // Obstacles
+                wordObstacles.forEach((obstacle, index) => {
+                    obstacle.y += obstacle.dy;
+                    obstacle.x += obstacle.dx;
+                    if (obstacle.y > canvas.height) {
+                        wordObstacles.splice(index, 1);
+                        return;
+                    }
+                    drawObstacle(obstacle);
+
+                    if (
+                        player.x < obstacle.x + 10 &&
+                        player.x + player.width > obstacle.x - 10 &&
+                        player.y < obstacle.y &&
+                        player.y + player.height > obstacle.y - 20
+                    ) {
+                        if (!isPlayerInvincible) {
+                            lives--;
+                            updateLivesDisplay();
+                            playHitSound();
+                            if (lives <= 0) {
+                                endGame(false);
+                            } else {
+                                // Give a brief invincibility period after being hit
+                                isPlayerInvincible = true;
+                                setTimeout(() => { isPlayerInvincible = false; }, 2000);
+                            }
+                        }
+                        wordObstacles.splice(index, 1);
+                    }
+                });
+                
+                // Power-ups
+                powerUps.forEach((powerUp, index) => {
+                    powerUp.y += powerUp.dy;
+                    if (powerUp.y > canvas.height) {
+                        powerUps.splice(index, 1);
+                        return;
+                    }
+                    drawPowerUp(powerUp);
+
+                    if (
+                        player.x < powerUp.x + powerUp.width &&
+                        player.x + player.width > powerUp.x &&
+                        player.y < powerUp.y + powerUp.height &&
+                        player.y + player.height > powerUp.y
+                    ) {
+                        playPowerUpSound();
+                        isPlayerInvincible = true;
+                        if (powerUpTimer) clearInterval(powerUpTimer);
+                        let timeLeft = 5;
+                        powerUpStatus.style.opacity = '1';
+                        powerUpTimerDisplay.textContent = `${timeLeft}s`;
+                        powerUpTimer = setInterval(() => {
+                            timeLeft--;
+                            if (timeLeft > 0) {
+                                powerUpTimerDisplay.textContent = `${timeLeft}s`;
+                            } else {
+                                clearInterval(powerUpTimer);
+                                isPlayerInvincible = false;
+                                powerUpStatus.style.opacity = '0';
+                            }
+                        }, 1000);
+
+                        powerUps.splice(index, 1);
+                    }
+                });
+                
+                animationFrameId = requestAnimationFrame(update);
+            }
+
+            function endGame(win) {
+                cancelAnimationFrame(animationFrameId);
+                gameStarted = false;
+                if (win) {
+                    showSwapAnimation();
+                } else {
+                    playGameOverSound();
+                    restartButton.classList.remove('hidden');
+                    updateHighScore(score);
+                    ctx.font = "60px 'Bangers', cursive";
+                    ctx.fillStyle = "#ff007f";
+                    ctx.shadowColor = "#ff007f";
+                    ctx.shadowBlur = 20;
+                    ctx.textAlign = "center";
+                    ctx.fillText("GAME OVER", canvas.width / 2, canvas.height / 2);
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            // --- Swap Animation ---
+            function showSwapAnimation() {
+                swapModal.style.display = 'flex';
+                let currentScore = score;
+                const lines = [
+                    `$ bobby_contract_address = 'rKa786raM6QvKsqELa1gkNDEv3k2gWuwwc'`,
+                    `$ xrp_balance = ${currentScore}`,
+                    `$ slippage_tolerance = '0.5%'`,
+                    `$ gas_fees = '0.0001 XRP'`,
+                    `$ bobby_contract.swap(xrp_balance, 'BOBBY')`,
+                    `$ status = 'SUCCESS'`,
+                    `$ transaction_id = '0x123...456'`,
+                    `$ print("Swap complete! Enjoy your BOBBY.")`
+                ];
+                let lineIndex = 0;
+
+                function typeLine() {
+                    if (lineIndex < lines.length) {
+                        const lineElement = document.getElementById(`line${lineIndex + 1}`);
+                        lineElement.textContent = lines[lineIndex];
+                        lineElement.style.width = '100%';
+                        lineIndex++;
+                        setTimeout(typeLine, 2000); // Wait 2 seconds for each line
+                    } else {
+                        setTimeout(() => {
+                            xrpIcon.style.transform = 'scale(0.1)';
+                            xrpIcon.style.opacity = '0';
+                            swapArrow.style.opacity = '1';
+                            bobbyLogo.style.display = 'block';
+                            bobbyLogo.style.opacity = '0';
+                            setTimeout(() => {
+                                bobbyLogo.style.opacity = '1';
+                                endSwapButton.classList.remove('hidden');
+                            }, 1000);
+                        }, 1000);
+                    }
+                }
+                typeLine();
+            }
+
+            endSwapButton.addEventListener('click', () => {
+                swapModal.style.display = 'none';
+                startScreen.style.display = 'flex';
+                // Reset game for a fresh start
+                score = 0;
+                scoreDisplay.textContent = 0;
+                updateHighScore(0);
+            });
+
+            // --- Event Listeners ---
+            function handleKeyDown(e) {
+                if (!gameStarted) return;
+                if (e.key === 'ArrowLeft' || e.key === 'A' || e.key === 'a') {
+                    player.dx = -5;
+                } else if (e.key === 'ArrowRight' || e.key === 'D' || e.key === 'd') {
+                    player.dx = 5;
+                } else if ((e.key === ' ' || e.key === 'W' || e.key === 'w') && player.isGrounded) {
+                    player.dy = player.jumpPower;
+                    player.isJumping = true;
+                }
+            }
+
+            function handleKeyUp(e) {
+                if (!gameStarted) return;
+                if (e.key === 'ArrowLeft' || e.key === 'A' || e.key === 'a' || e.key === 'ArrowRight' || e.key === 'D' || e.key === 'd') {
+                    player.dx = 0;
+                }
+            }
+            
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('keyup', handleKeyUp);
+
+            // Add touch event listeners for mobile controls
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            canvas.addEventListener('touchstart', (e) => {
+                if (!gameStarted) return;
+                const touch = e.touches[0];
+                touchStartX = touch.clientX;
+                player.dy = player.jumpPower; // Jump on tap
+                player.isJumping = true;
+                e.preventDefault(); // Prevent default browser behavior (like scrolling)
+            });
+
+            canvas.addEventListener('touchmove', (e) => {
+                if (!gameStarted) return;
+                const touch = e.touches[0];
+                touchEndX = touch.clientX;
+                const deltaX = touchEndX - touchStartX;
+                if (deltaX > 20) {
+                    player.dx = 5; // Move right
+                } else if (deltaX < -20) {
+                    player.dx = -5; // Move left
+                } else {
+                    player.dx = 0;
+                }
+                e.preventDefault();
+            });
+
+            canvas.addEventListener('touchend', () => {
+                if (!gameStarted) return;
+                player.dx = 0; // Stop horizontal movement
+            });
+
+
+            restartButton.addEventListener('click', () => {
+                resetGame();
+                animationFrameId = requestAnimationFrame(update);
+            });
+
+            // --- Pill choice logic ---
+            function startGame(type) {
+                obstacleType = type;
+                startScreen.style.display = 'none';
+                gameUiContainer.classList.remove('hidden');
+                
+                // Resize canvas to fit container
+                const container = document.getElementById('game-ui-container');
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight * 0.7; // Use 70% of container height for canvas
+                
+                resetGame();
+                animationFrameId = requestAnimationFrame(update);
+            }
+
+            redPill.addEventListener('click', () => startGame('red'));
+            greenPill.addEventListener('click', () => startGame('green'));
+
+            // Set initial high score display
+            highScoreDisplay.textContent = highScore;
+        };
     </script>
 </body>
 </html>
